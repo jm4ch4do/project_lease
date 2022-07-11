@@ -25,6 +25,6 @@ class Customer(models.Model):
     # internal fields
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    created_by = models.PositiveIntegerField()
-    updated_by = models.PositiveIntegerField()
+    created_by = models.PositiveIntegerField(blank=True, null=True)
+    updated_by = models.PositiveIntegerField(blank=True, null=True)
 
