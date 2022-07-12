@@ -18,19 +18,14 @@ class Customer(models.Model):
 
     # flags
     CHOICES_CUSTOMER_STATUS = (
-        (0, 'Active'),
-        (1, 'Inactive')
+        (1, 'Active'),
+        (2, 'Inactive')
     )
     status = models.SmallIntegerField(choices=CHOICES_CUSTOMER_STATUS)
 
     # internal fields
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    created_by = models.PositiveIntegerField(blank=True, null=True)
-    updated_by = models.PositiveIntegerField(blank=True, null=True)
-
-    def __str__(self):
-        return self.name
 
     # calculations
     @property
@@ -55,3 +50,12 @@ class Customer(models.Model):
     @property
     def name(self):
         return self.first_name + " " + self.last_name
+
+    # ordering
+    class Meta:
+        ordering = ['first_name']
+
+    # string output
+    def __str__(self):
+        return self.name
+
