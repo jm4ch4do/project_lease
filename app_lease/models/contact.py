@@ -7,7 +7,7 @@ from ..validators import at_least_one_required
 class Contact(models.Model):
 
     # foreign keys
-    customer = models.OneToOneField(Customer, on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
 
     # string fields
     phone_number_regex = RegexValidator(regex=r"^\+?1?\d{8,15}$")
