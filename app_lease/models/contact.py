@@ -17,11 +17,11 @@ class Contact(models.Model):
     note = models.CharField(blank=True, null=True, max_length=200)
 
     # flags
-    CHOICES_TYPE_CONTACT = (
+    CHOICES_CONTACT_TYPE = (
         (1, 'email'),
         (2, 'phone')
     )
-    type = models.SmallIntegerField(choices=CHOICES_TYPE_CONTACT)
+    type = models.SmallIntegerField(choices=CHOICES_CONTACT_TYPE)
 
     # internal fields
     created_at = models.DateTimeField(auto_now_add=True)
