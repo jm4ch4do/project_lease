@@ -127,6 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-/management/credentials.txt
+/config/credentials.txt
 
 app_lease/migrations/
