@@ -82,7 +82,7 @@ class Command(BaseCommand):
             random_last_name = fake.last_name() if not random_user.last_name else random_user.last_name
 
             # create fake customer
-            Customer.objects.create(
+            created_customer = Customer.objects.create(
                 user=random_user,
                 first_name=random_first_name,
                 last_name=random_last_name,
@@ -90,3 +90,39 @@ class Command(BaseCommand):
                 dob=fake.date_between(start_date=datetime(1950, 1, 1), end_date=datetime(2003, 1, 1)),
                 status=Provider.get_customer_status(random_user)  # status matches the user status
             )
+
+            # assign user email as a contact to the customer
+            Contact.objects.create(
+                customer=created_customer,
+                email=created_customer.user.email,
+                phone='',
+                note=fake.paragraph(nb_sentences=3),
+                type=1
+            )
+
+            # assign extra email to some contacts
+            should_create_email = bool(getrandbits(1))
+            random_user_name = Provider.get_random_user_name(fake.first_name())
+            if should_create_email:
+                Contact.objects.create(
+                    customer=created_customer,
+                    email=random_user_name + "@gmail.com",
+                    note=fake.paragraph(nb_sentences=3),
+                    type=1
+                )
+
+            # assign phone as a contact to the customer
+            random_number = int("1" + str(fake.msisdn()[3:]))
+            Contact.objects.create(
+                customer=created_customer,
+                email='',
+                phone=random_number,
+                note=fake.paragraph(nb_sentences=3),
+                type=2
+            )
+
+
+
+
+
+
