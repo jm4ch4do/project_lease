@@ -11,9 +11,9 @@ class Contact(models.Model):
 
     # string fields
     phone_number_regex = RegexValidator(regex=r"^\+?1?\d{8,15}$")
-    phone = models.CharField(validators=[phone_number_regex], max_length=16, unique=True,
+    phone = models.CharField(validators=[phone_number_regex], max_length=16,
                              blank=True, null=True, default="")
-    email = models.EmailField(max_length=254, unique=True, blank=True, null=True, default="")
+    email = models.EmailField(max_length=254, blank=True, null=True, default="")
     note = models.CharField(blank=True, null=True, max_length=200)
 
     # flags
@@ -29,7 +29,7 @@ class Contact(models.Model):
 
     # ordering
     class Meta:
-        ordering = ['created_at']
+        ordering = ['customer__first_name']
 
     # validation
     def clean(self):
