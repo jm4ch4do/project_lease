@@ -83,6 +83,7 @@ class Command(BaseCommand):
                 user=random_user,
                 first_name=random_first_name,
                 last_name=random_last_name,
+                job=fake.job(),
                 notes=fake.paragraph(nb_sentences=3),
                 dob=fake.date_between(start_date=datetime(1950, 1, 1), end_date=datetime(2003, 1, 1)),
                 status=Provider.get_customer_status(random_user)  # status matches the user status

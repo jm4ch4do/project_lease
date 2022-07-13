@@ -11,6 +11,7 @@ class Customer(models.Model):
     # text fields
     first_name = models.CharField(blank=False, max_length=200)
     last_name = models.CharField(blank=False, max_length=200)
+    job = models.CharField(blank=False, max_length=200)
     notes = models.TextField(blank=True, null=True, max_length=200)
 
     # date fields
