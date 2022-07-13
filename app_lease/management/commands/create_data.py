@@ -100,10 +100,10 @@ class Command(BaseCommand):
                 type=1
             )
 
-            # assign extra email to some contacts
+            # assign extra email to some customers
             should_create_email = bool(getrandbits(1))
-            random_user_name = Provider.get_random_user_name(fake.first_name())
             if should_create_email:
+                random_user_name = Provider.get_random_user_name(fake.first_name())
                 Contact.objects.create(
                     customer=created_customer,
                     email=random_user_name + "@gmail.com",
@@ -112,14 +112,27 @@ class Command(BaseCommand):
                 )
 
             # assign phone as a contact to the customer
-            random_number = int("1" + str(fake.msisdn()[3:]))
+            random_phone = int("1" + str(fake.msisdn()[3:]))
             Contact.objects.create(
                 customer=created_customer,
                 email='',
-                phone=random_number,
+                phone=random_phone,
                 note=fake.paragraph(nb_sentences=3),
                 type=2
             )
+
+            # assign extra phone to some customers
+            should_create_phone = bool(getrandbits(1))
+            if should_create_phone:
+                random_user_name = Provider.get_random_user_name(fake.first_name())
+                random_phone = int("1" + str(fake.msisdn()[3:]))
+                Contact.objects.create(
+                    customer=created_customer,
+                    email='',
+                    phone=random_phone,
+                    note=fake.paragraph(nb_sentences=3),
+                    type=2
+                )
 
 
 
