@@ -11,6 +11,7 @@ class Customer(models.Model):
     # text fields
     first_name = models.CharField(blank=False, max_length=200)
     last_name = models.CharField(blank=False, max_length=200)
+    job = models.CharField(blank=False, max_length=200)
     notes = models.TextField(blank=True, null=True, max_length=200)
 
     # date fields
@@ -18,19 +19,14 @@ class Customer(models.Model):
 
     # flags
     CHOICES_CUSTOMER_STATUS = (
-        (0, 'Active'),
-        (1, 'Inactive')
+        (1, 'Active'),
+        (2, 'Inactive')
     )
     status = models.SmallIntegerField(choices=CHOICES_CUSTOMER_STATUS)
 
     # internal fields
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    created_by = models.PositiveIntegerField(blank=True, null=True)
-    updated_by = models.PositiveIntegerField(blank=True, null=True)
-
-    def __str__(self):
-        return self.name
 
     # calculations
     @property
@@ -56,8 +52,11 @@ class Customer(models.Model):
     def name(self):
         return self.first_name + " " + self.last_name
 
+    # ordering
+    class Meta:
+        ordering = ['first_name']
 
-class Contact(models.Model):
+    # string output
+    def __str__(self):
+        return self.name
 
-    # foreign keys
-    customer = models.OneToOneField(Customer, on_delete=models.CASCADE)
