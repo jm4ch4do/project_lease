@@ -68,9 +68,6 @@ class Command(BaseCommand):
                 is_active=bool(getrandbits(1))
             )
 
-        # get all user ids
-        total_users = User.objects.all().count()
-
         # create one customer per user
         for _ in range(TOTAL_USERS):
 
@@ -124,7 +121,6 @@ class Command(BaseCommand):
             # assign extra phone to some customers
             should_create_phone = bool(getrandbits(1))
             if should_create_phone:
-                random_user_name = Provider.get_random_user_name(fake.first_name())
                 random_phone = int("1" + str(fake.msisdn()[3:]))
                 Contact.objects.create(
                     customer=created_customer,
@@ -133,9 +129,3 @@ class Command(BaseCommand):
                     note=fake.paragraph(nb_sentences=3),
                     type=2
                 )
-
-
-
-
-
-
