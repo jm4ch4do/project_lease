@@ -23,3 +23,9 @@ pyparsing==3.0.9
 pytest==7.1.2
 pytest-django==4.5.2
 tomli==2.0.1
+
+# factoryboy (pip install pytest-factoryboy)
+factory-boy==3.2.1
+inflection==0.5.1
+pytest-factoryboy==2.5.0
+typing_extensions==4.3.0
