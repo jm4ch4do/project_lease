@@ -1,10 +1,11 @@
-import pytest
-from django.contrib.auth.models import User
+def test_example(new_user):
+    user = new_user
+    print(user.username)
+    assert True if user.username else False
 
-@pytest.fixture
-def user_1(db):
-    return User.objects.create_user("test-user")
 
-@pytest.mark.django_db
-def test_set_check_password(user_1):
-    assert user_1.username == "test-user"
+def test_customer(new_customer):
+    customer = new_customer
+    print(customer.first_name)
+    assert True if customer.user.username else False
+
