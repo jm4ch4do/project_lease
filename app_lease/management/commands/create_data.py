@@ -34,11 +34,24 @@ class Provider(faker.providers.BaseProvider):
 
 class Command(BaseCommand):
 
-    help = "Command Information"
+    help = "Creates Users, Customers and Contacts"
+
+    def add_arguments(self, parser):
+
+        # positional argument (mandatory argument) [python manage.py create_data 10]
+        # parser.add_argument('total', type=int, help='Number of users to be created')
+
+        # optional argument
+        parser.add_argument('-t', '--total', type=str, help='Number of users to be created')
 
     def handle(self, *args, **kwargs):
 
-        TOTAL_USERS = 100
+        # constants
+        DEFAULT_TOTAL_USERS = 100
+
+        # arguments
+        total = kwargs['total']
+        total_users = DEFAULT_TOTAL_USERS if not total else int(total)
 
         # register customer functions
         fake = Faker()
@@ -51,7 +64,7 @@ class Command(BaseCommand):
         User.objects.filter(is_superuser=False).delete()
 
         # generate users
-        for _ in range(TOTAL_USERS):
+        for _ in range(total_users):
 
             # random first_name and last_name
             random_first_name = fake.first_name()
@@ -69,7 +82,7 @@ class Command(BaseCommand):
             )
 
         # create one customer per user
-        for _ in range(TOTAL_USERS):
+        for _ in range(total_users):
 
             # use any username with no repetition
             random_user = fake.unique.get_random_user_id()
