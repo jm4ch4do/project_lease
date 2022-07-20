@@ -39,7 +39,7 @@ class Customer(models.Model):
 
     @property
     def name(self):
-        return self.first_name + " " + self.last_name + " (" + str(self.age) +")"
+        return self.first_name + " " + self.last_name
 
     # ordering
     class Meta:
