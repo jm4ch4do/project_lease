@@ -1,28 +1,17 @@
 from django.db import models
-from django.contrib.auth.models import User
 from ..utils.age_from_dob import age_from_dob
 
 
-class Customer(models.Model):
-
-    # foreign keys
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+class Lead(models.Model):
 
     # text fields
     first_name = models.CharField(blank=False, max_length=200)
     last_name = models.CharField(blank=False, max_length=200)
-    job = models.CharField(blank=False, max_length=200)
+    source = models.URLField(blank=False, max_length=500)
     notes = models.TextField(blank=True, null=True, max_length=200)
 
     # date fields
-    dob = models.DateField(blank=False)
-
-    # flags
-    CHOICES_CUSTOMER_STATUS = (
-        (1, 'Active'),
-        (2, 'Inactive')
-    )
-    status = models.SmallIntegerField(choices=CHOICES_CUSTOMER_STATUS)
+    dob = models.DateField(blank=True, null=True)
 
     # internal fields
     created_at = models.DateTimeField(auto_now_add=True)
