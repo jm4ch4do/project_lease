@@ -1,8 +1,10 @@
 from django.core.management.base import BaseCommand
 from faker import Faker
 import faker.providers
-from app_lease.models.customer import Customer
-from app_lease.models.contact import Contact
+from app_lease.models import Customer, Contact, Lead
+# from app_lease.models.customer import Customer
+# from app_lease.models.contact import Contact
+# from app_lease.models.lead import Lead
 from django.contrib.auth.models import User
 from datetime import datetime
 from random import randint, getrandbits
@@ -12,6 +14,13 @@ class Provider(faker.providers.BaseProvider):
 
     def get_random_customer_status(self):
         return self.random_element(Customer.CHOICES_CUSTOMER_STATUS)[0]
+
+    def get_random_source(self):
+
+        SOURCES = ['www.facebook.com', 'www.instagram.com', 'www.tiktok.com', 'www.twitter.com',
+                   'www.company1.com', 'www.company2.com', 'www.company3.com', 'www.company4.com']
+
+        return self.random_element(SOURCES)
 
     @staticmethod
     def get_customer_status(user):
@@ -52,6 +61,7 @@ class Command(BaseCommand):
         # arguments
         total = kwargs['total']
         total_users = DEFAULT_TOTAL_USERS if not total else int(total)
+        total_leads = total_users * 2  # always create more leads than users
 
         # register customer functions
         fake = Faker()
@@ -143,3 +153,39 @@ class Command(BaseCommand):
                     note=fake.paragraph(nb_sentences=3),
                     type=2
                 )
+
+        # create leads
+        for _ in range(total_leads):
+
+            #  create name for lead
+            random_first_name = fake.first_name()
+            random_last_name = fake.last_name()
+
+            # create fake lead
+            created_lead = Lead.objects.create(
+                first_name=random_first_name,
+                last_name=random_last_name,
+                source=fake.get_random_source(),
+                notes=fake.paragraph(nb_sentences=3),
+                dob=fake.date_between(start_date=datetime(1950, 1, 1), end_date=datetime(2003, 1, 1)),
+            )
+
+            # assign email to lead
+            random_user_name = Provider.get_random_user_name(created_lead.first_name)
+            Contact.objects.create(
+                lead=created_lead,
+                email=random_user_name + "@gmail.com",
+                note=fake.paragraph(nb_sentences=3),
+                type=1
+            )
+
+            # assign phone to some leads
+            should_create_phone = bool(getrandbits(1))
+            random_phone = int("1" + str(fake.msisdn()[3:]))
+            Contact.objects.create(
+                lead=created_lead,
+                email='',
+                phone=random_phone,
+                note=fake.paragraph(nb_sentences=3),
+                type=2
+            )
