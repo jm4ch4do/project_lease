@@ -29,3 +29,6 @@ factory-boy==3.2.1
 inflection==0.5.1
 pytest-factoryboy==2.5.0
 typing_extensions==4.3.0
+
+# faker_vehicle (pip install faker_vehicle)
+# no new package appeared
