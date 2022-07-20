@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from ..utils.age_from_dob import age_from_dob
 
 
+
 class Customer(models.Model):
 
     # foreign keys
@@ -48,4 +49,3 @@ class Customer(models.Model):
     # string output
     def __str__(self):
         return self.name
-

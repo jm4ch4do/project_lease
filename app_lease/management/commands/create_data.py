@@ -66,7 +66,7 @@ class Command(BaseCommand):
         total_leads = total_users * 2  # always create more leads than users
         total_vehicles = int(total_users / 2)  # half of users will have vehicles
 
-        # register customer functions
+        # register custom functions
         fake = Faker()
         fake.add_provider(Provider)
         fake.add_provider(VehicleProvider)
