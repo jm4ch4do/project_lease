@@ -1,8 +1,9 @@
 from django.contrib import admin
-from .models import customer, contact, lead
+from .models import Customer, Contact, Lead, Vehicle
 
-admin.site.register(customer.Customer)
-admin.site.register(contact.Contact)
-admin.site.register(lead.Lead)
+admin.site.register(Customer)
+admin.site.register(Contact)
+admin.site.register(Lead)
+admin.site.register(Vehicle)
 
 
