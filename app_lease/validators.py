@@ -17,4 +17,4 @@ def at_least_one_required(fields, noun):
             params={'noun': noun}
         )
 
-    return fields
+    return fields\
