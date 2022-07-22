@@ -16,6 +16,7 @@ def test_create_customer():
 
 @pytest.mark.django_db
 def test_delete_customer():
+    created_customer = random_customer()
     # deleting customer should delete customer and user
     Customer.objects.all().delete()
     assert True if Customer.objects.all().count() == 0 else False

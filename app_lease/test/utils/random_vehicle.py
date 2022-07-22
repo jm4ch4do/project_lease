@@ -33,9 +33,9 @@ def random_vehicle(total=1, customer=None):
             machine_year=fake.machine_year()
         )
 
-        created_vehicles = created_vehicle
+        created_vehicles.append(created_vehicle)
 
     if len(created_vehicles) == 1:
-        return created_customer
+        return created_vehicle
     else:
         return created_vehicles
