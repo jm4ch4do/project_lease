@@ -45,15 +45,16 @@ class Provider(faker.providers.BaseProvider):
 
 class Command(BaseCommand):
 
-    help = "Creates Users, Customers and Contacts"
+    help = "Creates Users, Customers, Leads and Contacts"
 
     def add_arguments(self, parser):
-
+        """
         # positional argument (mandatory argument) [python manage.py create_data 10]
         # parser.add_argument('total', type=int, help='Number of users to be created')
 
         # optional argument
         parser.add_argument('-t', '--total', type=str, help='Number of users to be created')
+        """
 
     def handle(self, *args, **kwargs):
 

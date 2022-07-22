@@ -35,24 +35,3 @@ def test_custom_customer():
     created_customer = random_customer()
     assert True if isinstance(str(random_customer), str) else False  # object returns valid string
     assert True if isinstance(created_customer.age, int) else False  # age return valid int
-
-
-
-
-# assign wrong modelObject to customer or leave it empty
-# create object with missing fields
-# break field validation
-# internal fields storing date objects
-# custom methods and properties (see coverage suggestions)
-# ordering
-
-
-
-
-
-
-
-
-
-
-
