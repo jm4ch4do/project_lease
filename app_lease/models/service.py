@@ -9,6 +9,12 @@ class Service(models.Model):
     cost = models.FloatField(blank=False, max_length=200)
     description = models.TextField(blank=True, null=True, max_length=500)
 
+    WHEN_TO_PAY_CHOICES_SERVICE = (
+        (1, 'Start'),
+        (2, 'End')
+    )
+    when_to_pay = models.SmallIntegerField(choices=WHEN_TO_PAY_CHOICES_SERVICE)
+
     SERVICE_TYPE = (
         (1, 'Lease'),
         (2, 'Sale')
