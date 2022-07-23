@@ -2,7 +2,7 @@ from django.core.management.base import BaseCommand
 from faker import Faker
 from faker_vehicle import VehicleProvider
 import faker.providers
-from app_lease.models import Customer, Contact, Lead, Vehicle
+from app_lease.models import Customer, Contact, Lead, Vehicle, Service
 from django.contrib.auth.models import User
 from datetime import datetime
 from random import randint, getrandbits
@@ -55,7 +55,6 @@ class Command(BaseCommand):
         # optional argument
         parser.add_argument('-t', '--total', type=str, help='Number of users to be created')
 
-
     def handle(self, *args, **kwargs):
 
         # constants
@@ -72,11 +71,13 @@ class Command(BaseCommand):
         fake.add_provider(Provider)
         fake.add_provider(VehicleProvider)
 
-        # delete all customers
+        # delete user, customers, leads, services, vehicles, contacts
+        User.objects.all().delete()
         Customer.objects.all().delete()
-
-        # delete all users except superuser
-        User.objects.filter(is_superuser=False).delete()
+        Lead.objects.all().delete()
+        Service.objects.all().delete()
+        Vehicle.objects.all().delete()
+        Contact.objects.all().delete()
 
         # ----- generate users
         for _ in range(total_users):
@@ -186,14 +187,15 @@ class Command(BaseCommand):
 
             # assign phone to some leads
             should_create_phone = bool(getrandbits(1))
-            random_phone = int("1" + str(fake.msisdn()[3:]))
-            Contact.objects.create(
-                lead=created_lead,
-                email='',
-                phone=random_phone,
-                note=fake.paragraph(nb_sentences=3),
-                type=2
-            )
+            if should_create_phone:
+                random_phone = int("1" + str(fake.msisdn()[3:]))
+                Contact.objects.create(
+                    lead=created_lead,
+                    email='',
+                    phone=random_phone,
+                    note=fake.paragraph(nb_sentences=3),
+                    type=2
+                )
 
         # ----- create vehicles
         for _ in range(total_vehicles):
@@ -202,7 +204,7 @@ class Command(BaseCommand):
             random_customer = fake.unique.get_random_customer()
 
             # create fake vehicle
-            created_vehicle = Vehicle.objects.create(
+            Vehicle.objects.create(
                 customer=random_customer,
                 make_model=fake.vehicle_make_model(),
                 make=fake.vehicle_make(),
@@ -214,4 +216,25 @@ class Command(BaseCommand):
                 machine_category=fake.machine_category(),
                 year=fake.vehicle_year(),
                 machine_year=fake.machine_year()
+            )
+
+        # ----- create services
+        services_to_be_created = [
+            ('self-managed transfer', 255.00, 1, 1),
+            ('leasecosts managed transfer', 895.00, 1, 1),
+            ('sale', 895.00, 2, 2),
+        ]
+        for service_data in services_to_be_created:
+
+            # unpack
+            name, cost = service_data[0], service_data[1]
+            when_to_pay, service_type = service_data[2], service_data[3]
+
+            # create service
+            Service.objects.create(
+                name=name,
+                cost=cost,
+                when_to_pay=when_to_pay,
+                service_type=service_type,
+                description=fake.paragraph(nb_sentences=3)
             )
