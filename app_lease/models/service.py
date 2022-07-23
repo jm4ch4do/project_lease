@@ -5,36 +5,28 @@ from ..utils.age_from_dob import age_from_dob
 class Service(models.Model):
 
     # text fields
-    first_name = models.CharField(blank=False, max_length=200)
-    last_name = models.CharField(blank=False, max_length=200)
-    source = models.URLField(blank=False, max_length=500)
-    notes = models.TextField(blank=True, null=True, max_length=200)
+    name = models.CharField(blank=False, max_length=200)
+    cost = models.FloatField(blank=False, max_length=200)
+    description = models.TextField(blank=True, null=True, max_length=500)
 
-    # date fields
-    dob = models.DateField(blank=True, null=True)
+    SERVICE_TYPE = (
+        (1, 'Lease'),
+        (2, 'Sale')
+    )
+    type = models.SmallIntegerField(choices=SERVICE_TYPE)
 
     # internal fields
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    # calculations
     @property
-    def age(self):
-
-        if not self.dob:
-            None
-        else:
-            return age_from_dob(self.dob)
-
-    @property
-    def name(self):
-        return self.first_name + " " + self.last_name
+    def label(self):
+        return self.name + " (" + str(self.cost) + ")"
 
     # ordering
     class Meta:
-        ordering = ['first_name']
+        ordering = ['type', 'name']
 
     # string output
     def __str__(self):
-        return self.name
-
+        return self.label
