@@ -2,7 +2,7 @@ from datetime import date
 
 
 def age_from_dob(dob):
-    """" Calculates age using date of birth (dob)"""
+    """" Calculates age using date of birth (dob) """
 
     # find years_passed since dob
     today = date.today()
