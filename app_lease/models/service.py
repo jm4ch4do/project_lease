@@ -2,7 +2,7 @@ from django.db import models
 from ..utils.age_from_dob import age_from_dob
 
 
-class Lead(models.Model):
+class Service(models.Model):
 
     # text fields
     first_name = models.CharField(blank=False, max_length=200)
