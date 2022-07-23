@@ -22,7 +22,7 @@ class Lead(models.Model):
     def age(self):
 
         if not self.dob:
-            None
+            0
         else:
             return age_from_dob(self.dob)
 
