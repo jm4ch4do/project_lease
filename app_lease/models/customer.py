@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from ..utils.age_from_dob import age_from_dob
+from app_lease.utils import age_from_dob
 
 
 class Customer(models.Model):
