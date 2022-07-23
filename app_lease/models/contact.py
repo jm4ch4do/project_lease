@@ -38,6 +38,7 @@ class Contact(models.Model):
 
         # must provide at least one email or phone
         at_least_one_required([self.email, self.phone], 'email/phone')
+        at_least_one_required([self.customer, self.lead], 'customer/lead')
 
     # string output
     def __str__(self):

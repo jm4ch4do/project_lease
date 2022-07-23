@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 
 
 @pytest.mark.django_db
-def test_create_customer():
+def test_create_lead():
     created_lead = random_lead()
     assert True if isinstance(created_lead, Lead) else False  # Lead object created
     assert True if Lead.objects.all().count() == 1 else False  # only one object in table lead
