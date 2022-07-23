@@ -1,7 +1,6 @@
-from datetime import date
 from faker import Faker
 from random import randint
-from app_lease.models import Customer, Lead, Contact
+from app_lease.models import Customer, Contact
 from django.contrib.auth.models import User
 from app_lease.utils.fake_provider import Provider
 from datetime import datetime
