@@ -15,11 +15,11 @@ class Service(models.Model):
     )
     when_to_pay = models.SmallIntegerField(choices=WHEN_TO_PAY_CHOICES_SERVICE)
 
-    SERVICE_TYPE = (
+    TYPE_CHOICES_SERVICE = (
         (1, 'Lease'),
         (2, 'Sale')
     )
-    type = models.SmallIntegerField(choices=SERVICE_TYPE)
+    service_type = models.SmallIntegerField(choices=TYPE_CHOICES_SERVICE)
 
     # internal fields
     created_at = models.DateTimeField(auto_now_add=True)
@@ -31,7 +31,7 @@ class Service(models.Model):
 
     # ordering
     class Meta:
-        ordering = ['type', 'name']
+        ordering = ['service_type', 'name']
 
     # string output
     def __str__(self):
