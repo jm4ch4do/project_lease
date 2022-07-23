@@ -6,12 +6,14 @@ Django==4.0.6
 sqlparse==0.4.2
 tzdata==2022.1
 
-# generating fake data (pip install faker)
+# faker (pip install faker)
+# [generating fake data]
 Faker==13.15.0
 python-dateutil==2.8.2
 six==1.16.0
 
 # pytest (pip install pytest-django)
+# [for unit testing]
 atomicwrites==1.4.1
 attrs==21.4.0
 colorama==0.4.5
@@ -25,7 +27,16 @@ pytest-django==4.5.2
 tomli==2.0.1
 
 # factoryboy (pip install pytest-factoryboy)
+# [complements for pytest]
 factory-boy==3.2.1
 inflection==0.5.1
 pytest-factoryboy==2.5.0
 typing_extensions==4.3.0
+
+# faker_vehicle (pip install faker_vehicle)
+# [generate fake data about vehicles]
+faker-vehicle==0.2.0
+
+# coverage (pip install coverage)
+# [test recommendations to latter make with Pytest]
+coverage==6.4.2

@@ -1,10 +1,8 @@
 from django.core.management.base import BaseCommand
 from faker import Faker
+from faker_vehicle import VehicleProvider
 import faker.providers
-from app_lease.models import Customer, Contact, Lead
-# from app_lease.models.customer import Customer
-# from app_lease.models.contact import Contact
-# from app_lease.models.lead import Lead
+from app_lease.models import Customer, Contact, Lead, Vehicle
 from django.contrib.auth.models import User
 from datetime import datetime
 from random import randint, getrandbits
@@ -30,9 +28,13 @@ class Provider(faker.providers.BaseProvider):
     def get_random_contact_type(self):
         return self.random_element(Contact.CHOICES_CONTACT_TYPE)
 
-    def get_random_user_id(self):
+    def get_random_user(self):
         users = User.objects.all()
         return self.random_element(users)
+
+    def get_random_customer(self):
+        customers = Customer.objects.all()
+        return self.random_element(customers)
 
     @staticmethod
     def get_random_user_name(first_name):
@@ -43,15 +45,16 @@ class Provider(faker.providers.BaseProvider):
 
 class Command(BaseCommand):
 
-    help = "Creates Users, Customers and Contacts"
+    help = "Creates Users, Customers, Leads and Contacts"
 
     def add_arguments(self, parser):
-
+        """
         # positional argument (mandatory argument) [python manage.py create_data 10]
         # parser.add_argument('total', type=int, help='Number of users to be created')
 
         # optional argument
         parser.add_argument('-t', '--total', type=str, help='Number of users to be created')
+        """
 
     def handle(self, *args, **kwargs):
 
@@ -62,10 +65,12 @@ class Command(BaseCommand):
         total = kwargs['total']
         total_users = DEFAULT_TOTAL_USERS if not total else int(total)
         total_leads = total_users * 2  # always create more leads than users
+        total_vehicles = int(total_users / 2)  # half of users will have vehicles
 
-        # register customer functions
+        # register custom functions
         fake = Faker()
         fake.add_provider(Provider)
+        fake.add_provider(VehicleProvider)
 
         # delete all customers
         Customer.objects.all().delete()
@@ -73,7 +78,7 @@ class Command(BaseCommand):
         # delete all users except superuser
         User.objects.filter(is_superuser=False).delete()
 
-        # generate users
+        # ----- generate users
         for _ in range(total_users):
 
             # random first_name and last_name
@@ -91,11 +96,11 @@ class Command(BaseCommand):
                 is_active=bool(getrandbits(1))
             )
 
-        # create one customer per user
+        # ----- create one customer per user
         for _ in range(total_users):
 
             # use any username with no repetition
-            random_user = fake.unique.get_random_user_id()
+            random_user = fake.unique.get_random_user()
 
             # use first_name and last_name in User if any, otherwise create new
             random_first_name = fake.first_name() if not random_user.first_name else random_user.first_name
@@ -154,7 +159,7 @@ class Command(BaseCommand):
                     type=2
                 )
 
-        # create leads
+        # ----- create leads
         for _ in range(total_leads):
 
             #  create name for lead
@@ -188,4 +193,25 @@ class Command(BaseCommand):
                 phone=random_phone,
                 note=fake.paragraph(nb_sentences=3),
                 type=2
+            )
+
+        # ----- create vehicles
+        for _ in range(total_vehicles):
+
+            # select user for the vehicle
+            random_customer = fake.unique.get_random_customer()
+
+            # create fake vehicle
+            created_vehicle = Vehicle.objects.create(
+                customer=random_customer,
+                make_model=fake.vehicle_make_model(),
+                make=fake.vehicle_make(),
+                model=fake.vehicle_model(),
+                category=fake.vehicle_category(),
+                machine_make_model=fake.machine_make_model(),
+                machine_make=fake.machine_make(),
+                machine_model=fake.machine_model(),
+                machine_category=fake.machine_category(),
+                year=fake.vehicle_year(),
+                machine_year=fake.machine_year()
             )

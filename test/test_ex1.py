@@ -1,6 +1,5 @@
 def test_example(new_user):
     user = new_user
-    print(user.username)
     assert True if user.username else False
 
 

@@ -8,7 +8,7 @@ def age_from_dob(dob):
     today = date.today()
     diff_in_years = today.year - dob.year
 
-    # find if bithday already passed the current year
+    # find if birthday already passed the current year
     if today.month < dob.month:
         has_birthday_passed = False
     elif today.month > dob.month:
