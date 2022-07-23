@@ -55,7 +55,6 @@ class Command(BaseCommand):
         # optional argument
         parser.add_argument('-t', '--total', type=str, help='Number of users to be created')
 
-
     def handle(self, *args, **kwargs):
 
         # constants
@@ -186,14 +185,15 @@ class Command(BaseCommand):
 
             # assign phone to some leads
             should_create_phone = bool(getrandbits(1))
-            random_phone = int("1" + str(fake.msisdn()[3:]))
-            Contact.objects.create(
-                lead=created_lead,
-                email='',
-                phone=random_phone,
-                note=fake.paragraph(nb_sentences=3),
-                type=2
-            )
+            if should_create_phone:
+                random_phone = int("1" + str(fake.msisdn()[3:]))
+                Contact.objects.create(
+                    lead=created_lead,
+                    email='',
+                    phone=random_phone,
+                    note=fake.paragraph(nb_sentences=3),
+                    type=2
+                )
 
         # ----- create vehicles
         for _ in range(total_vehicles):
@@ -202,7 +202,7 @@ class Command(BaseCommand):
             random_customer = fake.unique.get_random_customer()
 
             # create fake vehicle
-            created_vehicle = Vehicle.objects.create(
+            Vehicle.objects.create(
                 customer=random_customer,
                 make_model=fake.vehicle_make_model(),
                 make=fake.vehicle_make(),
