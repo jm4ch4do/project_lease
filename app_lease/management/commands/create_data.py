@@ -2,7 +2,7 @@ from django.core.management.base import BaseCommand
 from faker import Faker
 from faker_vehicle import VehicleProvider
 import faker.providers
-from app_lease.models import Customer, Contact, Lead, Vehicle
+from app_lease.models import Customer, Contact, Lead, Vehicle, Service
 from django.contrib.auth.models import User
 from datetime import datetime
 from random import randint, getrandbits
@@ -214,4 +214,25 @@ class Command(BaseCommand):
                 machine_category=fake.machine_category(),
                 year=fake.vehicle_year(),
                 machine_year=fake.machine_year()
+            )
+
+        # ----- create services
+        services_to_be_created = [
+            ('self-managed transfer', 255.00, 1, 1),
+            ('leasecosts managed transfer', 895.00, 1, 1),
+            ('sale', 895.00, 2, 2),
+        ]
+        for service_data in services_to_be_created:
+
+            # unpack
+            name, cost = service_data[0], service_data[1]
+            when_to_pay, service_type = service_data[2], service_data[3]
+
+            # create service
+            Service.objects.create(
+                name=name,
+                cost=cost,
+                when_to_pay=when_to_pay,
+                service_type=service_type,
+                description=fake.paragraph(nb_sentences=3)
             )
