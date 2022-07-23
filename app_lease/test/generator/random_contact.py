@@ -25,8 +25,11 @@ def random_contact(total=1, related_to='customer', contact_type=1, user=None):
 
         # create phone or email
         phone, email = None, None
-        if contact_type == 1:
+        if contact_type == 1 and related_to == 'customer':
             email = created_customer.user.email
+        elif contact_type == 1 and related_to == 'lead':
+            random_user_name = Provider.get_random_user_name(created_lead.first_name)
+            email = random_user_name + "@gmail.com"
         elif contact_type == 2:
             random_phone = int("1" + str(fake.msisdn()[3:]))
             phone = random_phone
