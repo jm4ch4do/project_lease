@@ -1,7 +1,7 @@
 # ------------------------------ VEHICLE MODEL HAPPY PATH ------------------------------
 import pytest
 from app_lease.models import Vehicle, Customer
-from app_lease.test.utils import random_vehicle
+from app_lease.test.generator import random_vehicle
 from django.contrib.auth.models import User
 
 

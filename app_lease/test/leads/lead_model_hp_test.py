@@ -1,7 +1,7 @@
 # ------------------------------ CUSTOMER MODEL HAPPY PATH ------------------------------
 import pytest
 from app_lease.models import Lead
-from app_lease.test.utils import random_lead
+from app_lease.test.generator import random_lead
 from django.contrib.auth.models import User
 
 

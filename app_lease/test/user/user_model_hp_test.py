@@ -1,7 +1,7 @@
 # ------------------------------ CUSTOMER MODEL HAPPY PATH ------------------------------
 import pytest
 from app_lease.models import Customer
-from app_lease.test.utils import random_user, random_customer
+from app_lease.test.generator import random_user, random_customer
 from django.contrib.auth.models import User
 
 

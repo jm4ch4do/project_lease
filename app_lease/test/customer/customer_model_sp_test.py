@@ -1,7 +1,7 @@
 # ------------------------------ CUSTOMER MODEL HAPPY PATH ------------------------------
 import pytest
 from django.db import IntegrityError
-from app_lease.test.utils import random_customer
+from app_lease.test.generator import random_customer
 from django.core.exceptions import ValidationError
 
 

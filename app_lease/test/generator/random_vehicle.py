@@ -1,5 +1,5 @@
 from faker import Faker
-from app_lease.test.utils import Provider, random_customer
+from app_lease.test.generator import Provider, random_customer
 from app_lease.models import Vehicle
 from faker_vehicle import VehicleProvider
 
