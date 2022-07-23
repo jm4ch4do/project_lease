@@ -71,11 +71,13 @@ class Command(BaseCommand):
         fake.add_provider(Provider)
         fake.add_provider(VehicleProvider)
 
-        # delete all customers
+        # delete user, customers, leads, services, vehicles, contacts
+        User.objects.all().delete()
         Customer.objects.all().delete()
-
-        # delete all users except superuser
-        User.objects.filter(is_superuser=False).delete()
+        Lead.objects.all().delete()
+        Service.objects.all().delete()
+        Vehicle.objects.all().delete()
+        Contact.objects.all().delete()
 
         # ----- generate users
         for _ in range(total_users):
