@@ -40,3 +40,7 @@ faker-vehicle==0.2.0
 # coverage (pip install coverage)
 # [test recommendations to latter make with Pytest]
 coverage==6.4.2
+
+# pytest-order (pip install pytest-order)
+# [allows ordering test with pytest]
+pytest-order==1.0.1
