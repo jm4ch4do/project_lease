@@ -10,8 +10,8 @@ from faker import Faker
 
 @pytest.mark.order(5)
 @pytest.mark.django_db
-def test_customer_need_related_customer():
-
+def test_contact_need_related_customer():
+    """ A contact does not allow deleting its related customer """
     created_contact = random_contact()
     with pytest.raises(ValidationError) as exp:
         created_contact.customer = None
@@ -22,7 +22,7 @@ def test_customer_need_related_customer():
 @pytest.mark.order(5)
 @pytest.mark.django_db
 def test_customer_need_related_lead():
-
+    """ A contact does not allow deleting its related lead """
     created_contact = random_contact(related_to='lead')
     with pytest.raises(ValidationError) as exp:
         created_contact.lead = None
@@ -32,8 +32,8 @@ def test_customer_need_related_lead():
 
 @pytest.mark.order(5)
 @pytest.mark.django_db
-def test_customer_cant_have_related_contact_and_lead():
-
+def test_contact_cant_have_related_customer_and_lead():
+    """ A contact can't have both a related customer and a related lead """
     created_contact = random_contact()
     created_lead = random_lead()
 
@@ -45,7 +45,8 @@ def test_customer_cant_have_related_contact_and_lead():
 
 @pytest.mark.order(5)
 @pytest.mark.django_db
-def test_customer_need_related_email():
+def test_contact_need_related_email():
+    """ A contact doesn't allow deleting its email """
 
     created_contact = random_contact()
     with pytest.raises(ValidationError) as exp:
@@ -56,7 +57,8 @@ def test_customer_need_related_email():
 
 @pytest.mark.order(5)
 @pytest.mark.django_db
-def test_customer_need_related_phone():
+def test_contact_need_related_phone():
+    """ A contact doesn't allow deleting its phone """
 
     created_contact = random_contact(contact_type=2)
     with pytest.raises(ValidationError) as exp:
@@ -67,8 +69,8 @@ def test_customer_need_related_phone():
 
 @pytest.mark.order(5)
 @pytest.mark.django_db
-def test_customer_cant_have_related_contact_and_lead():
-
+def test_contact_cant_have_related_phone_and_email():
+    """ A contact doesn't allow having both email and phone """
     fake = Faker()
     created_contact = random_contact()
     random_phone = int("1" + str(fake.msisdn()[3:]))
@@ -81,7 +83,8 @@ def test_customer_cant_have_related_contact_and_lead():
 
 @pytest.mark.order(5)
 @pytest.mark.django_db
-def test_customer_bad_phone():
+def test_contact_bad_phone():
+    """ Phone input must be validated"""
 
     fake = Faker()
     created_contact = random_contact(contact_type=2)
@@ -96,7 +99,8 @@ def test_customer_bad_phone():
 
 @pytest.mark.order(5)
 @pytest.mark.django_db
-def test_customer_bad_phone():
+def test_contact_bad_phone():
+    """ Email input must be validated """
 
     created_contact = random_contact()
 
