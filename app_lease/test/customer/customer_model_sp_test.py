@@ -91,7 +91,7 @@ def test_blank_fields_customer():
 
 @pytest.mark.order(2)
 @pytest.mark.django_db
-def test_age_not_minor():
+def test_customer_age_not_minor():
     """ Customer cannot be under 18 years old """
 
     created_customer = random_customer()
