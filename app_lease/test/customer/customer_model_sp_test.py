@@ -6,6 +6,7 @@ from django.core.exceptions import ValidationError
 from datetime import date
 
 
+@pytest.mark.order(2)
 @pytest.mark.django_db
 def test_empty_user_in_customer():
     """ A customer should not allow having no related user """
@@ -20,6 +21,7 @@ def test_empty_user_in_customer():
         assert False
 
 
+@pytest.mark.order(2)
 @pytest.mark.django_db
 def test_string_user_in_customer():
     """ A customer should not allow having a string value as related user """
@@ -34,6 +36,7 @@ def test_string_user_in_customer():
         assert False
 
 
+@pytest.mark.order(2)
 @pytest.mark.django_db
 def test_none_fields_in_customer():
     """ A customer's first name can't be None """
@@ -49,6 +52,7 @@ def test_none_fields_in_customer():
         assert False
 
 
+@pytest.mark.order(2)
 @pytest.mark.django_db
 def test_blank_fields_customer():
     """ Several fields cannot be blank in customer """
@@ -85,6 +89,7 @@ def test_blank_fields_customer():
     assert True if exp else False
 
 
+@pytest.mark.order(2)
 @pytest.mark.django_db
 def test_age_not_minor():
     """ Customer cannot be under 18 years old """

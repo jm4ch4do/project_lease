@@ -8,6 +8,7 @@ from django.db import IntegrityError
 from faker import Faker
 
 
+@pytest.mark.order(5)
 @pytest.mark.django_db
 def test_customer_need_related_customer():
 
@@ -18,6 +19,7 @@ def test_customer_need_related_customer():
     assert True if exp else False
 
 
+@pytest.mark.order(5)
 @pytest.mark.django_db
 def test_customer_need_related_lead():
 
@@ -28,6 +30,7 @@ def test_customer_need_related_lead():
     assert True if exp else False
 
 
+@pytest.mark.order(5)
 @pytest.mark.django_db
 def test_customer_cant_have_related_contact_and_lead():
 
@@ -40,6 +43,7 @@ def test_customer_cant_have_related_contact_and_lead():
     assert True if exp else False
 
 
+@pytest.mark.order(5)
 @pytest.mark.django_db
 def test_customer_need_related_email():
 
@@ -50,6 +54,7 @@ def test_customer_need_related_email():
     assert True if exp else False
 
 
+@pytest.mark.order(5)
 @pytest.mark.django_db
 def test_customer_need_related_phone():
 
@@ -60,6 +65,7 @@ def test_customer_need_related_phone():
     assert True if exp else False
 
 
+@pytest.mark.order(5)
 @pytest.mark.django_db
 def test_customer_cant_have_related_contact_and_lead():
 
@@ -73,6 +79,7 @@ def test_customer_cant_have_related_contact_and_lead():
     assert True if exp else False
 
 
+@pytest.mark.order(5)
 @pytest.mark.django_db
 def test_customer_bad_phone():
 
@@ -87,6 +94,7 @@ def test_customer_bad_phone():
     assert True if exp else False
 
 
+@pytest.mark.order(5)
 @pytest.mark.django_db
 def test_customer_bad_phone():
 

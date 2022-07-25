@@ -5,6 +5,7 @@ from app_lease.test.generator import random_user, random_customer
 from django.contrib.auth.models import User
 
 
+@pytest.mark.order(2)
 @pytest.mark.django_db
 def test_create_user():
     created_user = random_user()
@@ -13,6 +14,7 @@ def test_create_user():
     assert True if Customer.objects.all().count() == 0 else False  # customers should be empty
 
 
+@pytest.mark.order(2)
 @pytest.mark.django_db
 def test_delete_user():
     # deleting user should delete user and customer

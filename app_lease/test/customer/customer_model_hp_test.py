@@ -4,7 +4,7 @@ from app_lease.models import Customer
 from app_lease.test.generator import random_customer
 from django.contrib.auth.models import User
 
-
+@pytest.mark.order(3)
 @pytest.mark.django_db
 def test_create_customer():
     created_customer = random_customer()
@@ -13,7 +13,7 @@ def test_create_customer():
     assert True if Customer.objects.all().count() == 1 else False  # only one object in table users
     assert True if Customer.objects.first().user.id == User.objects.first().id else False  # user and customer relation
 
-
+@pytest.mark.order(3)
 @pytest.mark.django_db
 def test_delete_customer():
     created_customer = random_customer()
@@ -28,7 +28,7 @@ def test_delete_customer():
     assert True if Customer.objects.all().count() == 0 else False
     assert True if User.objects.all().count() == 0 else False
 
-
+@pytest.mark.order(3)
 @pytest.mark.django_db
 def test_custom_customer():
     # testing custom methods in customer

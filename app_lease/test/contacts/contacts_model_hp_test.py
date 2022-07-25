@@ -4,7 +4,7 @@ from app_lease.models import Contact, Customer, Lead
 from app_lease.test.generator import random_contact
 from django.contrib.auth.models import User
 
-
+@pytest.mark.order(5)
 @pytest.mark.django_db
 def test_create_contact_with_email_for_customer():
 
@@ -19,6 +19,7 @@ def test_create_contact_with_email_for_customer():
     assert True if created_contact.type == 1 else False  # contact has type 1 (email)\
 
 
+@pytest.mark.order(5)
 @pytest.mark.django_db
 def test_create_contact_with_phone_for_customer():
 
@@ -33,6 +34,7 @@ def test_create_contact_with_phone_for_customer():
     assert True if created_contact.type == 2 else False  # contact has type 2 (phone)
 
 
+@pytest.mark.order(5)
 @pytest.mark.django_db
 def test_create_contact_with_email_for_lead():
 
@@ -45,6 +47,7 @@ def test_create_contact_with_email_for_lead():
     assert True if created_contact.type == 1 else False  # contact has type 1 (email)
 
 
+@pytest.mark.order(5)
 @pytest.mark.django_db
 def test_create_contact_with_phone_for_lead():
     # create contact with phone for a lead
@@ -57,6 +60,7 @@ def test_create_contact_with_phone_for_lead():
     assert True if created_contact.type == 2 else False  # contact has type 2 (phone)
 
 
+@pytest.mark.order(5)
 @pytest.mark.django_db
 def test_delete_contact_dont_delete_related_customer():
 
@@ -66,6 +70,7 @@ def test_delete_contact_dont_delete_related_customer():
     assert True if User.objects.all().count() == 1 else False  # user was not removed
 
 
+@pytest.mark.order(5)
 @pytest.mark.django_db
 def test_delete_contact_dont_delete_related_lead():
 
@@ -74,6 +79,7 @@ def test_delete_contact_dont_delete_related_lead():
     assert True if Lead.objects.all().count() == 1 else False  # lead was not removed
 
 
+@pytest.mark.order(5)
 @pytest.mark.django_db
 def test_delete_customer_delete_contact():
 
@@ -83,6 +89,7 @@ def test_delete_customer_delete_contact():
     assert True if Contact.objects.all().count() == 0 else False  # customer was not removed
 
 
+@pytest.mark.order(5)
 @pytest.mark.django_db
 def test_custom_contact():
     # testing custom methods in customer
