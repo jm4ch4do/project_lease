@@ -4,4 +4,5 @@ from .random_customer import random_customer
 from .random_lead import random_lead
 from .random_vehicle import random_vehicle
 from .random_contact import random_contact
+from .random_service import random_service
 
