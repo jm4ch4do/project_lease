@@ -91,6 +91,16 @@ def test_delete_customer_delete_contact():
 
 @pytest.mark.order(5)
 @pytest.mark.django_db
+def test_delete_lead_delete_contact():
+    """ Deleting customer must delete contact """
+    created_contact = random_contact(related_to='lead')
+    related_lead = created_contact.lead
+    related_lead.delete()
+    assert True if Contact.objects.all().count() == 0 else False
+
+
+@pytest.mark.order(5)
+@pytest.mark.django_db
 def test_custom_contact():
     """ Testing custom methods in customer """
 
