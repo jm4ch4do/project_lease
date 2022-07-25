@@ -38,3 +38,15 @@ def exclusive_fields(fields, noun):
             )
 
     return fields\
+
+
+
+def higher_eq_than(value, minimum, noun):
+    """ value should be higher or equal than limit """
+
+    if value < minimum:
+        raise ValidationError(
+            "The value %(noun) should be higher than %(minimum)",
+            code='higher_eq_than',
+            params={'noun': noun}
+        )

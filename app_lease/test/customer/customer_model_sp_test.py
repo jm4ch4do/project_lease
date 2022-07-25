@@ -3,6 +3,7 @@ import pytest
 from django.db import IntegrityError
 from app_lease.test.generator import random_customer
 from django.core.exceptions import ValidationError
+from datetime import date
 
 
 @pytest.mark.django_db
@@ -81,4 +82,18 @@ def test_blank_fields_customer():
     with pytest.raises(ValidationError) as exp:
         created_customer.dob = ""
         created_customer.full_clean()  # run validation
+    assert True if exp else False
+
+
+@pytest.mark.django_db
+def test_age_not_minor():
+    """ Customer cannot be under 18 years old """
+
+    created_customer = random_customer()
+    today = date.today()
+    today_15_years_ago = date(today.year - 15, today.month, today.day)
+
+    with pytest.raises(ValidationError) as exp:
+        created_customer.dob = today_15_years_ago
+        created_customer.full_clean()
     assert True if exp else False
