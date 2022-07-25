@@ -1,10 +1,8 @@
 from faker import Faker
-from app_lease.test.generator.random_user import random_user
 from app_lease.test.generator.random_customer import random_customer
 from app_lease.test.generator.random_lead import random_lead
-from app_lease.test.generator import Provider
+from app_lease.utils.fake_provider import Provider
 from app_lease.models import Contact
-from datetime import datetime
 
 
 def random_contact(total=1, related_to='customer', contact_type=1, user=None):

@@ -58,3 +58,5 @@ def lead_to_customer(lead, username=None, password=None):
 
     # delete lead
     lead.delete()
+
+    return created_customer

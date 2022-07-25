@@ -1,8 +1,5 @@
 import pytest
 from faker import Faker
-from app_lease.models import Customer
-from app_lease.test.generator import random_customer
-from django.contrib.auth.models import User
 from datetime import datetime
 from app_lease.utils.age_from_dob import age_from_dob
 

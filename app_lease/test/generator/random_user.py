@@ -1,5 +1,5 @@
 from faker import Faker
-from app_lease.test.generator import Provider
+from app_lease.utils.fake_provider import Provider
 from django.contrib.auth.models import User
 from random import getrandbits
 

@@ -1,6 +1,6 @@
 from faker import Faker
 from app_lease.test.generator.random_user import random_user
-from app_lease.test.generator import Provider
+from app_lease.utils.fake_provider import Provider
 from app_lease.models import Customer
 from datetime import datetime
 
