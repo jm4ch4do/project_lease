@@ -2,7 +2,7 @@ from django.db import models
 from .customer import Customer
 from .lead import Lead
 from django.core.validators import RegexValidator
-from ..validators import at_least_one_required
+from ..validators import at_least_one_required, exclusive_fields
 
 
 class Contact(models.Model):
@@ -39,6 +39,10 @@ class Contact(models.Model):
         # must provide at least one email or phone
         at_least_one_required([self.email, self.phone], 'email/phone')
         at_least_one_required([self.customer, self.lead], 'customer/lead')
+
+        # exclusive fields
+        exclusive_fields([self.email, self.phone], 'email/phone')
+        exclusive_fields([self.customer, self.lead], 'customer/lead')
 
     # string output
     def __str__(self):
