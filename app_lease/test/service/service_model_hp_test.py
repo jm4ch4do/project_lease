@@ -2,7 +2,6 @@
 import pytest
 from app_lease.models import Service
 from app_lease.test.generator import random_service
-from django.contrib.auth.models import User
 
 
 @pytest.mark.order(6)
@@ -20,7 +19,7 @@ def test_create_service():
 def test_delete_service():
     """ Basic test for deleting service """
 
-    created_lead = random_service()
+    random_service()
     Service.objects.all().delete()
     assert True if Service.objects.all().count() == 0 else False
 
