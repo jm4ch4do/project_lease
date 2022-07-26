@@ -24,15 +24,26 @@ class Trade(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    # ordering
     class Meta:
+
+        # ordering
         ordering = ['created_at']
+
+        # ----- limitations
+        # vehicle and service are unique as a couple
+        constraints = [
+            models.UniqueConstraint(fields=['vehicle', 'service'], name='unique_vehicle_service_in_trade'),
+        ]
 
     # calculation
     @property
     def label(self):
-        return self.vehicle.name + " (" + str(self.customer.name) + ")" \
+        return self.vehicle.name + " /" + str(self.customer.name) + "/" \
                                  + " [" + str(self.service.name) + "]"
+
+
+
+
 
     # string output
     def __str__(self):
