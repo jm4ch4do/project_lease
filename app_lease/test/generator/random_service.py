@@ -4,13 +4,13 @@ from app_lease.models import Service
 from random import randint, random
 
 
-def random_service(total=1, user=None):
+def random_service(total=1):
 
     # register custom functions
     fake = Faker()
     fake.add_provider(Provider)
 
-    # ----- create leads
+    # ----- create services
     created_services = []
     for _ in range(total):
 
