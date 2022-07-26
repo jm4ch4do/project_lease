@@ -1,10 +1,12 @@
 # ------------------------------ CUSTOMER MODEL HAPPY PATH ------------------------------
 import pytest
 from django.db import IntegrityError
-from app_lease.test.utils import random_customer
+from app_lease.test.generator import random_customer
 from django.core.exceptions import ValidationError
+from datetime import date
 
 
+@pytest.mark.order(2)
 @pytest.mark.django_db
 def test_empty_user_in_customer():
     """ A customer should not allow having no related user """
@@ -19,6 +21,7 @@ def test_empty_user_in_customer():
         assert False
 
 
+@pytest.mark.order(2)
 @pytest.mark.django_db
 def test_string_user_in_customer():
     """ A customer should not allow having a string value as related user """
@@ -33,6 +36,7 @@ def test_string_user_in_customer():
         assert False
 
 
+@pytest.mark.order(2)
 @pytest.mark.django_db
 def test_none_fields_in_customer():
     """ A customer's first name can't be None """
@@ -48,6 +52,7 @@ def test_none_fields_in_customer():
         assert False
 
 
+@pytest.mark.order(2)
 @pytest.mark.django_db
 def test_blank_fields_customer():
     """ Several fields cannot be blank in customer """
@@ -81,4 +86,19 @@ def test_blank_fields_customer():
     with pytest.raises(ValidationError) as exp:
         created_customer.dob = ""
         created_customer.full_clean()  # run validation
+    assert True if exp else False
+
+
+@pytest.mark.order(2)
+@pytest.mark.django_db
+def test_customer_age_not_minor():
+    """ Customer cannot be under 18 years old """
+
+    created_customer = random_customer()
+    today = date.today()
+    today_15_years_ago = date(today.year - 15, today.month, today.day)
+
+    with pytest.raises(ValidationError) as exp:
+        created_customer.dob = today_15_years_ago
+        created_customer.full_clean()
     assert True if exp else False

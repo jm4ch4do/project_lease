@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
-from ..utils.age_from_dob import age_from_dob
+from app_lease.utils.age_from_dob import age_from_dob
+from app_lease.validators import higher_eq_than
 
 
 class Customer(models.Model):
@@ -44,6 +45,13 @@ class Customer(models.Model):
     # ordering
     class Meta:
         ordering = ['first_name']
+
+    # validation
+    def clean(self):
+
+        # age > 18
+        higher_eq_than(self.age, 18, 'age')
+
 
     # string output
     def __str__(self):
