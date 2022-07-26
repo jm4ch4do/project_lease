@@ -28,7 +28,7 @@ class Trade(models.Model):
         # ordering
         ordering = ['created_at']
 
-        # ----- limitations
+        # ----- constraints
         # vehicle and service are unique as a couple
         constraints = [
             models.UniqueConstraint(fields=['vehicle', 'service'], name='unique_vehicle_service_in_trade'),
@@ -39,10 +39,6 @@ class Trade(models.Model):
     def label(self):
         return self.vehicle.name + " /" + str(self.vehicle.customer.name) + "/" \
                                  + " [" + str(self.service.name) + "]"
-
-
-
-
 
     # string output
     def __str__(self):
