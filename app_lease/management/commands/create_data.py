@@ -1,11 +1,12 @@
 from django.core.management.base import BaseCommand
 from faker import Faker
 from faker_vehicle import VehicleProvider
-from app_lease.models import Customer, Contact, Lead, Vehicle, Service
+from app_lease.models import Customer, Contact, Lead, Vehicle, Service, Trade
 from django.contrib.auth.models import User
 from datetime import datetime
 from random import getrandbits
 from app_lease.utils.fake_provider import Provider
+from random import randint
 
 
 class Command(BaseCommand):
@@ -202,4 +203,19 @@ class Command(BaseCommand):
                 when_to_pay=when_to_pay,
                 service_type=service_type,
                 description=fake.paragraph(nb_sentences=3)
+            )
+
+        # ----- create one trade per vehicle
+        for _ in range(total_vehicles):
+
+            # use any vehicle with no repetition
+            selected_vehicle = fake.unique.get_random_vehicle()
+            selected_service = fake.get_random_service()
+
+            created_trade = Trade.objects.create(
+                customer=selected_vehicle.customer,
+                service=selected_service,
+                vehicle=selected_vehicle,
+                note=fake.paragraph(nb_sentences=3),
+                status=randint(1, 3)
             )
