@@ -53,3 +53,11 @@ def test_random_vehicle():
 
     created_vehicle = random_vehicle()
     assert True if isinstance(created_vehicle, Vehicle) else False
+
+
+@pytest.mark.order(1)
+@pytest.mark.django_db
+def test_random_trade():
+
+    created_trade = random_trade()
+    assert True if isinstance(created_trade, Trade) else False

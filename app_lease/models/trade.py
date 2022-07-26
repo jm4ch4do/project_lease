@@ -5,8 +5,8 @@ from app_lease.models import Customer, Service, Vehicle
 class Trade(models.Model):
 
     # foreign keys
-    service = models.ForeignKey(Service, blank=False, on_delete=models.CASCADE)
     customer = models.ForeignKey(Customer, blank=False, on_delete=models.CASCADE)
+    service = models.ForeignKey(Service, blank=False, on_delete=models.CASCADE)
     vehicle = models.OneToOneField(Vehicle, blank=False, on_delete=models.CASCADE)
 
     # string fields
