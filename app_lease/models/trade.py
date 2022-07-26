@@ -5,7 +5,6 @@ from app_lease.models import Customer, Service, Vehicle
 class Trade(models.Model):
 
     # foreign keys
-    customer = models.ForeignKey(Customer, blank=False, on_delete=models.CASCADE)
     service = models.ForeignKey(Service, blank=False, on_delete=models.CASCADE)
     vehicle = models.OneToOneField(Vehicle, blank=False, on_delete=models.CASCADE)
 
@@ -38,7 +37,7 @@ class Trade(models.Model):
     # calculation
     @property
     def label(self):
-        return self.vehicle.name + " /" + str(self.customer.name) + "/" \
+        return self.vehicle.name + " /" + str(self.vehicle.customer.name) + "/" \
                                  + " [" + str(self.service.name) + "]"
 
 
