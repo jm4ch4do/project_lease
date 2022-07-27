@@ -17,7 +17,7 @@ class Trade(models.Model):
         (2, 'closed'),
         (3, 'canceled'),
     )
-    status = models.SmallIntegerField(choices=CHOICES_TRADE_STATUS)
+    status = models.SmallIntegerField(blank=False, choices=CHOICES_TRADE_STATUS, default=1)
 
     # internal fields
     created_at = models.DateTimeField(auto_now_add=True)

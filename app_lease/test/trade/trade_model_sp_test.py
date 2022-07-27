@@ -1,8 +1,7 @@
 import pytest
-from app_lease.models import Customer
 from app_lease.test.generator import random_trade
-from django.contrib.auth.models import User
 from django.db import IntegrityError
+from django.core.exceptions import ValidationError
 
 
 @pytest.mark.order(8)
@@ -42,4 +41,17 @@ def test_vehicle_empty_in_trade():
     with pytest.raises(IntegrityError) as exp:
         created_trade.vehicle = None
         created_trade.save()
+    assert True if exp else False
+
+
+@pytest.mark.order(8)
+@pytest.mark.django_db
+def test_status_not_empty_in_trade():
+    """ The status of the trade can't be empty """
+
+    created_trade = random_trade()
+
+    with pytest.raises(ValidationError) as exp:
+        created_trade.status = None
+        created_trade.full_clean()
     assert True if exp else False
