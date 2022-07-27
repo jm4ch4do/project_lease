@@ -14,10 +14,10 @@ def random_trade(total=1, service=None, vehicle=None):
     fake = Faker()
     fake.add_provider(Provider)
 
-    # can't create multiple trades for same customer, service, vehicle combination
+    # can't create multiple trades for same service, vehicle combination
     if total > 1 and service and vehicle:
         raise ValidationError(
-            "You can only have one trade per customer/service/vehicle combination",
+            "You can only have one trade per service/vehicle combination",
             code='trade_per_customer_service_vehicle'
         )
 

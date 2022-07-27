@@ -6,11 +6,11 @@ class Proposal(models.Model):
 
     # foreign keys
     trade = models.ForeignKey(Trade, blank=False, on_delete=models.CASCADE)
-    customer = models.ForeignKey(Customer, blank=True, null=True, on_delete=models.CASCADE)
+    buying_customer = models.ForeignKey(Customer, blank=True, null=True, on_delete=models.CASCADE)
 
     # numeric fields
     total_amount = models.FloatField(blank=False)
-    total_time_to_pay = models.IntegerField(blank=False, default=0)
+    total_days_to_pay = models.IntegerField(blank=False, default=0)
     down_payment = models.IntegerField(blank=False)
 
     # flags
