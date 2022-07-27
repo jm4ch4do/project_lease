@@ -1,5 +1,5 @@
 from django.db import models
-from app_lease.models import Customer, Service, Vehicle
+from app_lease.models import Service, Vehicle
 
 
 class Trade(models.Model):
@@ -14,7 +14,7 @@ class Trade(models.Model):
     # flags
     CHOICES_TRADE_STATUS = (
         (1, 'open'),
-        (2, 'closed'),
+        (2, 'accepted'),
         (3, 'canceled'),
     )
     status = models.SmallIntegerField(blank=False, choices=CHOICES_TRADE_STATUS, default=1)
@@ -47,7 +47,7 @@ class Trade(models.Model):
 
 # service ID
 # customer ID
-# status - open, closed, canceled
+# status - open, accepted, canceled
 # vehicle ID
 #
 
