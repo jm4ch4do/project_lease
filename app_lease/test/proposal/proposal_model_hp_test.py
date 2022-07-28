@@ -35,7 +35,7 @@ def test_create_proposal():
     assert True if created_proposal.trade.vehicle.customer.user == created_user else False
 
 
-@pytest.mark.order(8)
+@pytest.mark.order(9)
 @pytest.mark.django_db
 def test_delete_proposal():
     """ Delete proposal doesn't delete anything else """
@@ -50,7 +50,20 @@ def test_delete_proposal():
     assert True if Trade.objects.all().count() == 1 else False
 
 
-@pytest.mark.order(8)
+@pytest.mark.order(9)
+@pytest.mark.django_db
+def test_delete_proposal_from_trade():
+    """ Deleting trade must delete proposal """
+
+    created_proposal = random_proposal()
+    created_proposal.trade.delete()
+
+    assert True if Proposal.objects.all().count() == 0 else False
+    assert True if Trade.objects.all().count() == 0 else False
+
+
+
+@pytest.mark.order(9)
 @pytest.mark.django_db
 def test_custom_proposal():
     """ Test simple custom methods in proposal """
