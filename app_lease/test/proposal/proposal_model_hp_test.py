@@ -37,6 +37,21 @@ def test_create_proposal():
 
 @pytest.mark.order(8)
 @pytest.mark.django_db
+def test_delete_proposal():
+    """ Delete proposal doesn't delete anything else """
+
+    created_proposal = random_proposal()
+    created_proposal.delete()
+
+    assert True if User.objects.all().count() == 1 else False
+    assert True if Customer.objects.all().count() == 1 else False
+    assert True if Vehicle.objects.all().count() == 1 else False
+    assert True if Service.objects.all().count() == 1 else False
+    assert True if Trade.objects.all().count() == 1 else False
+
+
+@pytest.mark.order(8)
+@pytest.mark.django_db
 def test_custom_proposal():
     """ Test simple custom methods in proposal """
 
@@ -51,6 +66,8 @@ def test_custom_proposal():
     assert True if isinstance(created_proposal.show_notes, str) else False  # returns valid str
     created_proposal.system_note = 'my_internal_note'
     assert True if isinstance(created_proposal.show_notes, str) else False # returns valid str
+
+
 
 # need method for accepting proposal where you can pass the customer accepting the proposal
 # and it will change the status the accepted and leave a system_note
