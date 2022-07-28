@@ -6,14 +6,21 @@ class Proposal(models.Model):
 
     # foreign keys
     trade = models.ForeignKey(Trade, blank=False, on_delete=models.CASCADE)
-    buying_customer = models.ForeignKey(Customer, blank=True, null=True, on_delete=models.CASCADE)
+    created_by_customer = models.ForeignKey(Customer, blank=False, on_delete=models.CASCADE,
+                                            related_name='created_by_customer')
+    accepted_by_customer = models.ForeignKey(Customer, blank=True, null=True, on_delete=models.CASCADE
+                                             , related_name='accepted_by_customer')
 
-    # numeric fields
+    # ----- string fields
+    note = models.TextField(blank=True, null=True, max_length=200)
+    system_note = models.TextField(blank=True, null=True, max_length=200)
+
+    # ----- numeric fields
     total_amount = models.FloatField(blank=False)
     total_days_to_pay = models.IntegerField(blank=False, default=0)
     down_payment = models.IntegerField(blank=False)
 
-    # flags
+    # ----- flags
     CHOICES_PROPOSAL_STATUS = (
         (1, 'pending'),  # proposal wins the trade
         (2, 'accepted'),   # not decided yet
@@ -30,10 +37,10 @@ class Proposal(models.Model):
     )
     pay_frequency = models.SmallIntegerField(blank=False, choices=CHOICES_TRADE_PAY_FREQUENCY, default=1)
 
-    # calculations
+    # ----- calculations
     @property
     def proposed_by(self):
-        return "owner" if not self.customer else "buyer"
+        return "owner" if self.created_by_customer == self.trade.vehicle.customer else "buyer"
 
     @property
     def monthly_payment(self):
@@ -57,3 +64,14 @@ class Proposal(models.Model):
     def weekly_payment(self):
 
         return self.monthly_payment/4
+
+    @property
+    def show_notes(self):
+        if not self.system_note:
+            return self.note
+        else:
+            return self.note + '\n' + '---system_note---\n' + self.system_note
+
+    # functions
+    def accept_proposal(self):
+        pass
