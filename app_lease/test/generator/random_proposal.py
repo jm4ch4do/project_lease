@@ -5,7 +5,7 @@ from app_lease.models import Proposal
 from random import uniform, randint
 
 
-def random_proposal(total=1, trade=None, buying_customer=None):
+def random_proposal(total=1, trade=None, created_by_customer=None):
 
     # register custom functions
     fake = Faker()
@@ -18,8 +18,8 @@ def random_proposal(total=1, trade=None, buying_customer=None):
         # create trade if needed
         created_trade = trade if trade else random_trade()
 
-        # create customer if needed (customer may be empty if proposal was created by owner)
-        created_buying_customer = buying_customer if buying_customer else None
+        # create customer if needed
+        created_by_customer = created_by_customer if created_by_customer else created_trade.vehicle.customer
 
         # proposal parameters
         total_amount = round(uniform(10_000, 40_000), 0)
@@ -30,7 +30,7 @@ def random_proposal(total=1, trade=None, buying_customer=None):
         # create proposal
         created_proposal = Proposal.objects.create(
             trade=created_trade,
-            buying_customer=created_buying_customer,
+            created_by_customer=created_by_customer,
             total_amount=total_amount,
             down_payment=down_payment,
             total_days_to_pay=total_days_to_pay,
