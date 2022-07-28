@@ -18,7 +18,7 @@ class Proposal(models.Model):
     # ----- numeric fields
     total_amount = models.FloatField(blank=False)
     total_days_to_pay = models.IntegerField(blank=False, default=0)
-    down_payment = models.IntegerField(blank=False)
+    down_payment = models.FloatField(blank=False)
 
     # ----- flags
     CHOICES_PROPOSAL_STATUS = (
@@ -47,7 +47,7 @@ class Proposal(models.Model):
 
         # only one time payment => no monthly_payment
         if self.total_amount == self.down_payment:
-            return 0
+            return float(0)
 
         # time to pay lower than a month => assume one month
         if self.total_time_to_pay < 30:
@@ -67,12 +67,18 @@ class Proposal(models.Model):
 
     @property
     def show_notes(self):
-        if not self.system_note:
-            return self.note
-        else:
-            return self.note + '\n' + '---system_note---\n' + self.system_note
 
-    # functions
+        # guarantee notes always contain string
+        note = '' if not self.note else self.note
+        system_note = '' if not self.system_note else self.system_note
+
+        # output only note if no system_note
+        if not self.system_note:
+            return note
+        else:
+            return note + '\n' + '---system_note---\n' + system_note
+
+    # ----- functions
     def accept_proposal(self):
         pass
         # proposal can't be accepted if trade is already accepted
@@ -83,7 +89,11 @@ class Proposal(models.Model):
 
         # close other proposals for same trade leaving a note
 
-    # functions
     def refuse_proposal(self):
         pass
         # change state to refused and leave a note
+
+    # ----- string output
+    def __str__(self):
+        return self.proposed_by + ' proposes ' + str(self.total_amount) + \
+               ' as ' + self.get_pay_frequency_display() + ' for ' + str(self.trade)

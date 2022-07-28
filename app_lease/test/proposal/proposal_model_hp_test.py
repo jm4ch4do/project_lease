@@ -35,6 +35,23 @@ def test_create_proposal():
     assert True if created_proposal.trade.vehicle.customer.user == created_user else False
 
 
+@pytest.mark.order(8)
+@pytest.mark.django_db
+def test_custom_proposal():
+    """ Test simple custom methods in proposal """
+
+    created_proposal = random_proposal()
+    assert True if isinstance(str(created_proposal), str) else False  # object returns valid string
+    assert True if isinstance(created_proposal.proposed_by, str) else False  # returns valid str
+    assert True if isinstance(created_proposal.monthly_payment, float) else False  # returns valid float
+    assert True if isinstance(created_proposal.bi_weekly_payment, float) else False  # returns valid float
+    assert True if isinstance(created_proposal.weekly_payment, float) else False  # returns valid float
+
+    # try both with and without internal notes
+    assert True if isinstance(created_proposal.show_notes, str) else False  # returns valid str
+    created_proposal.system_note = 'my_internal_note'
+    assert True if isinstance(created_proposal.show_notes, str) else False # returns valid str
+
 # need method for accepting proposal where you can pass the customer accepting the proposal
 # and it will change the status the accepted and leave a system_note
 # accepting a proposal, closes other proposals in the same trade and accepts trade
