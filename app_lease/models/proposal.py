@@ -22,12 +22,12 @@ class Proposal(models.Model):
 
     # ----- flags
     CHOICES_PROPOSAL_STATUS = (
-        (1, 'pending'),  # proposal wins the trade
-        (2, 'accepted'),   # not decided yet
+        (1, 'pending'),  # not decided yet
+        (2, 'accepted'),   # proposal wins the trade
         (3, 'refused'),   # owner refused the proposal
         (4, 'closed'),    # parent trade was canceled or another proposal was accepted
     )
-    status = models.SmallIntegerField(blank=False, choices=CHOICES_PROPOSAL_STATUS, default=1)
+    _status = models.SmallIntegerField(blank=False, choices=CHOICES_PROPOSAL_STATUS, default=1)
 
     CHOICES_TRADE_PAY_FREQUENCY = (
         (1, 'one_time'),
@@ -75,3 +75,15 @@ class Proposal(models.Model):
     # functions
     def accept_proposal(self):
         pass
+        # proposal can't be accepted if trade is already accepted
+
+        # close proposal
+
+        # accept trade
+
+        # close other proposals for same trade leaving a note
+
+    # functions
+    def refuse_proposal(self):
+        pass
+        # change state to refused and leave a note
