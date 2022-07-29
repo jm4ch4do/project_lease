@@ -1,7 +1,7 @@
 # ------------------------------ CUSTOMER MODEL HAPPY PATH ------------------------------
 import pytest
 from django.db import IntegrityError
-from app_lease.test.generator import random_proposal
+from app_lease.test.generator import random_proposal, random_customer
 from django.core.exceptions import ValidationError
 from datetime import date
 
@@ -51,7 +51,25 @@ def test_not_equal_created_by_accepted_by_in_proposal():
     else:
         assert False
 
-# also, one of them must be the owner of the car
+
+@pytest.mark.order(9)
+@pytest.mark.django_db
+def test_vehicle_owner_in_proposal():
+    """ One of the  fields created_by_customer or accepted_by_customer
+        must contain the owner of the car """
+
+    created_proposal = random_proposal()
+    created_customer1 = random_customer()
+    created_customer2 = random_customer()
+
+    try:
+        created_proposal.accepted_by_customer = created_customer1
+        created_proposal.created_by_customer = created_customer2
+        created_proposal.full_clean()  # modify proposal to have no related trade
+    except ValidationError as ex:
+        assert True  # it should trigger an Exception
+    else:
+        assert False
 
 
 

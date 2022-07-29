@@ -61,3 +61,14 @@ def repeated_values(values, noun):
             code='repeated_values',
             params={'noun': noun}
         )
+
+
+def value_contained(values, target, message):
+    """ target must be in values """
+
+    if target not in values:
+        raise ValidationError(
+            "message",
+            code='repeated_values',
+            params={'message': message}
+        )
