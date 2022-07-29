@@ -146,25 +146,4 @@ def test_custom_proposal():
     # try both with and without internal notes
     assert True if isinstance(created_proposal.show_notes, str) else False  # returns valid str
     created_proposal.system_note = 'my_internal_note'
-    assert True if isinstance(created_proposal.show_notes, str) else False # returns valid str
-
-
-
-# need method for accepting proposal where you can pass the customer accepting the proposal
-# and it will change the status the accepted and leave a system_note
-# accepting a proposal, closes other proposals in the same trade and accepts trade
-
-
-# delete proposal deletes nothing else
-# deleting trade, vehicle, service, customer or user deletes proposal
-
-
-# created_by_customer and accepted_by_customer can't have the same value
-# also, one of them must be the owner of the car
-#  proposal can't have empty trade
-#  proposal can't have empty created_by_customer
-# both customers can't be equal
-
-#  need method for canceling trade
-
-# need to accept, close, cancel some proposals and trades in create_data command
+    assert True if isinstance(created_proposal.show_notes, str) else False  # returns valid str

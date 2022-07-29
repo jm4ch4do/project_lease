@@ -1,5 +1,6 @@
 from django.db import models
 from app_lease.models import Customer, Trade
+from app_lease.validators import repeated_values
 
 
 class Proposal(models.Model):
@@ -49,7 +50,7 @@ class Proposal(models.Model):
             return float(0)
 
         # time to pay lower than a month => assume one month
-        if self.total_time_to_pay < 30:
+        if self.total_days_to_pay < 30:
             return self.total_amount - self.down_payment
 
         return (self.total_amount - self.down_payment)/30
@@ -77,8 +78,15 @@ class Proposal(models.Model):
         else:
             return note + '\n' + '---system_note---\n' + system_note
 
+    # validation
+    def clean(self):
+
+        # created_by_customer and accepted_by_customer can't have same user
+        repeated_values([self.created_by_customer, self.accepted_by_customer],
+                        'created_by/accepted_by')
+
     # ----- functions
-    def accept_proposal(self):
+    def accept_proposal(self, accepting_customer):
         pass
         # proposal can't be accepted if trade is already accepted
 
@@ -88,7 +96,7 @@ class Proposal(models.Model):
 
         # close other proposals for same trade leaving a note
 
-    def refuse_proposal(self):
+    def refuse_proposal(self, refusing_customer):
         pass
         # change state to refused and leave a note
 

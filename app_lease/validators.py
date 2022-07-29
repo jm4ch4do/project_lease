@@ -50,3 +50,14 @@ def higher_eq_than(value, minimum, noun):
             code='higher_eq_than',
             params={'noun': noun}
         )
+
+
+def repeated_values(values, noun):
+    """ values can't have repeated (duplicated) objects """
+
+    if len(set(values)) != len(values):
+        raise ValidationError(
+            "You can't have repeated values in %(noun)",
+            code='repeated_values',
+            params={'noun': noun}
+        )
