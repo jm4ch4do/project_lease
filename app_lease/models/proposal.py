@@ -1,6 +1,7 @@
 from django.db import models
 from app_lease.models import Customer, Trade
-from app_lease.validators import repeated_values
+from app_lease.validators import repeated_values, value_contained
+from django.core.exceptions import ValidationError
 
 
 class Proposal(models.Model):
@@ -85,16 +86,35 @@ class Proposal(models.Model):
         repeated_values([self.created_by_customer, self.accepted_by_customer],
                         'created_by/accepted_by')
 
+        # created_by_customer or accepted_by_customer must be the vehicle's owner
+        value_contained([self.created_by_customer, self.accepted_by_customer],
+                        self.trade.vehicle.customer, "vehicle's owner must be in created_by or accepted_by")
+
     # ----- functions
     def accept_proposal(self, accepting_customer):
-        pass
+
         # proposal can't be accepted if trade is already accepted
+        if self._status == 2:
+            raise ValidationError(
+                "Proposal was already previously accepted already accepted",
+                code='already_accepted_proposal',
+            )
 
-        # close proposal
+        # close proposal and trade
+        self.accepted_by_customer = accepting_customer
+        self._status = 2
+        self.save()
+        self.trade.status = 2
+        self.trade.save()
 
-        # accept trade
 
         # close other proposals for same trade leaving a note
+        for a_proposal in self.trade.proposal_set.all():
+            if a_proposal != self:
+                a_proposal._status = 4
+                a_proposal.system_note = 'closed because other proposal was approved'
+                a_proposal.save()
+
 
     def refuse_proposal(self, refusing_customer):
         pass
