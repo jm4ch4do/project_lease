@@ -1,6 +1,6 @@
 from django.dispatch import receiver
-from django.db.models.signals import post_delete
-from app_lease.models import Customer
+from django.db.models.signals import post_delete, pre_delete
+from app_lease.models import Customer, Proposal
 from django.contrib.auth.models import User
 
 
@@ -9,4 +9,8 @@ from django.contrib.auth.models import User
 def customer_delete_handler(sender, instance, *args, **kwargs):
     user_id = instance.user.id
     User.objects.get(pk=user_id).delete()
+
+
+
+
 

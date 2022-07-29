@@ -6,8 +6,7 @@ class Proposal(models.Model):
 
     # foreign keys
     trade = models.ForeignKey(Trade, blank=False, on_delete=models.CASCADE)
-    created_by_customer = models.ForeignKey(Customer, blank=False, on_delete=models.CASCADE,
-                                            related_name='created_by_customer')
+    created_by_customer = models.ForeignKey(Customer, blank=False, on_delete=models.CASCADE, related_name='created_by_customer')
     accepted_by_customer = models.ForeignKey(Customer, blank=True, null=True, on_delete=models.CASCADE
                                              , related_name='accepted_by_customer')
 

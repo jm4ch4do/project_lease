@@ -1,7 +1,7 @@
 # ------------------------------ CUSTOMER MODEL HAPPY PATH ------------------------------
 import pytest
 from app_lease.models import Proposal, Trade, Customer, Vehicle, Service
-from app_lease.test.generator import random_proposal
+from app_lease.test.generator import random_proposal, random_customer
 from django.contrib.auth.models import User
 
 
@@ -62,6 +62,74 @@ def test_delete_proposal_from_trade():
     assert True if Trade.objects.all().count() == 0 else False
 
 
+@pytest.mark.order(9)
+@pytest.mark.django_db
+def test_delete_proposal_from_vehicle():
+    """ Deleting vehicle must delete proposal """
+
+    created_proposal = random_proposal()
+    created_proposal.trade.vehicle.delete()
+
+    assert True if Proposal.objects.all().count() == 0 else False
+    assert True if Trade.objects.all().count() == 0 else False
+    assert True if Vehicle.objects.all().count() == 0 else False
+
+
+@pytest.mark.order(9)
+@pytest.mark.django_db
+def test_delete_proposal_from_service():
+    """ Deleting service must delete proposal """
+
+    created_proposal = random_proposal()
+    created_proposal.trade.service.delete()
+
+    assert True if Proposal.objects.all().count() == 0 else False
+    assert True if Trade.objects.all().count() == 0 else False
+    assert True if Service.objects.all().count() == 0 else False
+
+
+@pytest.mark.order(9)
+@pytest.mark.django_db
+def test_delete_proposal_from_vehicle_customer():
+    """ Deleting customer must delete proposal """
+
+    created_proposal = random_proposal()
+    created_proposal.trade.vehicle.customer.delete()
+
+    assert True if Proposal.objects.all().count() == 0 else False
+    assert True if Trade.objects.all().count() == 0 else False
+    assert True if Vehicle.objects.all().count() == 0 else False
+    assert True if Customer.objects.all().count() == 0 else False
+    assert True if User.objects.all().count() == 0 else False
+
+
+@pytest.mark.order(9)
+@pytest.mark.django_db
+def test_delete_proposal_from_created_by_customer():
+    """ Deleting customer that created the proposal must delete proposal """
+
+    created_proposal = random_proposal()
+    created_proposal.created_by_customer = random_customer()
+    created_proposal.save()
+    created_proposal.created_by_customer.save()
+    created_proposal.created_by_customer.delete()
+
+    assert True if Proposal.objects.all().count() == 0 else False
+
+
+@pytest.mark.order(9)
+@pytest.mark.django_db
+def test_delete_proposal_from_accepted_by_customer():
+    """ Deleting customer that accepted the proposal must delete proposal """
+
+    created_proposal = random_proposal()
+    created_proposal.accepted_by_customer = random_customer()
+    created_proposal.save()
+    created_proposal.accepted_by_customer.save()
+    created_proposal.accepted_by_customer.delete()
+
+    assert True if Proposal.objects.all().count() == 0 else False
+
 
 @pytest.mark.order(9)
 @pytest.mark.django_db
@@ -91,9 +159,11 @@ def test_custom_proposal():
 # deleting trade, vehicle, service, customer or user deletes proposal
 
 
+# created_by_customer and accepted_by_customer can't have the same value
+# also, one of them must be the owner of the car
 #  proposal can't have empty trade
 #  proposal can't have empty created_by_customer
-
+# both customers can't be equal
 
 #  need method for canceling trade
 
