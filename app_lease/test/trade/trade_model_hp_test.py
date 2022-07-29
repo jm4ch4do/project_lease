@@ -96,7 +96,7 @@ def test_delete_trade_from_user():
 @pytest.mark.order(8)
 @pytest.mark.django_db
 def test_custom_trade():
-    """ Test custom methods in customer """
+    """ Test custom methods in trade """
 
     created_trade = random_trade()
     assert True if isinstance(str(random_trade), str) else False  # object returns valid string
