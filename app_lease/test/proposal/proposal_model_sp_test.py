@@ -97,6 +97,23 @@ def test_owner_out_of_proposal():
     assert True if exp else False
 
 
+@pytest.mark.order(9)
+@pytest.mark.django_db
+def test_owner_refuses_own_proposal():
+    """ Owner can't refuse his own proposal """
+
+    # owner makes a proposal
+    created_proposal = random_proposal()
+
+    # owner refuses his own proposal
+    with pytest.raises(ValidationError) as exp:
+        created_proposal.refuse_proposal()
+        created_proposal.full_clean()
+    assert True if exp else False
+
+
+
+
 
 #  need method for canceling trade
 
