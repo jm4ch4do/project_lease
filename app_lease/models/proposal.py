@@ -23,10 +23,11 @@ class Proposal(models.Model):
 
     # ----- flags
     CHOICES_PROPOSAL_STATUS = (
-        (1, 'pending'),  # not decided yet
-        (2, 'accepted'),   # proposal wins the trade
+        (1, 'pending'),   # not decided yet
+        (2, 'accepted'),  # proposal wins the trade
         (3, 'refused'),   # owner refused the proposal
         (4, 'closed'),    # parent trade was canceled or another proposal was accepted
+        (5, 'canceled'),  # owner canceled his own offer
     )
     _status = models.SmallIntegerField(blank=False, choices=CHOICES_PROPOSAL_STATUS, default=1)
 
@@ -128,6 +129,20 @@ class Proposal(models.Model):
         # change state to refused and leave a note
         self._status = 3
         self.system_note = 'owner refused the proposal'
+        self.save()
+
+    def cancel_proposal(self):
+
+        # proposal can only be canceled by owner if was created by owner
+        if self.created_by_customer != self.trade.vehicle.customer:
+            raise ValidationError(
+                "Owner can't cancel other customer's proposal. You should try refusing proposal.",
+                code='owner_canceling_customer_proposal',
+            )
+
+        # change state to canceled and leave a note
+        self._status = 5
+        self.system_note = 'owner canceled the proposal'
         self.save()
 
 
