@@ -13,7 +13,7 @@ class Invoice(models.Model):
     customer = models.OneToOneField(Customer, blank=False, on_delete=models.CASCADE)
 
     # numeric fields
-    amount = models.FloatField(blank=False, default=trade.service.cost)
+    amount = models.FloatField(blank=False)
 
     # flags
     CHOICES_INVOICE_STATUS = (
