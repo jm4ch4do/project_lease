@@ -16,7 +16,7 @@ def random_invoice(total=1, trade=None, customer=None, amount=None):
     for _ in range(total):
 
         # create trade if needed
-        created_trade = random_trade if not trade else trade
+        created_trade = random_trade() if not trade else trade
 
         # create customer if needed
         created_customer = random_customer() if not customer else customer
