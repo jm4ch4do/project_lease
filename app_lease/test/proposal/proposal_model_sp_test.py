@@ -72,10 +72,29 @@ def test_vehicle_owner_in_proposal():
         assert False
 
 
+@pytest.mark.order(9)
+@pytest.mark.django_db
+def test_owner_out_of_proposal():
+    """ Owner can't be left out of the proposal. He must be the creator
+        or the one accepting the proposal.
+    """
 
-# need method for accepting proposal where you can pass the customer accepting the proposal
-# and it will change the status the accepted and leave a system_note
-# accepting a proposal, closes other proposals in the same trade and accepts trade
+    # two customers come to shop
+    created_customer2 = random_customer()
+    created_customer3 = random_customer()
+
+    # owner makes a proposals
+    created_proposal1 = random_proposal()
+    owner = created_proposal1.trade.vehicle.customer
+
+    # customer2 makes another proposal
+    created_proposal2 = random_proposal(trade=created_proposal1.trade, created_by_customer=created_customer2)
+
+    # customer3 accepts customer 2 proposal which must result into an error
+    with pytest.raises(ValidationError) as exp:
+        created_proposal2.accept_proposal(created_customer3)
+        created_proposal2.full_clean()
+    assert True if exp else False
 
 
 
