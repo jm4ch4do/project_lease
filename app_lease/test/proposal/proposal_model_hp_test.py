@@ -184,3 +184,41 @@ def test_buyer_accepts_proposal():
     assert True if isinstance(created_proposal2.system_note, str) else False  # system_note in closed proposal
     assert True if created_proposal3._status == 4 else False  # proposal closed (not accepted)
     assert True if isinstance(created_proposal3.system_note, str) else False  # system_note in closed proposal
+
+
+@pytest.mark.order(9)
+@pytest.mark.django_db
+def test_owner_accepts_proposal():
+    """ Accepting a proposal changes status of all proposals related to parent trade.
+        Test owner accepting buyers proposal.
+    """
+
+    # two customers come to shop
+    created_customer2 = random_customer()
+    created_customer3 = random_customer()
+
+    # owner makes two proposals
+    created_proposal1 = random_proposal()
+    created_proposal2 = random_proposal(trade=created_proposal1.trade)
+
+    # customer3 makes proposal
+    created_proposal3 = random_proposal(trade=created_proposal1.trade, created_by_customer=created_customer3)
+
+    # owner accepts proposal3
+    owner = created_proposal1.trade.vehicle.customer
+    created_proposal3.accept_proposal(owner)
+
+    # refresh models from database
+    created_proposal1.refresh_from_db(), created_proposal2.refresh_from_db(), created_proposal3.refresh_from_db(),
+
+    # ----- results
+    # owner was properly assign
+    assert True if created_proposal3.accepted_by_customer == owner else False
+
+    # status changed on trade and all proposals for the same trade
+    assert True if created_proposal3._status == 2 else False  # proposal accepted
+    assert True if created_proposal3.trade.status == 2 else False  # trade accepted
+    assert True if created_proposal1._status == 4 else False  # proposal closed (not accepted)
+    assert True if isinstance(created_proposal1.system_note, str) else False  # system_note in closed proposal
+    assert True if created_proposal2._status == 4 else False  # proposal closed (not accepted)
+    assert True if isinstance(created_proposal2.system_note, str) else False  # system_note in closed proposal
