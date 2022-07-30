@@ -213,9 +213,28 @@ class Command(BaseCommand):
             selected_service = fake.get_random_service()
 
             created_trade = Trade.objects.create(
-                customer=selected_vehicle.customer,
                 service=selected_service,
                 vehicle=selected_vehicle,
                 note=fake.paragraph(nb_sentences=3),
                 status=randint(1, 3)
             )
+
+        # # ----- create one proposal per trade
+        # for _ in range(total_vehicles):
+        #
+        #     # use any trade with no repetition
+        #     selected_trade = fake.unique.get_random_trade()
+        #
+        #     # half of the proposals coming from owner, the rest from buyers
+        #     if randint(1,2) == 1:
+        #         selected_customer = selected_trade.vehicle.customer
+        #     else:
+        #         selected_customer =
+        #
+        #     created_proposal = Trade.objects.create(
+        #         customer=selected_vehicle.customer,
+        #         service=selected_service,
+        #         vehicle=selected_vehicle,
+        #         note=fake.paragraph(nb_sentences=3),
+        #         status=randint(1, 3)
+        #     )

@@ -1,5 +1,5 @@
 import faker.providers
-from app_lease.models import Customer, Contact, Vehicle, Service
+from app_lease.models import Customer, Contact, Vehicle, Service, Trade
 from django.contrib.auth.models import User
 from random import randint
 
@@ -24,6 +24,22 @@ class Provider(faker.providers.BaseProvider):
     def get_random_contact_type(self):
         return self.random_element(Contact.CHOICES_CONTACT_TYPE)
 
+    def get_random_customer(self):
+        customers = Customer.objects.all()
+        return self.random_element(customers)
+
+    def get_random_customer_not_owner(self):
+        customers = Customer.objects.all()
+        return self.random_element(customers)
+
+    def get_random_service(self):
+        services = Service.objects.all()
+        return self.random_element(services)
+
+    def get_random_trade(self):
+        services = Trade.objects.all()
+        return self.random_element(services)
+
     def get_random_user(self):
         users = User.objects.all()
         return self.random_element(users)
@@ -31,14 +47,6 @@ class Provider(faker.providers.BaseProvider):
     def get_random_vehicle(self):
         vehicles = Vehicle.objects.all()
         return self.random_element(vehicles)
-
-    def get_random_service(self):
-        services = Service.objects.all()
-        return self.random_element(services)
-
-    def get_random_customer(self):
-        customers = Customer.objects.all()
-        return self.random_element(customers)
 
     @staticmethod
     def get_random_user_name(first_name):
