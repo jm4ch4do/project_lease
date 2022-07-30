@@ -1,12 +1,12 @@
 from django.core.management.base import BaseCommand
 from faker import Faker
 from faker_vehicle import VehicleProvider
-from app_lease.models import Customer, Contact, Lead, Vehicle, Service, Trade
+from app_lease.models import Customer, Contact, Lead, Vehicle, Service, Trade, Proposal
 from django.contrib.auth.models import User
 from datetime import datetime
 from random import getrandbits
 from app_lease.utils.fake_provider import Provider
-from random import randint
+from random import randint, uniform
 
 
 class Command(BaseCommand):
@@ -219,22 +219,29 @@ class Command(BaseCommand):
                 status=randint(1, 3)
             )
 
-        # # ----- create one proposal per trade
-        # for _ in range(total_vehicles):
-        #
-        #     # use any trade with no repetition
-        #     selected_trade = fake.unique.get_random_trade()
-        #
-        #     # half of the proposals coming from owner, the rest from buyers
-        #     if randint(1,2) == 1:
-        #         selected_customer = selected_trade.vehicle.customer
-        #     else:
-        #         selected_customer =
-        #
-        #     created_proposal = Trade.objects.create(
-        #         customer=selected_vehicle.customer,
-        #         service=selected_service,
-        #         vehicle=selected_vehicle,
-        #         note=fake.paragraph(nb_sentences=3),
-        #         status=randint(1, 3)
-        #     )
+        # ----- create one proposal per trade
+        for _ in range(total_vehicles):
+
+            # use any trade with no repetition
+            selected_trade = fake.unique.get_random_trade()
+
+            # half of the proposals coming from owner, the rest from buyers
+            if randint(1,2) == 1:
+                selected_customer = selected_trade.vehicle.customer
+            else:
+                selected_customer = fake.unique.get_random_customer_not_owner()
+
+            # proposal parameters
+            total_amount = round(uniform(10_000, 40_000), 0)
+            down_payment = total_amount if selected_trade.service.service_type == 2 else total_amount / 5
+            total_days_to_pay = 0 if selected_trade.service.service_type == 2 else randint(90, 1080)
+            pay_frequency = 1 if selected_trade.service.service_type == 2 else randint(2, 4)
+
+            created_proposal = Proposal.objects.create(
+                trade=selected_trade,
+                created_by_customer=selected_customer,
+                total_amount=total_amount,
+                down_payment=down_payment,
+                total_days_to_pay=total_days_to_pay,
+                pay_frequency=pay_frequency,
+            )

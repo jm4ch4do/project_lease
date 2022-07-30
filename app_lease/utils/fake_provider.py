@@ -29,8 +29,9 @@ class Provider(faker.providers.BaseProvider):
         return self.random_element(customers)
 
     def get_random_customer_not_owner(self):
-        customers = Customer.objects.all()
-        return self.random_element(customers)
+        query = "SELECT * FROM app_lease_customer alc WHERE id NOT IN ( SELECT customer_id FROM app_lease_vehicle )"
+        customers_not_owners = Customer.objects.raw(query)
+        return self.random_element(customers_not_owners)
 
     def get_random_service(self):
         services = Service.objects.all()
