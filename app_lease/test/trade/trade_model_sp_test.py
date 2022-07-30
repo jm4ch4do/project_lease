@@ -1,5 +1,5 @@
 import pytest
-from app_lease.test.generator import random_trade
+from app_lease.test.generator import random_trade, random_customer, random_proposal
 from django.db import IntegrityError
 from django.core.exceptions import ValidationError
 
@@ -54,4 +54,27 @@ def test_status_not_empty_in_trade():
     with pytest.raises(ValidationError) as exp:
         created_trade.status = None
         created_trade.full_clean()
+    assert True if exp else False
+
+
+@pytest.mark.order(8)
+@pytest.mark.django_db
+def test_cant_cancel_accepted_trade():
+    """ An accepted trade can't be canceled """
+
+    # one customer comes to shop
+    created_customer2 = random_customer()
+
+    # owner makes a proposal
+    created_proposal = random_proposal()
+
+    # customer2 accepts proposal
+    created_proposal.accept_proposal(created_customer2)
+
+    # refresh model from database
+    created_proposal.refresh_from_db()
+
+    # trade can't be canceled because was previously accepted
+    with pytest.raises(ValidationError) as exp:
+        created_proposal.trade.cancel_trade()
     assert True if exp else False
