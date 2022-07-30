@@ -116,9 +116,20 @@ class Proposal(models.Model):
                 a_proposal.save()
 
 
-    def refuse_proposal(self, refusing_customer):
-        pass
+    def refuse_proposal(self):
+
+        # proposal can only be refused by owner if was created by buyer
+        if self.created_by_customer == self.trade.vehicle.customer:
+            raise ValidationError(
+                "Owner can't refuse its own proposal. You should try canceling proposal.",
+                code='owner_refusing_own_proposal',
+            )
+
         # change state to refused and leave a note
+        self._status = 3
+        self.system_note = 'owner refused the proposal'
+        self.save()
+
 
     # ----- string output
     def __str__(self):

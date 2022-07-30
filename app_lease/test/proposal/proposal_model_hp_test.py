@@ -222,3 +222,35 @@ def test_owner_accepts_proposal():
     assert True if isinstance(created_proposal1.system_note, str) else False  # system_note in closed proposal
     assert True if created_proposal2._status == 4 else False  # proposal closed (not accepted)
     assert True if isinstance(created_proposal2.system_note, str) else False  # system_note in closed proposal
+
+
+@pytest.mark.order(9)
+@pytest.mark.django_db
+def test_owner_refuses_proposal():
+    """ Owner can refuse a proposal from another customer
+    """
+
+    # one customer comes to shop
+    created_customer2 = random_customer()
+
+    # owner makes a proposal
+    created_proposal1 = random_proposal()
+    owner = created_proposal1.trade.vehicle.customer
+
+    # customer2 makes proposal
+    created_proposal2 = random_proposal(trade=created_proposal1.trade, created_by_customer=created_customer2)
+
+    # owner refuses proposal2
+    created_proposal2.refuse_proposal()
+
+    # refresh model from database
+    created_proposal2.refresh_from_db()
+
+    # ----- results
+    # proposal is refused and has system_note
+    assert True if created_proposal2._status == 3 else False
+    assert True if isinstance(created_proposal2.system_note, str) else False
+
+
+
+# all tests for refuse proposal
