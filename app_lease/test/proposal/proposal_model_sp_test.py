@@ -112,6 +112,27 @@ def test_owner_refuses_own_proposal():
     assert True if exp else False
 
 
+@pytest.mark.order(9)
+@pytest.mark.django_db
+def test_owner_canceling_customer_proposal():
+    """ Owner can't cancel some other customer's proposal """
+
+    # one customer come to shop
+    created_customer2 = random_customer()
+
+    # owner makes a proposal
+    created_proposal = random_proposal()
+
+    # customer2 makes another proposal
+    created_proposal2 = random_proposal(trade=created_proposal.trade, created_by_customer=created_customer2)
+
+    # owner cancel customer2's proposal -> triggers exception
+    with pytest.raises(ValidationError) as exp:
+        created_proposal2.cancel_proposal()
+        created_proposal.full_clean()
+    assert True if exp else False
+
+
 
 
 
