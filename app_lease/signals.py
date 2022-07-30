@@ -22,4 +22,8 @@ def trade_create_handler(sender, instance, *args, **kwargs):
             trade=created_trade,
             customer=created_trade.vehicle.customer,
             amount=created_trade.service.cost,
+            system_note='for accepting proposal for service sale'
         )
+
+
+

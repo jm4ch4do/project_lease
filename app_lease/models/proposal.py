@@ -121,6 +121,7 @@ class Proposal(models.Model):
                 trade=self.trade,
                 customer=self.trade.vehicle.customer,
                 amount=self.trade.service.cost,
+                system_note='for accepting proposal for service sale'
             )
 
     def refuse_proposal(self):
@@ -150,7 +151,6 @@ class Proposal(models.Model):
         self._status = 5
         self.system_note = 'owner canceled the proposal'
         self.save()
-
 
     # ----- string output
     def __str__(self):
