@@ -20,10 +20,11 @@ class Invoice(models.Model):
         (1, 'pending'),
         (2, 'paid'),
     )
+    status = models.SmallIntegerField(choices=CHOICES_INVOICE_STATUS, default=1)
 
     # date fields
-    today_plus_30days = (datetime.now() + timedelta(30)).date()
-    due_date = models.DateField(blank=False, default=today_plus_30days)
+    TODAY_PLUS_30DAYS = (datetime.now() + timedelta(30)).date()
+    due_date = models.DateField(blank=False, default=TODAY_PLUS_30DAYS)
 
     # internal fields
     created_at = models.DateTimeField(auto_now_add=True)
