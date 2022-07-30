@@ -54,11 +54,13 @@ class Trade(models.Model):
 
         # cancel trade
         self.status = 3
+        self.save()
 
         # close related proposals
         for a_proposal in self.proposal_set.all():
-            a_proposal._status = 3
+            a_proposal._status = 4
             a_proposal.system_note = 'Close because trade was canceled'
+            a_proposal.save()
 
 
     # string output

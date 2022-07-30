@@ -1,6 +1,6 @@
 import pytest
 from app_lease.models import Trade, Customer, Vehicle, Service
-from app_lease.test.generator import random_trade
+from app_lease.test.generator import random_trade, random_proposal, random_customer
 from django.contrib.auth.models import User
 
 
@@ -102,3 +102,36 @@ def test_custom_trade():
     assert True if isinstance(str(random_trade), str) else False  # object returns valid string
     assert True if isinstance(created_trade.label, str) else False  # label return valid str
 
+
+@pytest.mark.order(8)
+@pytest.mark.django_db
+def test_cancel_trade():
+    """ Canceling a trade closes related proposals """
+
+    # two customers come to shop
+    created_customer2 = random_customer()
+    created_customer3 = random_customer()
+
+    # owner makes a proposal
+    created_proposal1 = random_proposal()
+    owner = created_proposal1.trade.vehicle.customer
+
+    # customer2 and customer3 make two proposals
+    created_proposal2 = random_proposal(trade=created_proposal1.trade, created_by_customer=created_customer2)
+    created_proposal3 = random_proposal(trade=created_proposal1.trade, created_by_customer=created_customer3)
+
+    # trade is canceled
+    created_proposal1.trade.cancel_trade()
+
+    # refresh model from database
+    created_proposal1.refresh_from_db(), created_proposal2.refresh_from_db(), created_proposal3.refresh_from_db()
+
+    # ----- results
+    # trade is canceled and proposals are closed
+    assert True if created_proposal1.trade.status == 3 else False
+    assert True if created_proposal1._status == 4 else False
+    assert True if created_proposal2._status == 4 else False
+    assert True if created_proposal3._status == 4 else False
+    assert True if isinstance(created_proposal1.system_note, str) else False
+    assert True if isinstance(created_proposal2.system_note, str) else False
+    assert True if isinstance(created_proposal3.system_note, str) else False
