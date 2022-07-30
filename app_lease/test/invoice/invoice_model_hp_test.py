@@ -75,7 +75,3 @@ def test_custom_invoice():
     assert True if isinstance(str(random_invoice), str) else False
     assert True if isinstance(created_invoice.label, str) else False
     assert True if isinstance(created_invoice.days_remaining, int) else False
-
-
-# invoice can't have empty trade or empty customer
-# when creating or closing trade should check if invoice needs to be created
