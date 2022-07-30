@@ -131,11 +131,3 @@ def test_owner_canceling_customer_proposal():
         created_proposal2.cancel_proposal()
         created_proposal.full_clean()
     assert True if exp else False
-
-
-
-
-
-#  need method for canceling trade
-
-# need to accept, close, cancel some proposals and trades in create_data command

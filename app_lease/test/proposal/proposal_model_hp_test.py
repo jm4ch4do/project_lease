@@ -269,6 +269,3 @@ def test_owner_canceling_own_proposal():
     # check proposal was canceled
     assert True if created_proposal._status == 5 else False
     assert True if isinstance(created_proposal.system_note, str) else False  # note after canceling
-
-
-# all tests for refuse proposal

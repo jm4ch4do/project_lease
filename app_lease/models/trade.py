@@ -23,6 +23,7 @@ class Trade(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    # validation
     class Meta:
 
         # ordering
@@ -43,34 +44,3 @@ class Trade(models.Model):
     # string output
     def __str__(self):
         return self.label
-
-
-# service ID
-# customer ID
-# status - open, accepted, canceled
-# vehicle ID
-#
-
-
-# Proposals
-# tradeID
-# customer ID
-# type - Owner, Buyer
-# status - Accepted, Pending, Refused
-# totalamount
-# totaltime
-# downpayment
-# monthlypay
-# @weeklypay
-# @dailypay
-
-
-# Invoice
-# tradeID
-# amount
-
-# Payment
-# Amount
-# invoiceID
-
-
