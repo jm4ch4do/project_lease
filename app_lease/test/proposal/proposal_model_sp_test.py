@@ -117,7 +117,7 @@ def test_owner_refuses_own_proposal():
 def test_owner_canceling_customer_proposal():
     """ Owner can't cancel some other customer's proposal """
 
-    # one customer come to shop
+    # one customer comes to shop
     created_customer2 = random_customer()
 
     # owner makes a proposal

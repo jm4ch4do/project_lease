@@ -252,5 +252,23 @@ def test_owner_refuses_proposal():
     assert True if isinstance(created_proposal2.system_note, str) else False
 
 
+@pytest.mark.order(9)
+@pytest.mark.django_db
+def test_owner_canceling_own_proposal():
+    """ Owner can cancel some his own proposal """
+
+    # owner makes a proposal
+    created_proposal = random_proposal()
+
+    # owner cancels his own proposal
+    created_proposal.cancel_proposal()
+
+    # refresh model from database
+    created_proposal.refresh_from_db()
+
+    # check proposal was canceled
+    assert True if created_proposal._status == 5 else False
+    assert True if isinstance(created_proposal.system_note, str) else False  # note after canceling
+
 
 # all tests for refuse proposal
