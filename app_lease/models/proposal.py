@@ -1,5 +1,5 @@
 from django.db import models
-from app_lease.models import Customer, Trade
+from app_lease.models import Customer, Trade, Invoice
 from app_lease.validators import repeated_values, value_contained
 from django.core.exceptions import ValidationError
 
@@ -108,7 +108,6 @@ class Proposal(models.Model):
         self.trade.status = 2
         self.trade.save()
 
-
         # close other proposals for same trade leaving a note
         for a_proposal in self.trade.proposal_set.all():
             if a_proposal != self:
@@ -116,6 +115,13 @@ class Proposal(models.Model):
                 a_proposal.system_note = 'closed because other proposal was approved'
                 a_proposal.save()
 
+        # if trade is sale then create invoice
+        if self.trade.service.service_type == 2:
+            Invoice.objects.create(
+                trade=self.trade,
+                customer=self.trade.vehicle.customer,
+                amount=self.trade.service.cost,
+            )
 
     def refuse_proposal(self):
 

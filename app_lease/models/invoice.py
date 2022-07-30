@@ -9,6 +9,9 @@ class Invoice(models.Model):
     trade = models.OneToOneField(Trade, blank=False, on_delete=models.CASCADE)
     customer = models.OneToOneField(Customer, blank=False, on_delete=models.CASCADE)
 
+    # string fields
+    system_note = models.CharField(blank=True, null=True, max_length=500)
+
     # numeric fields
     amount = models.FloatField(blank=False)
 
@@ -17,7 +20,7 @@ class Invoice(models.Model):
         (1, 'pending'),
         (2, 'paid'),
     )
-    status = models.SmallIntegerField(choices=CHOICES_INVOICE_STATUS, default=1)
+    _status = models.SmallIntegerField(choices=CHOICES_INVOICE_STATUS, default=1)
 
     # date fields
     TODAY_PLUS_30DAYS = (datetime.now() + timedelta(30)).date()
