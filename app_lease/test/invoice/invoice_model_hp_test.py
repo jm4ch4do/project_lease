@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 
 
 @pytest.mark.order(10)
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 def test_create_invoice():
     """ Creating invoice also creates related trade and customer """
 
@@ -67,19 +67,6 @@ def test_delete_invoice_from_customer():
 
 
 
-# @pytest.mark.order(10)
-# @pytest.mark.django_db
-# def test_create_invoice_from_trade():
-#     """ An invoice must be created when creating trade for lease service """
-#
-#     created_service = random_service(service_type=1)
-#     created_trade = random_trade(service=created_service)
-#
-#     assert True if Invoice.objects.all().count() == 1 else False
-#
-#     created_invoice = Invoice.objects.all().first()
-#     assert True if created_invoice.trade == created_trade else False
-#     assert True if created_invoice.customer == created_trade.vehicle.customer else False
 
 
 
