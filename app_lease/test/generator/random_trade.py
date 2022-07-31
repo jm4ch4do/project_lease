@@ -38,7 +38,6 @@ def random_trade(total=1, service=None, vehicle=None):
                 service=created_service,
                 vehicle=created_vehicle,
                 note=fake.paragraph(nb_sentences=3),
-                status=randint(1, 3)
             )
 
             created_trades.append(created_trade)

@@ -12,18 +12,18 @@ def customer_delete_handler(sender, instance, *args, **kwargs):
 
 
 # When a trade is created, a proposal should also be created is trade is lease
-@receiver(post_init, sender=Trade)
-def trade_create_handler(sender, instance, *args, **kwargs):
-    created_trade = instance
-
-    if created_trade.service.service_type == 1:
-        # create invoice
-        Invoice.objects.create(
-            trade=created_trade,
-            customer=created_trade.vehicle.customer,
-            amount=created_trade.service.cost,
-            system_note='for accepting proposal for service sale'
-        )
+# @receiver(post_init, sender=Trade)
+# def trade_create_handler(sender, instance, *args, **kwargs):
+#     created_trade = instance
+#
+#     if created_trade.service.service_type == 1:
+#         # create invoice
+#         Invoice.objects.create(
+#             trade=created_trade,
+#             customer=created_trade.vehicle.customer,
+#             amount=created_trade.service.cost,
+#             system_note='for accepting proposal for service sale'
+#         )
 
 
 

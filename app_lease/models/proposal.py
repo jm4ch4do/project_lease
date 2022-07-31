@@ -1,5 +1,6 @@
 from django.db import models
-from app_lease.models import Customer, Trade, Invoice
+from app_lease.models import Customer, Trade
+from app_lease.models.invoice import Invoice
 from app_lease.validators import repeated_values, value_contained
 from django.core.exceptions import ValidationError
 
@@ -9,8 +10,8 @@ class Proposal(models.Model):
     # foreign keys
     trade = models.ForeignKey(Trade, blank=False, on_delete=models.CASCADE)
     created_by_customer = models.ForeignKey(Customer, blank=False, on_delete=models.CASCADE, related_name='created_by_customer')
-    accepted_by_customer = models.ForeignKey(Customer, blank=True, null=True, on_delete=models.CASCADE
-                                             , related_name='accepted_by_customer')
+    accepted_by_customer = models.ForeignKey(Customer, blank=True, null=True, on_delete=models.CASCADE,
+                                             related_name='accepted_by_customer')
 
     # ----- string fields
     note = models.TextField(blank=True, null=True, max_length=200)
