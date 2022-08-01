@@ -16,7 +16,7 @@ class Contact(models.Model):
     phone = models.CharField(validators=[phone_number_regex], max_length=16,
                              blank=True, null=True, default="")
     email = models.EmailField(max_length=254, blank=True, null=True, default="")
-    note = models.CharField(blank=True, null=True, max_length=200)
+    note = models.CharField(blank=True, null=True, max_length=500)
 
     # flags
     CHOICES_CONTACT_TYPE = (
