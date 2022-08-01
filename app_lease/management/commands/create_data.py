@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from faker import Faker
 from faker_vehicle import VehicleProvider
-from app_lease.models import Customer, Contact, Lead, Vehicle, Service, Trade, Proposal
+from app_lease.models import *
 from django.contrib.auth.models import User
 from datetime import datetime
 from random import getrandbits
@@ -44,6 +44,8 @@ class Command(BaseCommand):
         Service.objects.all().delete()
         Vehicle.objects.all().delete()
         Contact.objects.all().delete()
+        Proposal.objects.all().delete()
+        Invoice.objects.all().delete()
 
         # ----- generate users
         for _ in range(total_users):
@@ -219,14 +221,24 @@ class Command(BaseCommand):
                 status=randint(1, 3)
             )
 
+            # An invoice should be created for service type lease,
+            if selected_service.service_type == 1:
+                Invoice.objects.create(
+                    trade=created_trade,
+                    customer=created_trade.vehicle.customer,
+                    amount=selected_service.cost,
+                    system_note='for creating trade type lease'
+                )
+
         # ----- create one proposal per trade
+        # ----- invoices are created in here too when accepting proposals
         for _ in range(total_vehicles):
 
             # use any trade with no repetition
             selected_trade = fake.unique.get_random_trade()
 
             # half of the proposals coming from owner, the rest from buyers
-            if randint(1,2) == 1:
+            if randint(1, 2) == 1:
                 selected_customer = selected_trade.vehicle.customer
             else:
                 selected_customer = fake.unique.get_random_customer_not_owner()
@@ -245,3 +257,40 @@ class Command(BaseCommand):
                 total_days_to_pay=total_days_to_pay,
                 pay_frequency=pay_frequency,
             )
+
+        # ----- accept, cancel or leave open proposals randomly
+        for i in range(total_vehicles):
+
+            # select trade and proposal for modifying status
+            selected_trade = Trade.objects.all()[i]
+            total = selected_trade.proposal_set.all().count()
+            proposal_number = randint(1, total)
+            selected_proposal = selected_trade.proposal_set.all()[proposal_number-1]
+
+            # randomly modify the status
+            choice = randint(1, 3)
+
+            # leave proposal open
+            if choice == 1:
+
+                # some open trades will have a refused proposal
+                # a proposal can only be refused if it was submitted by buyer
+                if selected_proposal.proposed_by == "buyer":
+                    selected_proposal.refuse_proposal()
+
+            # cancel proposal
+            elif choice == 2:
+
+                # a proposal can only be canceled if it was submitted by owner
+                if selected_proposal.proposed_by == "owner":
+                    selected_proposal.cancel_proposal()
+
+            # accept proposal
+            elif choice == 3:
+                if selected_proposal.proposed_by == "buyer":
+                    owner = selected_proposal.trade.vehicle.customer
+                    selected_proposal.accept_proposal(owner)
+
+                elif selected_proposal.proposed_by == "owner":
+                    buyer = fake.get_random_customer_not_owner()
+                    selected_proposal.accept_proposal(buyer)
