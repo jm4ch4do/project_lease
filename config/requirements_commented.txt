@@ -44,3 +44,7 @@ coverage==6.4.2
 # pytest-order (pip install pytest-order)
 # [allows ordering test with pytest]
 pytest-order==1.0.1
+
+# psycopg2 (pip install psycopg2)
+# [manage postgresDB]
+psycopg2==2.9.3
