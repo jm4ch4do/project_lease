@@ -1,5 +1,4 @@
 from django.db import models
-from ..utils.age_from_dob import age_from_dob
 
 
 class Service(models.Model):
@@ -25,6 +24,7 @@ class Service(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    # calculation
     @property
     def label(self):
         return self.name + " (" + str(self.cost) + ")"

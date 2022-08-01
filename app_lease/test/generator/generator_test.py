@@ -1,4 +1,3 @@
-from random import randint
 from django.contrib.auth.models import User
 from app_lease.test.generator import *
 from app_lease.models import *
@@ -53,3 +52,27 @@ def test_random_vehicle():
 
     created_vehicle = random_vehicle()
     assert True if isinstance(created_vehicle, Vehicle) else False
+
+
+@pytest.mark.order(1)
+@pytest.mark.django_db
+def test_random_trade():
+
+    created_trade = random_trade()
+    assert True if isinstance(created_trade, Trade) else False
+
+
+@pytest.mark.order(1)
+@pytest.mark.django_db
+def test_random_proposal():
+
+    created_proposal = random_proposal()
+    assert True if isinstance(created_proposal, Proposal) else False
+
+
+@pytest.mark.order(1)
+@pytest.mark.django_db
+def test_random_invoice():
+
+    created_invoice = random_invoice()
+    assert True if isinstance(created_invoice, Invoice) else False

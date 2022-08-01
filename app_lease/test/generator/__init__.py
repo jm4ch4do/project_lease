@@ -5,4 +5,7 @@ from .random_lead import random_lead
 from .random_vehicle import random_vehicle
 from .random_contact import random_contact
 from .random_service import random_service
+from .random_trade import random_trade
+from .random_proposal import random_proposal
+from .random_invoice import random_invoice
 

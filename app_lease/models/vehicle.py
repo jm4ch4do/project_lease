@@ -1,7 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
 from ..models import Customer
-from ..utils.age_from_dob import age_from_dob
 
 
 class Vehicle(models.Model):
