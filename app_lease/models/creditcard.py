@@ -25,7 +25,7 @@ class CreditCard(models.Model):
         MaxValueValidator(999), MinValueValidator(100)
     ])
     card_number = models.BigIntegerField(blank=False, validators=[
-        MinLengthValidator(12), MaxLengthValidator(19)
+        MaxValueValidator(int('9'*19)), MinValueValidator(int('1'+'0'*11))
     ])
 
     # calculations
