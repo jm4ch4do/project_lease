@@ -43,6 +43,16 @@ def test_delete_creditcard_from_customer():
     assert True if User.objects.all().count() == 0 else False
 
 
+@pytest.mark.order(11)
+@pytest.mark.django_db
+def test_custom_creditcard():
+    """ Test simple custom methods in customer """
+
+    created_creditcard = random_creditcard()
+    assert True if isinstance(str(created_creditcard), str) else False
+    assert True if isinstance(created_creditcard.label, str) else False
+
+
 
 
 
