@@ -3,10 +3,11 @@ from .customer import Customer
 from datetime import datetime
 from django.core.validators import MaxValueValidator, MinValueValidator, MinLengthValidator, MaxLengthValidator
 
+
 class CreditCard(models.Model):
 
     # foreign keys
-    customer = models.ForeignKey(Customer, null=True, blank=True, on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer, blank=False, on_delete=models.CASCADE)
 
     # string fields
     name_in_card = models.CharField(blank=False, max_length=200)

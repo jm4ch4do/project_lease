@@ -1,5 +1,6 @@
 import pytest
 from app_lease.test.generator import random_creditcard
+from django.db import IntegrityError
 
 
 @pytest.mark.order(11)
@@ -8,6 +9,12 @@ def test_empty_customer_in_creditcard():
     """ Customer can't be empty in a credit card record """
 
     created_creditcard = random_creditcard()
+    with pytest.raises(IntegrityError) as exp:
+        created_creditcard.customer = None
+        created_creditcard.save()
+    assert True if exp else False
+
+
 
 
 @pytest.mark.order(11)
