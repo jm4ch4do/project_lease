@@ -72,9 +72,6 @@ def test_is_active_creditcard():
     assert True if not created_creditcard.is_active else False
 
 
-
-
-
 @pytest.mark.order(11)
 @pytest.mark.django_db
 def test_custom_creditcard():
@@ -83,38 +80,3 @@ def test_custom_creditcard():
     created_creditcard = random_creditcard()
     assert True if isinstance(str(created_creditcard), str) else False
     assert True if isinstance(created_creditcard.label, str) else False
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# expire year +20 -10
-# expire month 1, 12
-# security code 3 digits
-# card number validation
-# custom property is_active hp sp
-# customer not empty
-
-
-
-
-
-
-
