@@ -1,6 +1,7 @@
 from django.db import models
 from app_lease.models import Trade, Customer
 from datetime import datetime, timedelta
+from django.db.models import Sum
 
 
 class Invoice(models.Model):
@@ -30,7 +31,7 @@ class Invoice(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    # calculation
+    # ----- calculations
     @property
     def label(self):
         return '$' + str(self.amount) + " on " + self.customer.name + " for trade: " + str(self.trade)
@@ -39,6 +40,11 @@ class Invoice(models.Model):
     def days_remaining(self):
         date_diff = self.due_date - datetime.now().date()
         return date_diff.days
+
+    @property
+    def left_to_pay(self):
+        paid = 0 if not self.payment_set.all() else self.payment_set.all().aggregate(Sum('amount'))
+        return self.amount - paid
 
     # string output
     def __str__(self):
