@@ -90,7 +90,7 @@ class Command(BaseCommand):
             # assign credit card to customer
             CreditCard.objects.create(
                 customer=created_customer,
-                name_in_card=created_customer.first_name + created_customer.last_name,
+                name_in_card=created_customer.first_name + ' ' + created_customer.last_name,
                 provider=fake.credit_card_provider(),
                 expire_month=randint(1, 12),
                 expire_year=randint(datetime.today().year, datetime.today().year + 5),
