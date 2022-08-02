@@ -46,6 +46,7 @@ class Command(BaseCommand):
         Contact.objects.all().delete()
         Proposal.objects.all().delete()
         Invoice.objects.all().delete()
+        CreditCard.objects.all().delete()
 
         # ----- generate users
         for _ in range(total_users):
@@ -85,6 +86,27 @@ class Command(BaseCommand):
                 dob=fake.date_between(start_date=datetime(1950, 1, 1), end_date=datetime(2003, 1, 1)),
                 status=Provider.get_customer_status(random_user)  # status matches the user status
             )
+
+            # assign credit card to customer
+            CreditCard.objects.create(
+                customer=created_customer,
+                name_in_card=created_customer.first_name + created_customer.last_name,
+                expire_month=randint(1, 12),
+                expire_year=randint(datetime.today().year, datetime.today().year + 5),
+                security_code=fake.credit_card_security_code(),
+                card_number=fake.credit_card_number(),
+            )
+
+            # assign a second credit card to some customers
+            if randint(1, 2) == 1:
+                CreditCard.objects.create(
+                    customer=created_customer,
+                    name_in_card=fake.name(),
+                    expire_month=randint(1, 12),
+                    expire_year=randint(datetime.today().year, datetime.today().year + 5),
+                    security_code=fake.credit_card_security_code(),
+                    card_number=fake.credit_card_number(),
+                )
 
             # assign user email as a contact to the customer
             Contact.objects.create(
