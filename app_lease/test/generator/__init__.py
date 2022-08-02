@@ -8,4 +8,5 @@ from .random_service import random_service
 from .random_trade import random_trade
 from .random_proposal import random_proposal
 from .random_invoice import random_invoice
+from .random_creditcard import random_creditcard
 
