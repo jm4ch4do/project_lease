@@ -53,6 +53,15 @@ def test_security_code_in_creditcard():
     """ Security code always has three digits"""
 
     created_creditcard = random_creditcard()
+    with pytest.raises(ValidationError) as exp:
+        created_creditcard.security_code = 1234
+        created_creditcard.full_clean()
+    assert True if exp else False
+
+    with pytest.raises(ValidationError) as exp:
+        created_creditcard.security_code = 12
+        created_creditcard.full_clean()
+    assert True if exp else False
 
 
 @pytest.mark.order(11)
