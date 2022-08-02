@@ -84,3 +84,11 @@ def test_random_creditcard():
 
     created_creditcard = random_creditcard()
     assert True if isinstance(created_creditcard, CreditCard) else False
+
+
+@pytest.mark.order(1)
+@pytest.mark.django_db
+def test_random_payment():
+
+    created_payment = random_payment()
+    assert True if isinstance(created_payment, Payment) else False
