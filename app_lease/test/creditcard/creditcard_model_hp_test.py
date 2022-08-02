@@ -18,6 +18,18 @@ def test_create_creditcard():
     assert True if Customer.objects.first().user.id == User.objects.first().id else False
 
 
+@pytest.mark.order(10)
+@pytest.mark.django_db
+def test_delete_creditcard():
+    """ Delete creditcard deletes nothing in related tables"""
+
+    created_creditcard = random_creditcard()
+    created_creditcard.delete()
+    assert True if CreditCard.objects.all().count() == 0 else False
+    assert True if Customer.objects.all().count() == 1 else False
+    assert True if User.objects.all().count() == 1 else False
+
+
 
 
 
