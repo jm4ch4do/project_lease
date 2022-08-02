@@ -16,7 +16,7 @@ class CreditCard(models.Model):
     expire_month = models.IntegerField(blank=False)
     expire_year = models.IntegerField(blank=False)
     security_code = models.IntegerField(blank=False)
-    card_number = models.IntegerField(blank=False)
+    card_number = models.BigIntegerField(blank=False)
 
     # calculations
     @property
