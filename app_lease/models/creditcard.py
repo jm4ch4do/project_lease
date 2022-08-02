@@ -14,14 +14,14 @@ class CreditCard(models.Model):
     provider = models.CharField(blank=False, max_length=200)
 
     # numeric fields
-    expire_month = models.IntegerField(blank=False, validators=[
+    expire_month = models.PositiveIntegerField(blank=False, validators=[
         MaxValueValidator(12), MinValueValidator(1)
     ])
 
-    expire_year = models.IntegerField(blank=False, validators=[
+    expire_year = models.PositiveIntegerField(blank=False, validators=[
         MaxValueValidator(datetime.today().year + 20)
     ])
-    security_code = models.IntegerField(blank=False, validators=[
+    security_code = models.PositiveIntegerField(blank=False, validators=[
         MaxValueValidator(999), MinValueValidator(100)
     ])
     card_number = models.BigIntegerField(blank=False, validators=[
