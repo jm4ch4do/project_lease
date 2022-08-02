@@ -1,7 +1,8 @@
 from django.db import models
-from app_lease.models import Trade, Customer
+from app_lease.models import Trade, Customer, Payment
 from datetime import datetime, timedelta
 from django.db.models import Sum
+from django.core.exceptions import ValidationError
 
 
 class Invoice(models.Model):
@@ -45,6 +46,34 @@ class Invoice(models.Model):
     def left_to_pay(self):
         paid = 0 if not self.payment_set.all() else self.payment_set.all().aggregate(Sum('amount'))
         return self.amount - paid
+
+    # ----- functions
+    def pay_invoice(self, credit_card, payment_amount=None):
+
+        # can't pay if there is nothing owed
+        if self.left_to_pay == 0:
+            raise ValidationError(
+                "Can't paid because there is nothing owed",
+                code='paying_already_paid_invoice'
+            )
+
+        # can't pay more than left_to_pay
+        if payment_amount and payment_amount > self.left_to_pay:
+            raise ValidationError(
+                "Can't pay more than amount owed which is " + str(self.left_to_pay),
+                code='overpaying_invoice'
+            )
+
+        # no amount specified to pay -> pay maximum
+        payment_amount = self.left_to_pay if not payment_amount else payment_amount
+
+        # create payment
+        created_payment = Payment.objects.create(
+            creditcard=credit_card,
+            invoice=self,
+            amount=payment_amount,
+        )
+
 
     # string output
     def __str__(self):
