@@ -24,8 +24,8 @@ class CreditCard(models.Model):
     security_code = models.PositiveIntegerField(blank=False, validators=[
         MaxValueValidator(999), MinValueValidator(100)
     ])
-    card_number = models.CharField(blank=False, validators=[
-        MaxLengthValidator(19), MinLengthValidator(12)
+    card_number = models.CharField(blank=False, max_length=19, validators=[
+        MinLengthValidator(12)
     ])
 
     # calculations

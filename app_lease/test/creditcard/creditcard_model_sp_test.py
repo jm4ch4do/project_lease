@@ -70,3 +70,15 @@ def test_card_number_in_creditcard():
     """ Card number is always between 12 and 19 digits"""
 
     created_creditcard = random_creditcard()
+
+    # too short
+    with pytest.raises(ValidationError) as exp:
+        created_creditcard.security_code = str(12345678901)
+        created_creditcard.full_clean()
+    assert True if exp else False
+
+    # too long
+    with pytest.raises(ValidationError) as exp:
+        created_creditcard.security_code = str(12345678901234567890)
+        created_creditcard.full_clean()
+    assert True if exp else False
