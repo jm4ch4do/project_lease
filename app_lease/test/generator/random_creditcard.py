@@ -26,6 +26,7 @@ def random_creditcard(total=1, customer=None, name_in_card=None):
         created_creditcard = CreditCard.objects.create(
             customer=created_customer,
             name_in_card=created_name_in_card,
+            provider=fake.credit_card_provider(),
             expire_month=randint(1, 12),
             expire_year=randint(datetime.today().year, datetime.today().year + 5),
             security_code=fake.credit_card_security_code(),
