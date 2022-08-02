@@ -6,3 +6,4 @@ from .service import Service
 from .trade import Trade
 from .proposal import Proposal
 from .invoice import Invoice
+from .creditcard import CreditCard
