@@ -1,6 +1,8 @@
 import pytest
 from app_lease.test.generator import random_creditcard
 from django.db import IntegrityError
+from django.core.exceptions import ValidationError
+from datetime import datetime
 
 
 @pytest.mark.order(11)
@@ -15,14 +17,16 @@ def test_empty_customer_in_creditcard():
     assert True if exp else False
 
 
-
-
 @pytest.mark.order(11)
 @pytest.mark.django_db
 def test_expire_year_in_creditcard():
     """ Expire year allows values until 20 years into the future """
 
     created_creditcard = random_creditcard()
+    with pytest.raises(ValidationError) as exp:
+        created_creditcard.expire_year = datetime.today().year + 21
+        created_creditcard.full_clean()
+    assert True if exp else False
 
 
 @pytest.mark.order(11)
