@@ -4,8 +4,7 @@ from app_lease.models import Invoice, Customer, Vehicle, Service, Trade, Payment
 from app_lease.test.generator import random_invoice, random_trade, random_service, \
     random_proposal, random_customer, random_creditcard
 from django.contrib.auth.models import User
-
-# creating invoice creates, trade, vehicle, service, customer, user
+from app_lease.services.service_proposal import accept_proposal
 
 
 @pytest.mark.order(10)
@@ -81,7 +80,7 @@ def test_create_invoice_from_trade():
     created_proposal = random_proposal(trade=created_trade)
 
     # customer accepts proposal
-    created_proposal.accept_proposal(created_customer)
+    accept_proposal(created_proposal, created_customer)
 
     # a new invoice is created
     assert True if Invoice.objects.all().count() == 1 else False
