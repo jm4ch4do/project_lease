@@ -3,7 +3,7 @@ import pytest
 from app_lease.models import Proposal, Trade, Customer, Vehicle, Service
 from app_lease.test.generator import random_proposal, random_customer
 from django.contrib.auth.models import User
-from app_lease.services.service_proposal import accept_proposal
+from app_lease.services.service_proposal import accept_proposal, refuse_proposal
 
 
 @pytest.mark.order(9)
@@ -242,7 +242,7 @@ def test_owner_refuses_proposal():
     created_proposal2 = random_proposal(trade=created_proposal1.trade, created_by_customer=created_customer2)
 
     # owner refuses proposal2
-    created_proposal2.refuse_proposal()
+    refuse_proposal(created_proposal2)
 
     # refresh model from database
     created_proposal2.refresh_from_db()
