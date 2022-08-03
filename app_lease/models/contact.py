@@ -2,7 +2,7 @@ from django.db import models
 from .customer import Customer
 from .lead import Lead
 from django.core.validators import RegexValidator
-from ..validators import at_least_one_required, exclusive_fields
+from app_lease.validators import at_least_one_required, exclusive_fields
 
 
 class Contact(models.Model):

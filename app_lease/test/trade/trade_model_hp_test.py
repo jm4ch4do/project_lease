@@ -2,6 +2,7 @@ import pytest
 from app_lease.models import Trade, Customer, Vehicle, Service
 from app_lease.test.generator import random_trade, random_proposal, random_customer
 from django.contrib.auth.models import User
+from app_lease.services.service_trade import cancel_trade
 
 
 @pytest.mark.order(8)
@@ -121,7 +122,7 @@ def test_cancel_trade():
     created_proposal3 = random_proposal(trade=created_proposal1.trade, created_by_customer=created_customer3)
 
     # trade is canceled
-    created_proposal1.trade.cancel_trade()
+    cancel_trade(created_proposal1.trade)
 
     # refresh model from database
     created_proposal1.refresh_from_db(), created_proposal2.refresh_from_db(), created_proposal3.refresh_from_db()

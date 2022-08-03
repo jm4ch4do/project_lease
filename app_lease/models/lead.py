@@ -1,5 +1,5 @@
 from django.db import models
-from ..utils.age_from_dob import age_from_dob
+from app_lease.utils.age_from_dob import age_from_dob
 
 
 class Lead(models.Model):

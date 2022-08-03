@@ -1,8 +1,6 @@
 from django.db import models
 from app_lease.models import Customer, Trade
-from app_lease.models.invoice import Invoice
 from app_lease.validators import repeated_values, value_contained
-from django.core.exceptions import ValidationError
 
 
 class Proposal(models.Model):
@@ -92,66 +90,7 @@ class Proposal(models.Model):
         value_contained([self.created_by_customer, self.accepted_by_customer],
                         self.trade.vehicle.customer, "vehicle's owner must be in created_by or accepted_by")
 
-    # ----- functions
-    def accept_proposal(self, accepting_customer):
 
-        # proposal can't be accepted if trade is already accepted
-        if self._status == 2:
-            raise ValidationError(
-                "Proposal was already previously accepted already accepted",
-                code='already_accepted_proposal',
-            )
-
-        # close proposal and trade
-        self.accepted_by_customer = accepting_customer
-        self._status = 2
-        self.save()
-        self.trade.status = 2
-        self.trade.save()
-
-        # close other proposals for same trade leaving a note
-        for a_proposal in self.trade.proposal_set.all():
-            if a_proposal != self:
-                a_proposal._status = 4
-                a_proposal.system_note = 'closed because other proposal was approved'
-                a_proposal.save()
-
-        # if trade is sale then create invoice
-        if self.trade.service.service_type == 2:
-            Invoice.objects.create(
-                trade=self.trade,
-                customer=self.trade.vehicle.customer,
-                amount=self.trade.service.cost,
-                system_note='for accepting proposal for service sale'
-            )
-
-    def refuse_proposal(self):
-
-        # proposal can only be refused by owner if was created by buyer
-        if self.created_by_customer == self.trade.vehicle.customer:
-            raise ValidationError(
-                "Owner can't refuse its own proposal. You should try canceling proposal.",
-                code='owner_refusing_own_proposal',
-            )
-
-        # change state to refused and leave a note
-        self._status = 3
-        self.system_note = 'owner refused the proposal'
-        self.save()
-
-    def cancel_proposal(self):
-
-        # proposal can only be canceled by owner if was created by owner
-        if self.created_by_customer != self.trade.vehicle.customer:
-            raise ValidationError(
-                "Owner can't cancel other customer's proposal. You should try refusing proposal.",
-                code='owner_canceling_customer_proposal',
-            )
-
-        # change state to canceled and leave a note
-        self._status = 5
-        self.system_note = 'owner canceled the proposal'
-        self.save()
 
     # ----- string output
     def __str__(self):

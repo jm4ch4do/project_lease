@@ -1,7 +1,8 @@
 # ------------------------------ CUSTOMER MODEL HAPPY PATH ------------------------------
 import pytest
-from app_lease.models import Invoice, Customer, Vehicle, Service, Trade
-from app_lease.test.generator import random_invoice, random_trade, random_service, random_proposal, random_customer
+from app_lease.models import Invoice, Customer, Vehicle, Service, Trade, Payment
+from app_lease.test.generator import random_invoice, random_trade, random_service, \
+    random_proposal, random_customer, random_creditcard
 from django.contrib.auth.models import User
 
 # creating invoice creates, trade, vehicle, service, customer, user
@@ -89,6 +90,21 @@ def test_create_invoice_from_trade():
     created_invoice = Invoice.objects.all().first()
     assert True if created_invoice.trade == created_trade else False
     assert True if created_invoice.customer == created_trade.vehicle.customer else False
+
+
+@pytest.mark.order(10)
+@pytest.mark.django_db
+def test_paying_invoice():
+    """ Invoice can be paid using a credit card """
+
+    created_invoice = random_invoice()
+    created_customer = created_invoice.customer
+    created_creditcard = random_creditcard(created_customer)
+    created_invoice.pay_invoice(credit_card=created_creditcard)
+
+    assert True if Payment.objects.all().count() == 1 else False
+    assert True if Payment.objects.first().invoice == created_invoice else False
+    assert True if Payment.objects.first().creditcard == created_creditcard else False
 
 
 @pytest.mark.order(10)

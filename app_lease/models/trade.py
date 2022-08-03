@@ -1,6 +1,5 @@
 from django.db import models
 from app_lease.models import Service, Vehicle
-from django.core.exceptions import ValidationError
 
 
 class Trade(models.Model):
@@ -41,27 +40,6 @@ class Trade(models.Model):
         constraints = [
             models.UniqueConstraint(fields=['vehicle', 'service'], name='unique_vehicle_service_in_trade'),
         ]
-
-    # ----- functions
-    def cancel_trade(self):
-
-        # trade can't be canceled if it was already accepted
-        if self.status == 2:
-            raise ValidationError(
-                "Can't cancel trade that was already accepted.",
-                code='canceling_accepted_trade',
-            )
-
-        # cancel trade
-        self.status = 3
-        self.save()
-
-        # close related proposals
-        for a_proposal in self.proposal_set.all():
-            a_proposal._status = 4
-            a_proposal.system_note = 'Close because trade was canceled'
-            a_proposal.save()
-
 
     # string output
     def __str__(self):
