@@ -3,7 +3,7 @@ import pytest
 from django.db import IntegrityError
 from app_lease.test.generator import random_proposal, random_customer
 from django.core.exceptions import ValidationError
-from app_lease.services.service_proposal import accept_proposal, refuse_proposal, cancel_proposal
+from app_lease.services.proposal_serv import accept_proposal, refuse_proposal, cancel_proposal
 
 
 

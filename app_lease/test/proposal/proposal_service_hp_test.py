@@ -1,6 +1,6 @@
 import pytest
 from app_lease.test.generator import random_proposal, random_customer
-from app_lease.services.service_proposal import accept_proposal, refuse_proposal, cancel_proposal
+from app_lease.services.proposal_serv import accept_proposal, refuse_proposal, cancel_proposal
 
 
 @pytest.mark.order(9)

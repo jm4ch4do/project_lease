@@ -1,6 +1,6 @@
 import pytest
-from app_lease.services.service_proposal import accept_proposal
-from app_lease.services.service_invoice import pay_invoice
+from app_lease.services.proposal_serv import accept_proposal
+from app_lease.services.invoice_serv import pay_invoice
 from app_lease.models import Invoice, Payment
 from app_lease.test.generator import random_invoice, random_trade, random_service, \
     random_proposal, random_customer, random_creditcard

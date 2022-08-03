@@ -2,7 +2,7 @@ import pytest
 from app_lease.models import Trade, Customer, Vehicle, Service
 from app_lease.test.generator import random_trade, random_proposal, random_customer
 from django.contrib.auth.models import User
-from app_lease.services.service_trade import cancel_trade
+from app_lease.services.trade_serv import cancel_trade
 
 
 @pytest.mark.order(8)

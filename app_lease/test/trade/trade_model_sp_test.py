@@ -2,8 +2,8 @@ import pytest
 from app_lease.test.generator import random_trade, random_customer, random_proposal
 from django.db import IntegrityError
 from django.core.exceptions import ValidationError
-from app_lease.services.service_trade import cancel_trade
-from app_lease.services.service_proposal import accept_proposal
+from app_lease.services.trade_serv import cancel_trade
+from app_lease.services.proposal_serv import accept_proposal
 
 
 @pytest.mark.order(8)
