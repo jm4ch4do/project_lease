@@ -1,8 +1,5 @@
 from django.core.exceptions import ValidationError
-
-
-def create_trade():
-    pass
+from app_lease.models import Trade, Invoice
 
 
 def cancel_trade(trade):
@@ -23,3 +20,20 @@ def cancel_trade(trade):
         a_proposal._status = 4
         a_proposal.system_note = 'Closed because trade was canceled'
         a_proposal.save()
+
+
+def create_trade(service, vehicle):
+
+    created_trade = Trade.objects.create(
+        service=service,
+        vehicle=vehicle,
+    )
+
+    # An invoice should be created if service type is lease,
+    if service.service_type == 1:
+        Invoice.objects.create(
+            trade=created_trade,
+            customer=created_trade.vehicle.customer,
+            amount=service.cost,
+            system_note='for creating trade type lease'
+        )
