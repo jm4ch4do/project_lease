@@ -3,7 +3,7 @@ from app_lease.models import Customer
 from app_lease.serializers import CustomerSerializer
 
 
-def drink_list(request):
+def customer_list(request):
 
     # get all drinks
     customers = Customer.objects.all()
@@ -12,4 +12,5 @@ def drink_list(request):
     serializer = CustomerSerializer(customers, many=True)
 
     # return json
-    return JsonResponse(serializer.data)
+    # return JsonResponse(serializer.data, safe=False)
+    return JsonResponse({'customers': serializer.data})
