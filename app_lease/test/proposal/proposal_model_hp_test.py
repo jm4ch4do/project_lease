@@ -207,7 +207,7 @@ def test_owner_accepts_proposal():
 
     # owner accepts proposal3
     owner = created_proposal1.trade.vehicle.customer
-    created_proposal3.accept_proposal(owner)
+    accept_proposal(created_proposal3, owner)
 
     # refresh models from database
     created_proposal1.refresh_from_db(), created_proposal2.refresh_from_db(), created_proposal3.refresh_from_db(),
