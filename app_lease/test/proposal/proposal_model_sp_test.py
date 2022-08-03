@@ -3,6 +3,8 @@ import pytest
 from django.db import IntegrityError
 from app_lease.test.generator import random_proposal, random_customer
 from django.core.exceptions import ValidationError
+from app_lease.services.service_proposal import accept_proposal, refuse_proposal, cancel_proposal
+
 
 
 @pytest.mark.order(9)
@@ -91,7 +93,7 @@ def test_owner_out_of_proposal():
 
     # customer3 accepts customer 2 proposal which must result into an error
     with pytest.raises(ValidationError) as exp:
-        created_proposal2.accept_proposal(created_customer3)
+        accept_proposal(created_proposal2, created_customer3)
         created_proposal2.full_clean()
     assert True if exp else False
 
