@@ -108,7 +108,7 @@ def test_owner_refuses_own_proposal():
 
     # owner refuses his own proposal
     with pytest.raises(ValidationError) as exp:
-        created_proposal.refuse_proposal()
+        refuse_proposal(created_proposal)
         created_proposal.full_clean()
     assert True if exp else False
 
