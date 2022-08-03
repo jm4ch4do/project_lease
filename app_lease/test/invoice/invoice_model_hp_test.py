@@ -5,6 +5,7 @@ from app_lease.test.generator import random_invoice, random_trade, random_servic
     random_proposal, random_customer, random_creditcard
 from django.contrib.auth.models import User
 from app_lease.services.service_proposal import accept_proposal
+from app_lease.services.service_invoice import pay_invoice
 
 
 @pytest.mark.order(10)
@@ -98,8 +99,8 @@ def test_paying_invoice():
 
     created_invoice = random_invoice()
     created_customer = created_invoice.customer
-    created_creditcard = random_creditcard(created_customer)
-    created_invoice.pay_invoice(credit_card=created_creditcard)
+    created_creditcard = random_creditcard(customer=created_customer)
+    pay_invoice(created_invoice, created_creditcard)
 
     assert True if Payment.objects.all().count() == 1 else False
     assert True if Payment.objects.first().invoice == created_invoice else False
