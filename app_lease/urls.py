@@ -4,5 +4,5 @@ from app_lease import views
 
 
 urlpatterns = [
-    path('customers/', views.customer_list),
+    path('services/', views.service_list),
 ]
