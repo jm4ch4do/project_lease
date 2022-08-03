@@ -7,3 +7,4 @@ from .trade import Trade
 from .proposal import Proposal
 from .invoice import Invoice
 from .creditcard import CreditCard
+from .payment import Payment

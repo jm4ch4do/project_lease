@@ -245,7 +245,7 @@ class Command(BaseCommand):
                 status=randint(1, 3)
             )
 
-            # An invoice should be created for service type lease,
+            # An invoice should be created if service type is lease,
             if selected_service.service_type == 1:
                 Invoice.objects.create(
                     trade=created_trade,

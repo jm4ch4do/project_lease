@@ -1,4 +1,3 @@
-# ------------------------------ CUSTOMER MODEL HAPPY PATH ------------------------------
 import pytest
 from app_lease.models import Service
 from app_lease.test.generator import random_service
