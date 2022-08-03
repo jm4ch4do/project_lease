@@ -2,6 +2,8 @@ import pytest
 from app_lease.test.generator import random_trade, random_customer, random_proposal
 from django.db import IntegrityError
 from django.core.exceptions import ValidationError
+from app_lease.services.service_trade import cancel_trade
+from app_lease.services.service_proposal import accept_proposal
 
 
 @pytest.mark.order(8)
@@ -69,12 +71,12 @@ def test_cant_cancel_accepted_trade():
     created_proposal = random_proposal()
 
     # customer2 accepts proposal
-    created_proposal.accept_proposal(created_customer2)
+    accept_proposal(created_proposal, created_customer2)
 
     # refresh model from database
     created_proposal.refresh_from_db()
 
     # trade can't be canceled because was previously accepted
     with pytest.raises(ValidationError) as exp:
-        created_proposal.trade.cancel_trade()
+        cancel_trade(created_proposal.trade)
     assert True if exp else False
