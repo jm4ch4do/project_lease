@@ -129,6 +129,6 @@ def test_owner_canceling_customer_proposal():
 
     # owner cancel customer2's proposal -> triggers exception
     with pytest.raises(ValidationError) as exp:
-        created_proposal2.cancel_proposal()
+        cancel_proposal(created_proposal2)
         created_proposal.full_clean()
     assert True if exp else False
