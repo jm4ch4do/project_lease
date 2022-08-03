@@ -3,7 +3,7 @@ import pytest
 from app_lease.models import Proposal, Trade, Customer, Vehicle, Service
 from app_lease.test.generator import random_proposal, random_customer
 from django.contrib.auth.models import User
-from app_lease.services.service_proposal import accept_proposal, refuse_proposal
+from app_lease.services.service_proposal import accept_proposal, refuse_proposal, cancel_proposal
 
 
 @pytest.mark.order(9)
@@ -262,7 +262,7 @@ def test_owner_canceling_own_proposal():
     created_proposal = random_proposal()
 
     # owner cancels his own proposal
-    created_proposal.cancel_proposal()
+    cancel_proposal(created_proposal)
 
     # refresh model from database
     created_proposal.refresh_from_db()
