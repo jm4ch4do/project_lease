@@ -37,3 +37,5 @@ def create_trade(service, vehicle):
             amount=service.cost,
             system_note='for creating trade type lease'
         )
+
+    return created_trade
