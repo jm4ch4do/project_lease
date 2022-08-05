@@ -11,5 +11,4 @@ urlpatterns = [
     path('services/', views.service_list),
     path('services/<int:id>', views.service_detail),
     path('', include(router.urls)),
-    path('api-auth', include('rest_framework.urls', namespace='rest_framework'))
 ]
