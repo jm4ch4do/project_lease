@@ -13,7 +13,8 @@ def service_list(request):
 
         services = Service.objects.all()  # get all drinks
         serializer = ServiceSerializer(services, many=True)  # serialize them
-        return JsonResponse({'services': serializer.data})  # return json
+        return Response(serializer.data)
+        # return JsonResponse({'services': serializer.data})  # return json
 
     if request.method == 'POST':
         serializer = ServiceSerializer(data=request.data)
@@ -21,14 +22,31 @@ def service_list(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+
 @api_view(['GET', 'PUT', 'DELETE'])
-def service_detail(request):
+def service_detail(request, id):
 
+    # ----- verify service exists
+    try:
+        service = Service.objects.get(pk=id)
+    except Service.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    # ----- Get service detail
     if request.method == 'GET':
-        pass
+        serializer = ServiceSerializer(service)
+        return Response(serializer.data)
 
+    # ----- Modify service
     elif request.method == 'PUT':
-        pass
+        serializer = ServiceSerializer(service, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            Response(serializer.error, status=status.HTTP_400_BAD_REQUEST)
 
+    # ----- Delete service
     elif request.method == 'DELETE':
-        pass
+        service.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
