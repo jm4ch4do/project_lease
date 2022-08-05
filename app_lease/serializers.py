@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from app_lease.models import Service, Customer
+from app_lease.models import Service, Customer, Lead
 from django.contrib.auth.models import User, Group
 
 
@@ -27,3 +27,10 @@ class CustomerSerializer(serializers.ModelSerializer):
         model = Customer
         fields = ['id', 'user', 'first_name', 'last_name', 'job', 'notes',
                   'dob', 'status', 'created_at', 'updated_at', 'age']
+
+
+class LeadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Lead
+        fields = ['id', 'first_name', 'last_name', 'source', 'notes',
+                  'dob', 'created_at', 'updated_at', 'name']
