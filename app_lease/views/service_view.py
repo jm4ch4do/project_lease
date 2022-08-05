@@ -21,6 +21,7 @@ def service_list(request):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
@@ -44,7 +45,7 @@ def service_detail(request, id):
             serializer.save()
             return Response(serializer.data)
         else:
-            Response(serializer.error, status=status.HTTP_400_BAD_REQUEST)
+            Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     # ----- Delete service
     elif request.method == 'DELETE':
