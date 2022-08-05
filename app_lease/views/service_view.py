@@ -1,3 +1,5 @@
+# Uses function based api_views
+
 from django.http import JsonResponse
 from app_lease.models import Service
 from app_lease.serializers import ServiceSerializer

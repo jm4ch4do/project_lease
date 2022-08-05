@@ -52,7 +52,6 @@ class Customer(models.Model):
         # age > 18
         higher_eq_than(self.age, 18, 'age')
 
-
     # string output
     def __str__(self):
         return self.name
