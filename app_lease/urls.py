@@ -9,7 +9,7 @@ router.register(r'groups', views.GroupViewSet)
 
 urlpatterns = [
     path('services/', views.service_list),
-    path('services/<int:id>', views.service_detail),
+    path('services/<int:pk>', views.service_detail),
     path('customers/', views.CustomerList.as_view()),
     path('customers/<int:pk>', views.CustomerDetail.as_view()),
     path('lead/', views.LeadList.as_view()),
