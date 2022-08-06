@@ -14,8 +14,8 @@ class CustomerList(APIView):
     """
 
     def get(self, request):
-        snippets = Customer.objects.all()
-        serializer = CustomerSerializer(snippets, many=True)
+        customers = Customer.objects.all()
+        serializer = CustomerSerializer(customers, many=True)
         return Response(serializer.data)
 
     def post(self, request):

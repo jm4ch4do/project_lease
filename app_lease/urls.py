@@ -12,5 +12,11 @@ urlpatterns = [
     path('services/<int:id>', views.service_detail),
     path('customers/', views.CustomerList.as_view()),
     path('customers/<int:pk>', views.CustomerDetail.as_view()),
+    path('lead/', views.LeadList.as_view()),
+    path('leads/<int:pk>', views.LeadDetail.as_view()),
+    path('vehicles/', views.VehicleList.as_view()),
+    path('vehicles/<int:pk>', views.VehicleDetail.as_view()),
+    path('trades/', views.VehicleList.as_view()),
+    path('trades/<int:pk>', views.VehicleDetail.as_view()),
     path('', include(router.urls)),
 ]
