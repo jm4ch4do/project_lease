@@ -18,5 +18,9 @@ urlpatterns = [
     path('vehicles/<int:pk>', apis.VehicleDetail.as_view()),
     path('trades/', apis.VehicleList.as_view()),
     path('trades/<int:pk>', apis.VehicleDetail.as_view()),
+
+    path('register/', apis.user_api.user_register),
+
+
     path('', include(router.urls)),
 ]
