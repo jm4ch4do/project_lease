@@ -54,5 +54,6 @@ pytz==2022.1
 djangorestframework==3.13.1
 
 # PyJWT (pip install pyjwt)
+# We don't need this. Django has better built-in methods.
 [encode and decode Web Tokens]
 PyJWT==2.4.0
