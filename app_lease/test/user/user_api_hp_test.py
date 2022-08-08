@@ -5,6 +5,7 @@ from app_lease.test.generator import random_user_payload
 client = APIClient()
 
 
+@pytest.mark.skip
 @pytest.mark.django_db
 def test_register_user():
 

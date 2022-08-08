@@ -1,4 +1,4 @@
-# Uses Generic Class-Based views
+# Uses Generic Class-Based apis
 
 from app_lease.models import Trade
 from app_lease.serializers import TradeSerializer

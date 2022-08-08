@@ -1,4 +1,4 @@
-# Uses Generic Class-Based views
+# Uses Generic Class-Based apis
 
 from app_lease.models import Lead
 from app_lease.serializers import LeadSerializer
