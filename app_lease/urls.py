@@ -20,7 +20,10 @@ urlpatterns = [
     path('trades/', api.TradeList.as_view()),
     path('trades/<int:pk>', api.TradeDetail.as_view()),
 
+    # ----- API User
     path('register/', api.user.user_api.user_register, name='api_register'),
+    path('password_update/<int:pk>', api.user.user_api.user_password_update,
+         name='api_password_update'),
     path('login/', obtain_auth_token),
 
 

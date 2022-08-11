@@ -51,7 +51,7 @@ def test_register_user():
 
 
 
-
+# user is able to change password using old password
 # user is able to reset passwords
 # new view to create staff members that can only be accessed by superuser
 

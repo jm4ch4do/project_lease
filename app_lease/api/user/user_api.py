@@ -2,7 +2,8 @@ from django.contrib.auth.models import User
 from rest_framework.decorators import api_view
 from rest_framework import viewsets
 from rest_framework import permissions
-from app_lease.api.user.user_serializer import UserSerializer, UserCustomerRegSerializer
+from app_lease.api.user.user_serializer import UserSerializer, \
+    UserCustomerRegSerializer, UserPasswordUpdateSerializer
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework import status
@@ -19,27 +20,58 @@ class UserViewSet(viewsets.ModelViewSet):
 
 @api_view(['POST'])
 def user_register(request):
-    if request.method == 'POST':
+    """ User registers creating user and customer and getting token back """
 
-        status_code = status.HTTP_201_CREATED
-        serializer = UserCustomerRegSerializer(data=request.data)
-        output = {}
-        if serializer.is_valid():
+    status_code = status.HTTP_201_CREATED
+    serializer = UserCustomerRegSerializer(data=request.data)
+    output = {}
+    if serializer.is_valid():
 
-            # create user and customer
-            created_user, created_customer = serializer.save()
+        # create user and customer
+        created_user, created_customer = serializer.save()
 
-            # return user data
-            output['response'] = "successfully registered a new user."
-            output['user_id'] = created_user.id
-            output['email'] = created_user.email
-            output['username'] = created_user.username
-            output['customer_id'] = created_customer.id
-            output['token'] = Token.objects.get(user=created_user).key
+        # return user data
+        output['response'] = "successfully registered a new user."
+        output['user_id'] = created_user.id
+        output['email'] = created_user.email
+        output['username'] = created_user.username
+        output['customer_id'] = created_customer.id
+        output['token'] = Token.objects.get(user=created_user).key
 
-        else:
-            output = serializer.errors
-            status_code = status.HTTP_400_BAD_REQUEST
-        return Response(output, status=status_code)
+    else:
+        output = serializer.errors
+        status_code = status.HTTP_400_BAD_REQUEST
+    return Response(output, status=status_code)
 
 
+@api_view(['PUT'])
+def user_password_update(request, pk):
+    """ Allow change user password """
+
+    # verify user exists
+    try:
+        target_user = User.objects.get(pk)
+    except User.DoesNotExist:
+        return Response({'response': "User not Found"},
+                        status=status.HTTP_404_NOT_FOUND)
+
+    # verify user is authenticated
+    if not request.user.is_authenticated:
+        return Response({'response': "Logging to change password"},
+                        status.HTTP_401_UNAUTHORIZED)
+
+    # verify user has permissions to modify
+    if request.user != target_user and \
+        not request.user.is_staff and \
+            not request.user.is_superuser:
+
+        return Response({'response': "No permission to modify the user's password"},
+                        status.HTTP_401_UNAUTHORIZED)
+
+    # verify data is valid
+    serializer = UserPasswordUpdateSerializer(target_user, data=request.data)
+    if not serializer.is_valid():
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+    # update password
+    serializer.save()
