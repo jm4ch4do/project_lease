@@ -29,6 +29,9 @@ def test_register_user():
     assert data.get('user_id') is not None
     assert data.get('customer_id') is not None
     assert "password" not in data
+    assert data.get('response') is not None  # a response was provided
+    assert response.status_code == 200
+    assert len(data.keys()) == 6  # no extra values in response
 
     # created user is active, not_staff, not_superuser
     assert created_user.is_active
@@ -38,11 +41,6 @@ def test_register_user():
     # created customer is active, and is linked to user
     assert created_customer.status == 1
     assert created_customer.user == created_user
-
-
-
-
-    # the created user is active and is not an admin
 
 
 
