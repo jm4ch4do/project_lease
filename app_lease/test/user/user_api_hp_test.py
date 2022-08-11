@@ -38,6 +38,9 @@ def test_register_user():
     assert not created_user.is_staff
     assert not created_user.is_superuser
 
+    # password was encrypted before storing it
+    assert created_user.check_password(payload["password"])
+
     # created customer is active, and is linked to user
     assert created_customer.status == 1
     assert created_customer.user == created_user
@@ -45,9 +48,6 @@ def test_register_user():
 
 
 
-# count amount of values in response
-# verify Customer was created and linked to user
-# verify user is not type staff or superuser
 # password must be encripted before storing it
 # user must be active
 # every value was properly assigned
