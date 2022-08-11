@@ -51,11 +51,12 @@ def random_user_payload():
     # create random user payload
     payload = dict(
         password="Teclado123",
+        password2="Teclado123",
         is_superuser=False,
         first_name=random_first_name,
         last_name=random_last_name,
         username=random_user_name,
         email=random_user_name + "@gmail.com",
-        is_active=bool(getrandbits(1))
+        is_active=1
     )
     return payload

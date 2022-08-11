@@ -3,12 +3,26 @@ from app_lease.models import Service, Customer, Lead, Vehicle, Trade
 from django.contrib.auth.models import User, Group
 
 
+class TradeSerializer(serializers.ModelSerializer):
+
+    vehicle_name = serializers.CharField(source='vehicle.name')
+    vehicle_model = serializers.CharField(source='vehicle.model')
+
+    class Meta:
+
+        model = Trade
+        fields = ('id', 'service', 'vehicle', 'note', 'status', 'created_at',
+                  'updated_at', 'label', 'vehicle', 'vehicle_name', 'vehicle_model')
+
+
 class ServiceSerializer(serializers.ModelSerializer):
+
+    trades = TradeSerializer(source='trade_set', many=True, read_only=True)
 
     class Meta:
 
         model = Service
-        fields = ('id', 'name', 'cost', 'description', 'when_to_pay', 'service_type')
+        fields = ('id', 'name', 'cost', 'description', 'when_to_pay', 'service_type', 'trades')
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -81,11 +95,5 @@ class LeadSerializer(serializers.ModelSerializer):
                   'dob', 'created_at', 'updated_at', 'name']
 
 
-class TradeSerializer(serializers.ModelSerializer):
 
-    class Meta:
-
-        model = Trade
-        fields = ('id', 'service', 'vehicle', 'note', 'status', 'created_at',
-                  'updated_at', 'label')
 

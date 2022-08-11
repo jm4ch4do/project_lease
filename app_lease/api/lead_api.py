@@ -1,4 +1,4 @@
-# Uses Generic Class-Based apis
+# Uses Generic Class-Based api
 
 from app_lease.models import Lead
 from app_lease.serializers import LeadSerializer
