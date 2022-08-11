@@ -5,6 +5,7 @@ from rest_framework import permissions
 from app_lease.api.user.user_serializer import UserSerializer, UserCustomerRegSerializer
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
+from rest_framework import status
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -19,6 +20,8 @@ class UserViewSet(viewsets.ModelViewSet):
 @api_view(['POST'])
 def user_register(request):
     if request.method == 'POST':
+
+        status_code = status.HTTP_201_CREATED
         serializer = UserCustomerRegSerializer(data=request.data)
         output = {}
         if serializer.is_valid():
@@ -36,6 +39,7 @@ def user_register(request):
 
         else:
             output = serializer.errors
-        return Response(output)
+            status_code = status.HTTP_400_BAD_REQUEST
+        return Response(output, status=status_code)
 
 

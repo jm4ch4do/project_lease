@@ -23,9 +23,9 @@ def test_register_user():
     created_customer = Customer.objects.first()
 
     # response has the correct values
-    assert data["email"] == payload["email"]
-    assert data["username"] == payload["username"]
-    assert isinstance(data["token"], str)
+    assert data.get("email") == payload.get("email")
+    assert data.get("username") == payload.get("username")
+    assert isinstance(data.get('token'), str)
     assert data.get('user_id') is not None
     assert data.get('customer_id') is not None
     assert "password" not in data
@@ -48,23 +48,25 @@ def test_register_user():
 
 
 
-# password must be encripted before storing it
-# user must be active
-# every value was properly assigned
 
+
+
+
+# user is able to reset passwords
+# new view to create staff members that can only be accessed by superuser
+
+
+
+# User login
 # correct user and password gives you token
 # incorrect gives you error (403 Invalid Credentials)
+# token is returned together on user login
 
-# token is returned on user creation
-# token is returned together with user view data
-
-# tokens are not returned in user list
+# tokens are not returned in user list or user view data,
 # passwords are never returned
 
 # response.status_code must be always correct
 
-
-# new view to create staff members that can only be accessed by superuser
 
 # only staff and superuser can get user list
 
@@ -72,6 +74,5 @@ def test_register_user():
 # staff or superuser can do the same on any user
 
 
-# fails to create duplicated name
 
-# user is able to reset passwords
+
