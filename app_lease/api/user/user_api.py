@@ -5,7 +5,6 @@ from rest_framework import permissions
 from app_lease.api.user.user_serializer import UserSerializer, UserCustomerRegSerializer
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
-from app_lease.models import Customer
 
 
 class UserViewSet(viewsets.ModelViewSet):
