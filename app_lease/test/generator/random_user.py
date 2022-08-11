@@ -2,6 +2,7 @@ from faker import Faker
 from app_lease.utils.fake_provider import Provider
 from django.contrib.auth.models import User
 from random import getrandbits
+from datetime import datetime
 
 
 def random_user(total=1):
@@ -37,7 +38,7 @@ def random_user(total=1):
         return created_users
 
 
-def random_user_payload():
+def random_user_customer_payload():
 
     # register custom functions
     fake = Faker()
@@ -57,6 +58,9 @@ def random_user_payload():
         last_name=random_last_name,
         username=random_user_name,
         email=random_user_name + "@gmail.com",
-        is_active=1
+        is_active=1,
+        job=fake.job(),
+        notes=fake.paragraph(nb_sentences=3),
+        dob=fake.date_between(start_date=datetime(1950, 1, 1), end_date=datetime(2003, 1, 1)),
     )
     return payload

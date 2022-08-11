@@ -20,7 +20,7 @@ urlpatterns = [
     path('trades/', api.TradeList.as_view()),
     path('trades/<int:pk>', api.TradeDetail.as_view()),
 
-    path('register/', api.user_api.user_register, name='api_register'),
+    path('register/', api.user.user_api.user_register, name='api_register'),
     path('login/', obtain_auth_token),
 
 

@@ -25,45 +25,6 @@ class ServiceSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'cost', 'description', 'when_to_pay', 'service_type', 'trades')
 
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
-
-    class Meta:
-        model = User
-        fields = ['url', 'username', 'email', 'groups']
-
-
-class UserRegSerializer(serializers.ModelSerializer):
-
-    password2 = serializers.CharField(style={'input_type': 'password'}, write_only=True)
-
-    class Meta:
-        model = User
-        fields = ['email', 'username', 'password', 'password2', 'first_name', 'last_name']
-        extra_kwargs = {
-            'password': {'write_only': True},
-            'email': {'required': True},
-            'first_name': {'required': True},
-            'last_name': {'required': True},
-        }
-
-    def save(self):
-
-        email = self.validated_data.get('email')
-        username = self.validated_data.get('username')
-        first_name = self.validated_data.get('first_name')
-        last_name = self.validated_data.get('last_name')
-        password = self.validated_data.get('password')
-        password2 = self.validated_data.get('password2')
-
-        if password != password2:
-            raise serializers.ValidationError({'password': 'Passwords must match'})
-
-        created_user = User(email=email, username=username, first_name=first_name, last_name=last_name)
-        created_user.set_password(password)
-        created_user.save()
-        return created_user
-
-
 class GroupSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Group

@@ -1,6 +1,6 @@
 import pytest
 from rest_framework.test import APIClient
-from app_lease.test.generator import random_user_payload
+from app_lease.test.generator import random_user_customer_payload
 from django.urls import reverse
 
 client = APIClient()
@@ -8,17 +8,24 @@ client = APIClient()
 
 @pytest.mark.django_db
 def test_register_user():
+    """ A new user is able to register and gets token back """
 
     url = reverse("api_register")
-    payload = random_user_payload()
+    payload = random_user_customer_payload()
 
     response = client.post(url, payload)
     data = response.data
 
+    # response has the correct values
     assert data["email"] == payload["email"]
     assert data["username"] == payload["username"]
     assert isinstance(data["token"], str)
     assert "password" not in data
+
+    # user was created but no customer was created
+
+    # the created user is active and is not an admin
+
 
 
 
@@ -51,3 +58,4 @@ def test_register_user():
 
 # fails to create duplicated name
 
+# user is able to reset passwords
