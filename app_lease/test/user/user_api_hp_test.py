@@ -9,7 +9,6 @@ from rest_framework.authtoken.models import Token
 
 
 
-
 @pytest.mark.order(2)
 @pytest.mark.django_db
 def test_register_user():
@@ -78,6 +77,21 @@ def test_password_update_own_user():
     assert User.objects.first().check_password(new_password)
 
 
+@pytest.mark.skip
+@pytest.mark.order(2)
+@pytest.mark.django_db
+def test_password_update_staff_user():
+    """ A staff member can can update any user's password"""
+    pass
+
+
+@pytest.mark.skip
+@pytest.mark.order(2)
+@pytest.mark.django_db
+def test_password_update_superuser_user():
+    """ A superuser can can update any user's password"""
+    pass
+
 
 
 
@@ -87,7 +101,6 @@ def test_password_update_own_user():
 # assert False if user is None else True
 # login(None, user)
 
-# user is able to change password using old password
 # can't change password if user doesn't exist
 # can't change password if user is not authenticated
 # can't change password if user has no permission to modify (user, staff or superuser)
