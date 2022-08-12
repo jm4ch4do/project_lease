@@ -5,8 +5,9 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from app_lease.models import Customer
 from django.contrib.auth import authenticate, login
+from rest_framework.authtoken.models import Token
 
-client = APIClient()
+
 
 
 @pytest.mark.order(2)
@@ -15,6 +16,7 @@ def test_register_user():
     """ A new user is able to register and gets token back, also gets customer_id """
 
     # make request
+    client = APIClient()
     url = reverse("api_register")
     payload = random_user_customer_payload()
     response = client.post(url, payload)
@@ -48,7 +50,6 @@ def test_register_user():
     assert created_customer.user == created_user
 
 
-@pytest.mark.skip
 @pytest.mark.order(2)
 @pytest.mark.django_db
 def test_password_update_own_user():
@@ -58,25 +59,33 @@ def test_password_update_own_user():
     created_customer = random_customer()
     created_user = created_customer.user
 
-    # authenticate user
-    user = authenticate(username=created_user.username, password=created_user.password)
-    assert False if user is None else True
-    login(None, user)
+    # configure token
+    client = APIClient()
+    token, created = Token.objects.get_or_create(user=created_user)
+    client.credentials(HTTP_AUTHORIZATION='Token ' + str(token))
 
     # make request for changing password
+    new_password = "NewPassword123"
     url = reverse('api_password_update', kwargs={'pk': created_user.pk})
-    payload = dict(password="NewPassword123")
-    response = client.post(url, payload)
+    payload = dict(password=new_password)
+    response = client.put(url, payload)
 
     # verify response is correct
     assert response.data.get('response') is not None
     assert response.status_code == 200
 
-    # verify password was indeed changed
+    # verify password was indeed changed correctly
+    assert User.objects.first().check_password(new_password)
 
 
 
 
+
+
+# authenticate user
+# user = authenticate(username=created_user.username, password='mypassword')
+# assert False if user is None else True
+# login(None, user)
 
 # user is able to change password using old password
 # can't change password if user doesn't exist

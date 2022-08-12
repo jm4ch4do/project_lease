@@ -50,7 +50,7 @@ def user_password_update(request, pk):
 
     # verify user exists
     try:
-        target_user = User.objects.get(pk)
+        target_user = User.objects.get(pk=pk)
     except User.DoesNotExist:
         return Response({'response': "User not Found"},
                         status=status.HTTP_404_NOT_FOUND)
@@ -74,4 +74,7 @@ def user_password_update(request, pk):
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
     # update password
-    serializer.save()
+    serializer.update()
+
+    # return response
+    return Response({'response': "Password Updated"}, status.HTTP_200_OK)

@@ -16,6 +16,12 @@ class UserPasswordUpdateSerializer(serializers.ModelSerializer):
         model = User
         fields = ['password']
 
+    def update(self):
+        password = self.validated_data.get('password')
+        current_user = self.instance
+        current_user.set_password(password)
+        current_user.save()
+
 
 class UserCustomerRegSerializer(serializers.ModelSerializer):
 
@@ -45,7 +51,6 @@ class UserCustomerRegSerializer(serializers.ModelSerializer):
         last_name = self.validated_data.get('last_name')
         password = self.validated_data.get('password')
         password2 = self.validated_data.get('password2')
-        job = self.validated_data.get('job')
         notes = self.validated_data.get('notes')
         dob = self.validated_data.get('dob')
         job = self.validated_data.get('job')
