@@ -1,13 +1,15 @@
 import pytest
 from rest_framework.test import APIClient
-from app_lease.test.generator import random_user_customer_payload
+from app_lease.test.generator import random_user_customer_payload, random_customer
 from django.urls import reverse
 from django.contrib.auth.models import User
 from app_lease.models import Customer
+from django.contrib.auth import authenticate, login
 
 client = APIClient()
 
 
+@pytest.mark.order(2)
 @pytest.mark.django_db
 def test_register_user():
     """ A new user is able to register and gets token back, also gets customer_id """
@@ -30,7 +32,7 @@ def test_register_user():
     assert data.get('customer_id') is not None
     assert "password" not in data
     assert data.get('response') is not None  # a response was provided
-    assert response.status_code == 200
+    assert response.status_code == 201  # created status
     assert len(data.keys()) == 6  # no extra values in response
 
     # created user is active, not_staff, not_superuser
@@ -46,12 +48,46 @@ def test_register_user():
     assert created_customer.user == created_user
 
 
+@pytest.mark.skip
+@pytest.mark.order(2)
+@pytest.mark.django_db
+def test_password_update_own_user():
+    """ A user can update his own password, also staff members and superuser can """
+
+    # create user with related customer
+    created_customer = random_customer()
+    created_user = created_customer.user
+
+    # authenticate user
+    user = authenticate(username=created_user.username, password=created_user.password)
+    assert False if user is None else True
+    login(None, user)
+
+    # make request for changing password
+    url = reverse('api_password_update', kwargs={'pk': created_user.pk})
+    payload = dict(password="NewPassword123")
+    response = client.post(url, payload)
+
+    # verify response is correct
+    assert response.data.get('response') is not None
+    assert response.status_code == 200
+
+    # verify password was indeed changed
 
 
 
 
 
 # user is able to change password using old password
+# can't change password if user doesn't exist
+# can't change password if user is not authenticated
+# can't change password if user has no permission to modify (user, staff or superuser)
+# new password can't be empty
+# not active user should be refused
+
+
+
+
 # user is able to reset passwords
 # new view to create staff members that can only be accessed by superuser
 
