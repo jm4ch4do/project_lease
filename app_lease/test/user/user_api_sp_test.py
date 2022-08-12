@@ -8,10 +8,9 @@ from rest_framework import status
 client = APIClient()
 
 
-# fails to create repeated username or email
 @pytest.mark.django_db
 def test_register_duplicated_user():
-    """ Fails to created duplicated username or email returning 400 """
+    """ Refuses to created duplicated username or email, returns 400 """
 
     # constants
     url = reverse("api_register")
