@@ -20,8 +20,7 @@ def random_user(total=1):
         random_last_name = fake.last_name()
         random_user_name = Provider.get_random_user_name(random_first_name)
 
-        created_user = User.objects.create(
-            password="Teclado123",
+        created_user = User(
             is_superuser=False,
             first_name=random_first_name,
             last_name=random_last_name,
@@ -29,6 +28,10 @@ def random_user(total=1):
             email=random_user_name + "@gmail.com",
             is_active=bool(getrandbits(1))
         )
+
+        created_user.set_password("Teclado123")
+        created_user.save()
+
 
         created_users.append(created_user)
 
