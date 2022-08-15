@@ -24,9 +24,9 @@ urlpatterns = [
     path('register/', api.user.user_api.user_register, name='api_register'),
     path('password_update/<int:pk>', api.user.user_api.user_password_update,
          name='api_password_update'),
-    path('login/', obtain_auth_token),
+    path('login/', api.user.user_api.user_login, name='api_login'),
 
 
-
+    # ----- View Sets
     path('', include(router.urls)),
 ]

@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from app_lease.models import Customer
 from django.contrib.auth.models import User
+from rest_framework.authtoken.models import Token
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -20,14 +21,46 @@ class UserPasswordUpdateSerializer(serializers.ModelSerializer):
             'password': {'write_only': True, 'required': True},
         }
 
-    def update(self):
+    def update(self, instance=None, validated_data=None):
         password = self.validated_data.get('password')
         current_user = self.instance
         current_user.set_password(password)
         current_user.save()
 
 
+class LoginSerializer(serializers.ModelSerializer):
 
+    class Meta:
+        model = User
+        fields = ['username', 'password']
+
+        extra_kwargs = {
+            'password': {'write_only': True, 'required': True},
+            'username': {'required': True},
+        }
+
+    def is_valid(self, raise_exception=False):
+        username = self.validated_data.get('username')
+        password = self.validated_data.get('password')
+
+        # False if user doesn't exist
+        user = User.objects.get(username=username)
+        if not user:
+            serializers.ValidationError('Invalid username/password combination')
+            return False
+
+        # False if password doesn't match
+        if not user.check_password(password):
+            serializers.ValidationError('Invalid username/password combination')
+            return False
+
+        return True
+
+    def get_token(self, instance=None, validated_data=None):
+        username = self.validated_data('username')
+        token, _ = Token.objects.get_or_create(user=username)
+
+        return token
 
 
 class UserCustomerRegSerializer(serializers.ModelSerializer):

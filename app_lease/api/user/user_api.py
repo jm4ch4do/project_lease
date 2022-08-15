@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework import viewsets
 from rest_framework import permissions
 from app_lease.api.user.user_serializer import UserSerializer, \
-    UserCustomerRegSerializer, UserPasswordUpdateSerializer
+    UserCustomerRegSerializer, UserPasswordUpdateSerializer, LoginSerializer
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework import status
@@ -83,3 +83,19 @@ def user_password_update(request, pk):
 
     # return response
     return Response({'response': "Password Updated"}, status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+def user_login(request):
+    """ User logs in and gets token back """
+
+    # load data into serializer
+    login_serializer = LoginSerializer(data=request.data)
+
+    # data validation
+    if not login_serializer.is_valid():
+        return Response(login_serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+    # get token
+    token = login_serializer.get_token()
+    return token
