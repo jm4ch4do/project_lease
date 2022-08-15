@@ -213,37 +213,3 @@ def test_password_update_superuser_superuser():
 # user = authenticate(username=created_user.username, password='mypassword')
 # assert False if user is None else True
 # login(None, user)
-
-# can't change password if user doesn't exist
-# can't change password if user is not authenticated
-# can't change password if user has no permission to modify (user, staff or superuser)
-# new password can't be empty
-# not active user should be refused
-
-
-
-
-# user is able to reset passwords
-# new view to create staff members that can only be accessed by superuser
-
-
-
-# User login
-# correct user and password gives you token
-# incorrect gives you error (403 Invalid Credentials)
-# token is returned together on user login
-
-# tokens are not returned in user list or user view data,
-# passwords are never returned
-
-# response.status_code must be always correct
-
-
-# only staff and superuser can get user list
-
-# each user can view, delete, modify, their own user
-# staff or superuser can do the same on any user
-
-
-
-
