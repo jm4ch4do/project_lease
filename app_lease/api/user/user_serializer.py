@@ -16,11 +16,18 @@ class UserPasswordUpdateSerializer(serializers.ModelSerializer):
         model = User
         fields = ['password']
 
+        extra_kwargs = {
+            'password': {'write_only': True, 'required': True},
+        }
+
     def update(self):
         password = self.validated_data.get('password')
         current_user = self.instance
         current_user.set_password(password)
         current_user.save()
+
+
+
 
 
 class UserCustomerRegSerializer(serializers.ModelSerializer):
