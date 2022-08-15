@@ -82,9 +82,8 @@ def test_password_update_own_user():
 def test_password_update_staff_user():
     """ A staff member can update any user's password"""
 
-    # create user with related customer
+    # create user
     created_user = random_user(is_active=1)
-    created_customer = random_customer(user=created_user)
 
     # create user as member of the staff
     staff_user = random_user(is_active=1)
@@ -93,7 +92,7 @@ def test_password_update_staff_user():
 
     # configure token for staff_user
     client = APIClient()
-    token, created = Token.objects.get_or_create(user=staff_user)
+    token, _ = Token.objects.get_or_create(user=staff_user)
     client.credentials(HTTP_AUTHORIZATION='Token ' + str(token))
 
     # make request for changing password
@@ -110,23 +109,22 @@ def test_password_update_staff_user():
     assert User.objects.first().check_password(new_password)
 
 
-@pytest.mark.skip
 @pytest.mark.order(2)
 @pytest.mark.django_db
 def test_password_update_superuser_user():
     """ A superuser can update any user's password"""
-    # create user with related customer
+
+    # create user
     created_user = random_user(is_active=1)
-    created_customer = random_customer(user=created_user)
 
-    # create user as member of the staff
-    staff_user = random_user(is_active=1)
-    staff_user.is_staff = 1
-    staff_user.save()
+    # create user as superuser
+    super_user = random_user(is_active=1)
+    super_user.is_superuser = 1
+    super_user.save()
 
-    # configure token for staff_user
+    # configure token for superuser
     client = APIClient()
-    token, created = Token.objects.get_or_create(user=staff_user)
+    token, _ = Token.objects.get_or_create(user=super_user)
     client.credentials(HTTP_AUTHORIZATION='Token ' + str(token))
 
     # make request for changing password
@@ -143,7 +141,72 @@ def test_password_update_superuser_user():
     assert User.objects.first().check_password(new_password)
 
 
+@pytest.mark.order(2)
+@pytest.mark.django_db
+def test_password_update_staff_staffuser():
+    """ Staff member can change staff password """
 
+    # create user
+    created_user = random_user(is_active=1)
+    created_user.is_staff = 1
+    created_user.save()
+
+    # create user as staff member
+    super_user = random_user(is_active=1)
+    super_user.is_staff = 1
+    super_user.save()
+
+    # configure token for superuser
+    client = APIClient()
+    token, _ = Token.objects.get_or_create(user=super_user)
+    client.credentials(HTTP_AUTHORIZATION='Token ' + str(token))
+
+    # make request for changing password
+    new_password = "NewPassword123"
+    url = reverse('api_password_update', kwargs={'pk': created_user.pk})
+    payload = dict(password=new_password)
+    response = client.put(url, payload)
+
+    # verify response is correct
+    assert response.data.get('response') is not None
+    assert response.status_code == 200
+
+    # verify password was indeed changed correctly
+    assert User.objects.first().check_password(new_password)
+
+
+@pytest.mark.order(2)
+@pytest.mark.django_db
+def test_password_update_superuser_superuser():
+    """ Superuser can change superuser password """
+
+    # create user
+    created_user = random_user(is_active=1)
+    created_user.is_superuser = 1
+    created_user.save()
+
+    # create user as superuser
+    super_user = random_user(is_active=1)
+    super_user.is_superuser = 1
+    super_user.save()
+
+    # configure token for superuser
+    client = APIClient()
+    token, _ = Token.objects.get_or_create(user=super_user)
+    client.credentials(HTTP_AUTHORIZATION='Token ' + str(token))
+
+    # make request for changing password
+    new_password = "NewPassword123"
+    url = reverse('api_password_update', kwargs={'pk': created_user.pk})
+    payload = dict(password=new_password)
+    response = client.put(url, payload)
+
+    # verify response is correct
+    assert response.data.get('response') is not None
+    assert response.status_code == 200
+
+    # verify password was indeed changed correctly
+    assert User.objects.first().check_password(new_password)
 
 
 # authenticate user

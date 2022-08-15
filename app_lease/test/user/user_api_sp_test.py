@@ -8,6 +8,7 @@ from rest_framework import status
 client = APIClient()
 
 
+@pytest.mark.order(2)
 @pytest.mark.django_db
 def test_register_duplicated_user():
     """ Refuses to created duplicated username or email, returns 400 """
