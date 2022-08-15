@@ -139,3 +139,30 @@ def test_password_cant_update_no_existing_user():
 
     # verify password was not updated
     assert not User.objects.first().check_password(new_password)
+
+
+@pytest.mark.order(2)
+@pytest.mark.django_db
+def test_password_cant_update_not_authenticated_user():
+    """ Password can't be changed if user is not authenticated """
+
+    # create user
+    created_user = random_user(is_active=1)
+
+    # configure token for user
+    client = APIClient()
+    token, _ = Token.objects.get_or_create(user=created_user)
+
+    # make request for changing password
+    new_password = "NewPassword123"
+    url = reverse('api_password_update', kwargs={'pk': created_user.pk})
+    payload = dict(password=new_password)
+    response = client.put(url, payload)
+
+    # verify response 401
+    assert response.data.get('response') is not None
+    assert response.status_code == 401
+
+    # verify password was not updated
+    assert not User.objects.first().check_password(new_password)
+    
