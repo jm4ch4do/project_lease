@@ -97,5 +97,10 @@ def user_login(request):
         return Response(login_serializer.errors, status.HTTP_400_BAD_REQUEST)
 
     # get token
-    token = login_serializer.get_token()
-    return token
+    token, user = login_serializer.get_token()
+    output = {'response': "successful login",
+              'username': user.username,
+              'token': token.key}
+
+    # return
+    return Response(output, status.HTTP_200_OK)

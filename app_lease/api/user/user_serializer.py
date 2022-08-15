@@ -28,20 +28,18 @@ class UserPasswordUpdateSerializer(serializers.ModelSerializer):
         current_user.save()
 
 
-class LoginSerializer(serializers.ModelSerializer):
+class LoginSerializer(serializers.Serializer):
 
-    class Meta:
-        model = User
-        fields = ['username', 'password']
+    username = serializers.CharField()
+    password = serializers.CharField(style={'input_type': 'password'}, write_only=True)
 
-        extra_kwargs = {
-            'password': {'write_only': True, 'required': True},
-            'username': {'required': True},
-        }
+    def validate(self, data):
+        username = data.get('username')
+        password = data.get('password')
 
-    def is_valid(self, raise_exception=False):
-        username = self.validated_data.get('username')
-        password = self.validated_data.get('password')
+        # Username and Password can't be empty
+        if not username or not password:
+            serializers.ValidationError("Username/password can't be empty")
 
         # False if user doesn't exist
         user = User.objects.get(username=username)
@@ -54,13 +52,14 @@ class LoginSerializer(serializers.ModelSerializer):
             serializers.ValidationError('Invalid username/password combination')
             return False
 
-        return True
+        return {'username': username, 'password': password}
 
-    def get_token(self, instance=None, validated_data=None):
-        username = self.validated_data('username')
-        token, _ = Token.objects.get_or_create(user=username)
+    def get_token(self):
+        username = self.validated_data.get('username')
+        user = User.objects.get(username=username)
+        token, _ = Token.objects.get_or_create(user=user)
 
-        return token
+        return token, user
 
 
 class UserCustomerRegSerializer(serializers.ModelSerializer):

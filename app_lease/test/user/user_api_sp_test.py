@@ -7,9 +7,6 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 
 
-client = APIClient()
-
-
 @pytest.mark.order(2)
 @pytest.mark.django_db
 def test_register_duplicated_user():
@@ -20,6 +17,7 @@ def test_register_duplicated_user():
 
     # one user registers
     payload = random_user_customer_payload()
+    client = APIClient()
     response = client.post(url, payload)
 
     # a second user tries to use same username to register
@@ -191,3 +189,25 @@ def test_password_cant_be_empty():
 
     # verify password was not updated
     assert not User.objects.first().check_password(new_password)
+
+
+@pytest.mark.order(2)
+@pytest.mark.django_db
+def test_login_username_cant_be_empty_user():
+    """ A user can't login with empty username """
+
+    # create user
+    created_user = random_user(is_active=1)
+    new_password = 'mypassword123'
+    created_user.set_password(new_password)
+    created_user.save()
+
+    # make request
+    client = APIClient()
+    url = reverse("api_login")
+    payload = {"username": "", "password": new_password}
+    response = client.post(url, payload)
+
+    # get data back
+    assert response.status_code == 400
+    assert response.data
