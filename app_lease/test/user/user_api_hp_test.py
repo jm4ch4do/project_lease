@@ -180,12 +180,12 @@ def test_password_update_staff_staffuser():
 def test_password_update_superuser_superuser():
     """ Superuser can change superuser password """
 
-    # create user
+    # create user who is superuser
     created_user = random_user(is_active=1)
     created_user.is_superuser = 1
     created_user.save()
 
-    # create user as superuser
+    # create another superuser
     super_user = random_user(is_active=1)
     super_user.is_superuser = 1
     super_user.save()

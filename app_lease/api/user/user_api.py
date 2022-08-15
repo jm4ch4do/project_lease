@@ -68,6 +68,11 @@ def user_password_update(request, pk):
         return Response({'response': "No permission to modify the user's password"},
                         status.HTTP_401_UNAUTHORIZED)
 
+    # extra permission: only superuser can modify superuser
+    if target_user.is_superuser and not request.user.is_superuser:
+        return Response({'response': "No permission to modify the user's password"},
+                        status.HTTP_401_UNAUTHORIZED)
+
     # verify data is valid
     serializer = UserPasswordUpdateSerializer(target_user, data=request.data)
     if not serializer.is_valid():
