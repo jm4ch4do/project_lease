@@ -5,7 +5,7 @@ from random import getrandbits
 from datetime import datetime
 
 
-def random_user(total=1):
+def random_user(total=1, is_active=None):
 
     # register custom functions
     fake = Faker()
@@ -19,6 +19,7 @@ def random_user(total=1):
         random_first_name = fake.first_name()
         random_last_name = fake.last_name()
         random_user_name = Provider.get_random_user_name(random_first_name)
+        is_active = bool(getrandbits(1)) if not is_active else is_active
 
         created_user = User(
             is_superuser=False,
@@ -26,7 +27,7 @@ def random_user(total=1):
             last_name=random_last_name,
             username=random_user_name,
             email=random_user_name + "@gmail.com",
-            is_active=bool(getrandbits(1))
+            is_active=is_active
         )
 
         created_user.set_password("Teclado123")

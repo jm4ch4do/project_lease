@@ -1,6 +1,6 @@
 import pytest
 from rest_framework.test import APIClient
-from app_lease.test.generator import random_user_customer_payload, random_customer
+from app_lease.test.generator import random_user, random_user_customer_payload, random_customer
 from django.urls import reverse
 from django.contrib.auth.models import User
 from app_lease.models import Customer
@@ -55,8 +55,8 @@ def test_password_update_own_user():
     """ A user can update his own password, also staff members and superuser can """
 
     # create user with related customer
-    created_customer = random_customer()
-    created_user = created_customer.user
+    created_user = random_user(is_active=1)
+    created_customer = random_customer(user=created_user)
 
     # configure token
     client = APIClient()
