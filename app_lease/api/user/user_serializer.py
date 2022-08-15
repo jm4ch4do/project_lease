@@ -30,8 +30,8 @@ class UserPasswordUpdateSerializer(serializers.ModelSerializer):
 
 class LoginSerializer(serializers.Serializer):
 
-    username = serializers.CharField()
-    password = serializers.CharField(style={'input_type': 'password'}, write_only=True)
+    username = serializers.CharField(required=True)
+    password = serializers.CharField(required=True, style={'input_type': 'password'}, write_only=True)
 
     def validate(self, data):
         username = data.get('username')
@@ -39,18 +39,17 @@ class LoginSerializer(serializers.Serializer):
 
         # Username and Password can't be empty
         if not username or not password:
-            serializers.ValidationError("Username/password can't be empty")
+            raise serializers.ValidationError("Username/password can't be empty", code='authorization')
 
         # False if user doesn't exist
-        user = User.objects.get(username=username)
-        if not user:
-            serializers.ValidationError('Invalid username/password combination')
-            return False
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            raise serializers.ValidationError('Invalid username/password combination', code='authorization')
 
         # False if password doesn't match
         if not user.check_password(password):
-            serializers.ValidationError('Invalid username/password combination')
-            return False
+            raise serializers.ValidationError('Invalid username/password combination', code='authorization')
 
         return {'username': username, 'password': password}
 
