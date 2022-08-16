@@ -73,6 +73,11 @@ def user_password_update(request, pk):
         return Response({'response': "No permission to modify the user's password"},
                         status.HTTP_401_UNAUTHORIZED)
 
+    # extra permission: user can't modify password if he's inactive
+    if not request.user.is_active:
+        return Response({'response': "No permission to modify the user's password"},
+                        status.HTTP_401_UNAUTHORIZED)
+
     # verify data is valid
     serializer = UserPasswordUpdateSerializer(target_user, data=request.data)
     if not serializer.is_valid():
