@@ -63,19 +63,58 @@ def test_register_fails_empty_username():
 
 @pytest.mark.order(2)
 @pytest.mark.django_db
-def test_register_fails_empty_password():
-    """ System refuses to register if password is empty """
-
+def test_register_fails_weak_password():
+    """
+    API refuses to update if password is weak. Password must include:
+        8 characters length or more
+        1 digit or more
+        1 symbol or more
+        1 uppercase letter or more
+        1 lowercase letter or more
+     """
     # constants
     url = reverse("api_register")
 
     # a user tries to register with empty name
     payload = random_user_customer_payload()
     client = APIClient()
-    payload['password'] = ""
-    response = client.post(url, payload)
 
-    # response is an error
+    # error because password is too short
+    payload['password'] = "Tdo123*"
+    payload['password2'] = "Tdo123*"
+    response = client.post(url, payload)
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert not response.data.get('token')
+    assert response.data.get('password')
+
+    # error because password has no digits
+    payload['password'] = "TecladoABC"
+    payload['password2'] = "TecladoABC"
+    response = client.post(url, payload)
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert not response.data.get('token')
+    assert response.data.get('password')
+
+    # error because password has no lowercase
+    payload['password'] = "TECLADO123*"
+    payload['password2'] = "TECLADO123*"
+    response = client.post(url, payload)
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert not response.data.get('token')
+    assert response.data.get('password')
+
+    # error because password has no uppercase
+    payload['password'] = "teclado123*"
+    payload['password2'] = "teclado123*"
+    response = client.post(url, payload)
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert not response.data.get('token')
+    assert response.data.get('password')
+
+    # error because password doesn't have symbols
+    payload['password'] = "Teclado123"
+    payload['password2'] = "Teclado123"
+    response = client.post(url, payload)
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert not response.data.get('token')
     assert response.data.get('password')
@@ -224,13 +263,100 @@ def test_password_cant_update_empty_password():
     response = client.put(url, payload)
 
     # verify response 400
-    assert response.status_code == 400
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert not response.data.get('token')
+    assert response.data.get('password')
 
     # verify password was not updated
     assert not User.objects.first().check_password(new_password)
 
 
-# can't update own password if user is inactive
+@pytest.mark.order(2)
+@pytest.mark.django_db
+def test_password_cant_update_weak_password():
+    """
+    API refuses to update if password is weak. Password must include:
+        8 characters length or more
+        1 digit or more
+        1 symbol or more
+        1 uppercase letter or more
+        1 lowercase letter or more
+     """
+
+    # create user
+    created_user = random_user(is_active=1)
+
+    # configure token for user
+    client = APIClient()
+    token, _ = Token.objects.get_or_create(user=created_user)
+    client.credentials(HTTP_AUTHORIZATION='Token ' + str(token))
+
+    # make request for changing password with missing special characters
+    new_password = "Teclado123"
+    url = reverse('api_password_update', kwargs={'pk': created_user.pk})
+    payload = dict(password=new_password)
+    response = client.put(url, payload)
+
+    # verify response 400
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert not response.data.get('token')
+    assert response.data.get('password')
+
+    # verify password was not updated
+    assert not User.objects.first().check_password(new_password)
+
+@pytest.mark.order(2)
+@pytest.mark.django_db
+def test_password_cant_update_inactive_user():
+    """ A user can't update any password if inactive """
+
+    # create user
+    created_user = random_user()
+    created_user.is_active = False
+    created_user.save()
+
+    # configure token for user
+    client = APIClient()
+    token, _ = Token.objects.get_or_create(user=created_user)
+    client.credentials(HTTP_AUTHORIZATION='Token ' + str(token))
+
+    # make request for changing password
+    new_password = "NewPassword123"
+    url = reverse('api_password_update', kwargs={'pk': created_user.pk})
+    payload = dict(password=new_password)
+    response = client.put(url, payload)
+
+    # verify response 400
+    assert response.status_code == 401
+
+    # verify password was not updated
+    assert not User.objects.first().check_password(new_password)
+
+    # ----- same goes for superuser
+    # create superuser
+    super_user = random_user()
+    super_user.is_active = False
+    super_user.is_superuser = True
+    super_user.save()
+
+    # configure token for superuser
+    client = APIClient()
+    token, _ = Token.objects.get_or_create(user=super_user)
+    client.credentials(HTTP_AUTHORIZATION='Token ' + str(token))
+
+    # make request for changing password
+    new_password = "NewPassword123"
+    url = reverse('api_password_update', kwargs={'pk': created_user.pk})
+    payload = dict(password=new_password)
+    response = client.put(url, payload)
+
+    # verify response 400
+    assert response.status_code == 401
+
+    # verify password was not updated
+    assert not User.objects.first().check_password(new_password)
+
+
 
 @pytest.mark.order(2)
 @pytest.mark.django_db

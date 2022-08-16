@@ -30,7 +30,7 @@ def random_user(total=1, is_active=None):
             is_active=is_active
         )
 
-        created_user.set_password("Teclado123")
+        created_user.set_password("Teclado123*")
         created_user.save()
 
 
@@ -55,8 +55,8 @@ def random_user_customer_payload():
 
     # create random user payload
     payload = dict(
-        password="Teclado123",
-        password2="Teclado123",
+        password="Teclado123*",
+        password2="Teclado123*",
         is_superuser=False,
         first_name=random_first_name,
         last_name=random_last_name,

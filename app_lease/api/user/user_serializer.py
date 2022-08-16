@@ -2,6 +2,7 @@ from rest_framework import serializers
 from app_lease.models import Customer
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
+from app_lease.utils.password_has_errors import password_has_errors
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -41,21 +42,19 @@ class LoginSerializer(serializers.Serializer):
         if not username or not password:
             raise serializers.ValidationError("Username/password can't be empty", code='authorization')
 
-        # False if user doesn't exist
+        # User must exist
         try:
             user = User.objects.get(username=username)
         except User.DoesNotExist:
             raise serializers.ValidationError('Invalid username/password combination', code='authorization')
 
-        # False if user is inactive
+        # User must be active
         if not user.is_active:
             raise serializers.ValidationError('Invalid username/password combination', code='authorization')
 
-        # False if password doesn't match
+        # Passwords must match
         if not user.check_password(password):
             raise serializers.ValidationError('Invalid username/password combination', code='authorization')
-
-
 
         return {'username': username, 'password': password}
 
@@ -99,8 +98,14 @@ class UserCustomerRegSerializer(serializers.ModelSerializer):
         dob = self.validated_data.get('dob')
         job = self.validated_data.get('job')
 
+        # validation: passwords must match
         if password != password2:
             raise serializers.ValidationError({'password': 'Passwords must match'})
+
+        # validation: password must be strong
+        errors = password_has_errors(password)
+        if errors:
+            raise serializers.ValidationError({'password': errors[0]})
 
         created_user = User(email=email, username=username, first_name=first_name, last_name=last_name)
         created_user.set_password(password)
