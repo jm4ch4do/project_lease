@@ -47,9 +47,15 @@ class LoginSerializer(serializers.Serializer):
         except User.DoesNotExist:
             raise serializers.ValidationError('Invalid username/password combination', code='authorization')
 
+        # False if user is inactive
+        if not user.is_active:
+            raise serializers.ValidationError('Invalid username/password combination', code='authorization')
+
         # False if password doesn't match
         if not user.check_password(password):
             raise serializers.ValidationError('Invalid username/password combination', code='authorization')
+
+
 
         return {'username': username, 'password': password}
 

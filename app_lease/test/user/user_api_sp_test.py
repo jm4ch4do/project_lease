@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 
 @pytest.mark.order(2)
 @pytest.mark.django_db
-def test_register_duplicated_user():
+def test_register_fails_duplicated_user():
     """ Refuses to created duplicated username or email, returns 400 """
 
     # constants
@@ -39,6 +39,46 @@ def test_register_duplicated_user():
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert not response.data.get('token')
     assert not response.data.get('password')
+
+
+@pytest.mark.order(2)
+@pytest.mark.django_db
+def test_register_fails_empty_username():
+    """ System refuses to register if username is empty """
+
+    # constants
+    url = reverse("api_register")
+
+    # a user tries to register with empty name
+    payload = random_user_customer_payload()
+    client = APIClient()
+    payload['username'] = ""
+    response = client.post(url, payload)
+
+    # response is an error
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert not response.data.get('token')
+    assert response.data.get('username')
+
+
+@pytest.mark.order(2)
+@pytest.mark.django_db
+def test_register_fails_empty_password():
+    """ System refuses to register if password is empty """
+
+    # constants
+    url = reverse("api_register")
+
+    # a user tries to register with empty name
+    payload = random_user_customer_payload()
+    client = APIClient()
+    payload['password'] = ""
+    response = client.post(url, payload)
+
+    # response is an error
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert not response.data.get('token')
+    assert response.data.get('password')
 
 
 @pytest.mark.order(2)
@@ -108,7 +148,6 @@ def test_password_cant_update_user_user():
     assert response.status_code == 404
 
 
-
 @pytest.mark.order(2)
 @pytest.mark.django_db
 def test_password_cant_update_no_existing_user():
@@ -167,7 +206,7 @@ def test_password_cant_update_not_authenticated():
 
 @pytest.mark.order(2)
 @pytest.mark.django_db
-def test_password_cant_be_empty():
+def test_password_cant_update_empty_password():
     """ New password can't be empty """
 
     # create user
@@ -190,6 +229,8 @@ def test_password_cant_be_empty():
     # verify password was not updated
     assert not User.objects.first().check_password(new_password)
 
+
+# can't update own password if user is inactive
 
 @pytest.mark.order(2)
 @pytest.mark.django_db
@@ -271,6 +312,29 @@ def test_login_fails_due_to_bad_username():
     client = APIClient()
     url = reverse("api_login")
     payload = {"username": new_username, "password": new_password}
+    response = client.post(url, payload)
+
+    # get data back
+    assert response.status_code == 400
+    assert response.data
+
+
+@pytest.mark.order(2)
+@pytest.mark.django_db
+def test_login_fails_for_inactive_user():
+    """ A user can't login if it's inactive """
+
+    # create user
+    created_user = random_user(is_active=True)
+    created_user.is_active = False
+    new_password = 'mypassword123'
+    created_user.set_password(new_password)
+    created_user.save()
+
+    # make request
+    client = APIClient()
+    url = reverse("api_login")
+    payload = {"username": created_user.username, "password": new_password}
     response = client.post(url, payload)
 
     # get data back
