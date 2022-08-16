@@ -321,7 +321,7 @@ def test_password_cant_update_inactive_user():
     client.credentials(HTTP_AUTHORIZATION='Token ' + str(token))
 
     # make request for changing password
-    new_password = "NewPassword123"
+    new_password = "NewPassword123*"
     url = reverse('api_password_update', kwargs={'pk': created_user.pk})
     payload = dict(password=new_password)
     response = client.put(url, payload)
@@ -409,7 +409,7 @@ def test_login_fails_due_to_bad_password():
 
     # create user
     created_user = random_user(is_active=1)
-    new_password = 'somerandomwrongpassword123'
+    new_password = 'somerandomwrongpassword123*'
 
     # make request
     client = APIClient()
