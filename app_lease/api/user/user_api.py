@@ -112,8 +112,12 @@ def user_login(request):
     return Response(output, status.HTTP_200_OK)
 
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def user_list(request):
+
+    # if post redirect to create user
+    if request.method == 'POST':
+        return user_add(request)
 
     # only staff and superuser can get user list
     if not request.user.is_staff and not request.user.is_superuser:
@@ -186,3 +190,9 @@ def user_add(request):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def user_edit(request):
+
+    pass
