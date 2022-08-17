@@ -28,8 +28,35 @@ def test_user_cant_get_list_user():
     # get data back
     assert response.status_code == 401
     assert response.data['response']
+    assert len(response.data) == 1
 
 
-# a regular user can't get user list
+@pytest.mark.order(2)
+@pytest.mark.django_db
+def test_unauthenticated_staff_cant_get_list_user():
+    """ staff members can get the list of users """
+
+    # create user
+    created_user = random_user(is_active=1)
+    created_user.is_staff = True
+    created_user.save()
+
+    # create related customer
+    created_customer = random_customer(user=created_user)
+
+    # configure token for created_user
+    client = APIClient()
+    token, created = Token.objects.get_or_create(user=created_user)
+
+    # make request
+    url = reverse("user_list")
+    response = client.get(url)
+
+    # get data back
+    assert response.status_code == 401
+    assert response.data['response']
+    assert len(response.data) == 1
+
+
 # staff and superuser need to be authenticated
 # staff and superuser can't be inactive
