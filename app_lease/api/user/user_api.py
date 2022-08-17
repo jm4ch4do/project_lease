@@ -145,8 +145,8 @@ def user_search(request):
 
     for key, value in parameters.items():
         if key not in ALLOWED_FIELDS:
-            return Response({'response': "Invalid Fields"},
-                            status.HTTP_400_BAD_REQUEST)
+            return Response({'response': "Invalid Field + key"},
+                            status.HTTP_422_UNPROCESSABLE_ENTITY)
         filter_pars = {key + '__contains': value}
         queryset = queryset.filter(**filter_pars)
 
