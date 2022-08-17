@@ -139,5 +139,3 @@ def test_inactive_superuser_cant_get_list_user():
     assert response.status_code == 401
     assert response.data['response']
     assert len(response.data) == 1
-
-# staff and superuser can't be inactive

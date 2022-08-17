@@ -150,5 +150,9 @@ def user_search(request):
         filter_pars = {key + '__contains': value}
         queryset = queryset.filter(**filter_pars)
 
+    if queryset.count() == 0:
+        return Response({'response': "No results found in search"},
+                        status.HTTP_204_NO_CONTENT)
+
     serializer = UserSerializer(queryset, many=True)
     return Response(serializer.data)
