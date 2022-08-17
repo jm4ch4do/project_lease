@@ -1,0 +1,35 @@
+import pytest
+from rest_framework.test import APIClient
+from app_lease.test.generator import random_user, random_customer
+from django.urls import reverse
+from rest_framework.authtoken.models import Token
+
+
+@pytest.mark.order(2)
+@pytest.mark.django_db
+def test_user_cant_get_list_user():
+    """ A regular user can't access the list of users """
+
+    # create user
+    created_user = random_user(is_active=1)
+    created_user.is_staff = False
+    created_user.is_superuser = False
+    created_user.save()
+
+    # configure token for created_user
+    client = APIClient()
+    token, created = Token.objects.get_or_create(user=created_user)
+    client.credentials(HTTP_AUTHORIZATION='Token ' + str(token))
+
+    # make request
+    url = reverse("user_list")
+    response = client.get(url)
+
+    # get data back
+    assert response.status_code == 401
+    assert response.data['response']
+
+
+# a regular user can't get user list
+# staff and superuser need to be authenticated
+# staff and superuser can't be inactive
