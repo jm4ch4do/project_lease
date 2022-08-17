@@ -58,12 +58,3 @@ def test_create_user():
     assert response.data.get("username") == payload.get("username")
     assert response.data.get('id') is not None
     assert "password" not in response.data
-
-
-
-
-
-# super user can create regular, staff and superuser users
-# all fields are visible
-# regular users and staff users can't access
-# errors are shown for missing fields
