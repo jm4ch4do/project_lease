@@ -88,8 +88,8 @@ def test_register_fails_weak_password():
     assert response.data.get('password')
 
     # error because password has no digits
-    payload['password'] = "TecladoABC"
-    payload['password2'] = "TecladoABC"
+    payload['password'] = "TecladoABC*"
+    payload['password2'] = "TecladoABC*"
     response = client.post(url, payload)
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert not response.data.get('token')
@@ -290,20 +290,43 @@ def test_password_cant_update_weak_password():
     client = APIClient()
     token, _ = Token.objects.get_or_create(user=created_user)
     client.credentials(HTTP_AUTHORIZATION='Token ' + str(token))
-
-    # make request for changing password with missing special characters
-    new_password = "Teclado123"
     url = reverse('api_password_update', kwargs={'pk': created_user.pk})
-    payload = dict(password=new_password)
-    response = client.put(url, payload)
 
-    # verify response 400
+    # error because password is too short
+    payload = dict(password="Tdo123*")
+    response = client.put(url, payload)
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert not response.data.get('token')
     assert response.data.get('password')
 
-    # verify password was not updated
-    assert not User.objects.first().check_password(new_password)
+    # error because password has no digits
+    payload = dict(password="TecladoABC*")
+    response = client.put(url, payload)
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert not response.data.get('token')
+    assert response.data.get('password')
+
+    # error because password has no lowercase
+    payload = dict(password="TECLADO123*")
+    response = client.put(url, payload)
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert not response.data.get('token')
+    assert response.data.get('password')
+
+    # error because password has no uppercase
+    payload = dict(password="teclado123*")
+    response = client.put(url, payload)
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert not response.data.get('token')
+    assert response.data.get('password')
+
+    # error because password doesn't have symbols
+    payload = dict(password="Teclado123")
+    response = client.put(url, payload)
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert not response.data.get('token')
+    assert response.data.get('password')
+
 
 @pytest.mark.order(2)
 @pytest.mark.django_db

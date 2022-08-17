@@ -28,6 +28,12 @@ class UserPasswordUpdateSerializer(serializers.ModelSerializer):
         current_user.set_password(password)
         current_user.save()
 
+    def validate(self, data):
+        password = data.get('password')
+        errors = password_has_errors(password)
+        if errors:
+            raise serializers.ValidationError({'password': errors[0]})
+
 
 class LoginSerializer(serializers.Serializer):
 
