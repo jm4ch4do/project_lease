@@ -10,7 +10,6 @@ from rest_framework.authtoken.models import Token
 from rest_framework import status
 
 
-
 class UserViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.

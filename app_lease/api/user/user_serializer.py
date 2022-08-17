@@ -155,9 +155,8 @@ class UserSerializer(serializers.ModelSerializer):
 
 class UserAdminSerializer(serializers.ModelSerializer):
 
-    customer = CustomerSerializer(read_only=True)
-
     class Meta:
 
         model = User
-        fields = ('id', 'username', 'email', 'first_name', 'last_name', 'is_active', 'is_staff', 'customer')
+        fields = '__all__'
+        extra_kwargs = {'password': {'write_only': True}}
