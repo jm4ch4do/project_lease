@@ -1,7 +1,6 @@
 from django.urls import path, include
 from app_lease import api
 from rest_framework import routers
-from rest_framework.authtoken.views import obtain_auth_token
 
 router = routers.DefaultRouter()
 router.register(r'users', api.UserViewSet)
