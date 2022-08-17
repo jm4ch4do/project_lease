@@ -25,6 +25,7 @@ urlpatterns = [
     path('password_update/<int:pk>', api.user.user_api.user_password_update,
          name='api_password_update'),
     path('login/', api.user.user_api.user_login, name='api_login'),
+    path('users/', api.user.user_api.user_list, name='user_list'),
 
 
     # ----- View Sets

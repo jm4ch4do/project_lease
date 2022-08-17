@@ -2,11 +2,12 @@ from django.contrib.auth.models import User
 from rest_framework.decorators import api_view
 from rest_framework import viewsets
 from rest_framework import permissions
-from app_lease.api.user.user_serializer import UserSerializer, \
-    UserCustomerRegSerializer, UserPasswordUpdateSerializer, LoginSerializer
+from app_lease.api.user.user_serializer import UserHyperSerializer, \
+    UserCustomerRegSerializer, UserPasswordUpdateSerializer, LoginSerializer, UserSerializer
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework import status
+
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -14,7 +15,7 @@ class UserViewSet(viewsets.ModelViewSet):
     API endpoint that allows users to be viewed or edited.
     """
     queryset = User.objects.all().order_by('-date_joined')
-    serializer_class = UserSerializer
+    serializer_class = UserHyperSerializer
     permission_classes = [permissions.IsAuthenticated]
 
 
@@ -109,3 +110,16 @@ def user_login(request):
 
     # return
     return Response(output, status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+def user_list(request):
+
+    # only staff and superuser can get user list
+    if not request.user.is_staff and not request.user.is_superuser:
+        return Response({'response': "No permission to view user's list"},
+                        status.HTTP_401_UNAUTHORIZED)
+
+    users = User.objects.get.all()
+    serializer = UserSerializer(users, many=True)
+    return Response(serializer.data)

@@ -3,9 +3,10 @@ from app_lease.models import Customer
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from app_lease.utils.password_has_errors import password_has_errors
+from app_lease.serializers import CustomerSerializer
 
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
+class UserHyperSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = User
@@ -130,3 +131,13 @@ class UserCustomerRegSerializer(serializers.ModelSerializer):
         )
 
         return created_user, created_customer
+
+
+class UserSerializer(serializers.ModelSerializer):
+
+    customer = CustomerSerializer(source='customer_set', read_only=True)
+
+    class Meta:
+
+        model = User
+        fields = ('id', 'username', 'email', 'first_name', 'last_name', 'is_active', 'is_staff')
