@@ -27,6 +27,7 @@ urlpatterns = [
     path('login/', api.user.user_api.user_login, name='api_login'),
     path('users/', api.user.user_api.user_list, name='user_list'),
     path('users/search/', api.user.user_api.user_search, name='user_search'),
+    path('user/', api.user.user_api.user_add, name='user_add'),
 
 
     # ----- View Sets

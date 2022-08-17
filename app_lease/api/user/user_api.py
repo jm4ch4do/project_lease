@@ -3,7 +3,8 @@ from rest_framework.decorators import api_view
 from rest_framework import viewsets
 from rest_framework import permissions
 from app_lease.api.user.user_serializer import UserHyperSerializer, \
-    UserCustomerRegSerializer, UserPasswordUpdateSerializer, LoginSerializer, UserSerializer
+    UserCustomerRegSerializer, UserPasswordUpdateSerializer, LoginSerializer, \
+    UserSerializer, UserAdminSerializer
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework import status
@@ -166,3 +167,23 @@ def user_search(request):
 
     serializer = UserSerializer(queryset, many=True)
     return Response(serializer.data)
+
+
+@api_view(['POST'])
+def user_add(request):
+
+    # verify user is authenticated
+    if not request.user.is_authenticated:
+        return Response({'response': "Logging to be able to add users"},
+                        status.HTTP_401_UNAUTHORIZED)
+
+    # only superuser can create user (you can also register users for regular users)
+    if not request.user.is_superuser:
+        return Response({'response': "No permission to add users"},
+                        status.HTTP_401_UNAUTHORIZED)
+
+    serializer = UserAdminSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

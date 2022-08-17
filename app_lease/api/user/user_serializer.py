@@ -151,3 +151,13 @@ class UserSerializer(serializers.ModelSerializer):
         except Customer.DoesNotExist:
             customer_id = 0
         return customer_id
+
+
+class UserAdminSerializer(serializers.ModelSerializer):
+
+    customer = CustomerSerializer(read_only=True)
+
+    class Meta:
+
+        model = User
+        fields = ('id', 'username', 'email', 'first_name', 'last_name', 'is_active', 'is_staff', 'customer')
