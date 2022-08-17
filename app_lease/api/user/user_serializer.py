@@ -135,9 +135,16 @@ class UserCustomerRegSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
 
-    customer = CustomerSerializer(source='customer_set', read_only=True)
+    # this brings all the customer's information in the serializer
+    # customer = CustomerSerializer(read_only=True)
+
+    customer_id = serializers.SerializerMethodField('get_customer_id')
 
     class Meta:
 
         model = User
-        fields = ('id', 'username', 'email', 'first_name', 'last_name', 'is_active', 'is_staff')
+        fields = ('id', 'username', 'email', 'first_name', 'last_name', 'is_active', 'is_staff', 'customer_id')
+
+    def get_customer_id(self, user):
+        customer_id = user.customer.id
+        return customer_id

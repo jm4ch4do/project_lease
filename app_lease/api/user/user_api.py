@@ -117,9 +117,19 @@ def user_list(request):
 
     # only staff and superuser can get user list
     if not request.user.is_staff and not request.user.is_superuser:
-        return Response({'response': "No permission to view user's list"},
+        return Response({'response': "No permission to view users list"},
                         status.HTTP_401_UNAUTHORIZED)
 
-    users = User.objects.get.all()
+    # verify user is authenticated
+    if not request.user.is_authenticated:
+        return Response({'response': "Logging to get users list"},
+                        status.HTTP_401_UNAUTHORIZED)
+
+    # extra permission: user can't modify password if he's inactive
+    if not request.user.is_active:
+        return Response({'response': "No permission to get users list"},
+                        status.HTTP_401_UNAUTHORIZED)
+
+    users = User.objects.all()
     serializer = UserSerializer(users, many=True)
     return Response(serializer.data)
