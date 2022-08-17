@@ -8,7 +8,7 @@ from rest_framework.authtoken.models import Token
 
 @pytest.mark.order(2)
 @pytest.mark.django_db
-def test_create_user():
+def test_superuser_creates_user():
     """ A superuser can create users of any kind """
 
     # create user

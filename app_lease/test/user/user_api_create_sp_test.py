@@ -8,8 +8,8 @@ from rest_framework.authtoken.models import Token
 
 @pytest.mark.order(2)
 @pytest.mark.django_db
-def test_create_user():
-    """ A superuser can create users of any kind """
+def test_regular_and_staff_cant_create_user():
+    """ Regular users and staff members can't create users """
 
     # create regular user
     created_user = random_user(is_active=1)
@@ -48,8 +48,26 @@ def test_create_user():
     assert response.data.get("response")
 
 
+@pytest.mark.order(2)
+@pytest.mark.django_db
+def test_superuser_cant_create_user_with_invalid_data():
+    """ All data must be valid when creating user """
 
+    # create superuser
+    super_user = random_user(is_active=1)
+    super_user.is_superuser = True
+    super_user.save()
 
+    # configure token for created_user
+    client = APIClient()
+    token, created = Token.objects.get_or_create(user=super_user)
+    client.credentials(HTTP_AUTHORIZATION='Token ' + str(token))
 
-# regular users and staff users can't access
-# errors are shown for missing fields
+    # make request for creating a new regular user
+    url = reverse("user_add")
+    payload = random_user_payload()
+    payload["password"] = ""
+    response = client.post(url, payload)
+
+    # response has the correct values
+    assert response.status_code == 400
