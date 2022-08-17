@@ -138,6 +138,16 @@ def user_list(request):
 @api_view(['GET'])
 def user_search(request):
 
+    # verify user is authenticated
+    if not request.user.is_authenticated:
+        return Response({'response': "Logging to be able to search users"},
+                        status.HTTP_401_UNAUTHORIZED)
+
+    # only staff and superuser can get user list
+    if not request.user.is_staff and not request.user.is_superuser:
+        return Response({'response': "No permission to search users"},
+                        status.HTTP_401_UNAUTHORIZED)
+
     ALLOWED_FIELDS = ('username', 'first_name', 'last_name')
 
     parameters = request.query_params

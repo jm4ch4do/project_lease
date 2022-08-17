@@ -7,7 +7,7 @@ from rest_framework.authtoken.models import Token
 
 @pytest.mark.order(2)
 @pytest.mark.django_db
-def test_staff_and_superuser_can_search():
+def test_staff_and_superuser_can_search_in_user_list():
     """ Staff and Superusers can both search users by:
         username, first_name and last_name """
 
