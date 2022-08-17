@@ -146,5 +146,8 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('id', 'username', 'email', 'first_name', 'last_name', 'is_active', 'is_staff', 'customer_id')
 
     def get_customer_id(self, user):
-        customer_id = user.customer.id
+        try:
+            customer_id = user.customer.id
+        except Customer.DoesNotExist:
+            customer_id = 0
         return customer_id

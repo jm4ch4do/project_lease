@@ -133,3 +133,22 @@ def user_list(request):
     users = User.objects.all()
     serializer = UserSerializer(users, many=True)
     return Response(serializer.data)
+
+
+@api_view(['GET'])
+def user_search(request):
+
+    ALLOWED_FIELDS = ('username', 'first_name', 'last_name')
+
+    parameters = request.query_params
+    queryset = User.objects.all()
+
+    for key, value in parameters.items():
+        if key not in ALLOWED_FIELDS:
+            return Response({'response': "Invalid Fields"},
+                            status.HTTP_400_BAD_REQUEST)
+        filter_pars = {key + '__contains': value}
+        queryset = queryset.filter(**filter_pars)
+
+    serializer = UserSerializer(queryset, many=True)
+    return Response(serializer.data)
