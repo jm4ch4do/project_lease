@@ -22,7 +22,7 @@ def test_password_update_own_user():
     client.credentials(HTTP_AUTHORIZATION='Token ' + str(token))
 
     # make request for changing password
-    new_password = "NewPassword123"
+    new_password = "NewPassword123*"
     url = reverse('api_password_update', kwargs={'pk': created_user.pk})
     payload = dict(password=new_password)
     response = client.put(url, payload)
@@ -54,7 +54,7 @@ def test_password_update_staff_user():
     client.credentials(HTTP_AUTHORIZATION='Token ' + str(token))
 
     # make request for changing password
-    new_password = "NewPassword123"
+    new_password = "NewPassword123*"
     url = reverse('api_password_update', kwargs={'pk': created_user.pk})
     payload = dict(password=new_password)
     response = client.put(url, payload)
@@ -86,7 +86,7 @@ def test_password_update_superuser_user():
     client.credentials(HTTP_AUTHORIZATION='Token ' + str(token))
 
     # make request for changing password
-    new_password = "NewPassword123"
+    new_password = "NewPassword123*"
     url = reverse('api_password_update', kwargs={'pk': created_user.pk})
     payload = dict(password=new_password)
     response = client.put(url, payload)
@@ -120,7 +120,7 @@ def test_password_update_staff_staffuser():
     client.credentials(HTTP_AUTHORIZATION='Token ' + str(token))
 
     # make request for changing password
-    new_password = "NewPassword123"
+    new_password = "NewPassword123*"
     url = reverse('api_password_update', kwargs={'pk': created_user.pk})
     payload = dict(password=new_password)
     response = client.put(url, payload)
@@ -154,7 +154,7 @@ def test_password_update_superuser_superuser():
     client.credentials(HTTP_AUTHORIZATION='Token ' + str(token))
 
     # make request for changing password
-    new_password = "NewPassword123"
+    new_password = "NewPassword123*"
     url = reverse('api_password_update', kwargs={'pk': created_user.pk})
     payload = dict(password=new_password)
     response = client.put(url, payload)

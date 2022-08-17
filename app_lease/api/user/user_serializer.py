@@ -34,6 +34,8 @@ class UserPasswordUpdateSerializer(serializers.ModelSerializer):
         if errors:
             raise serializers.ValidationError({'password': errors[0]})
 
+        return data
+
 
 class LoginSerializer(serializers.Serializer):
 
