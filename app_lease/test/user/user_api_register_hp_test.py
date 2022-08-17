@@ -1,10 +1,10 @@
 import pytest
 from rest_framework.test import APIClient
-from app_lease.test.generator import random_user, random_user_customer_payload, random_customer
+from app_lease.test.generator import random_user_customer_payload
 from django.urls import reverse
 from django.contrib.auth.models import User
 from app_lease.models import Customer
-from rest_framework.authtoken.models import Token
+
 
 @pytest.mark.order(2)
 @pytest.mark.django_db
