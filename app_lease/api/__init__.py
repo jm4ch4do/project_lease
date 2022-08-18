@@ -7,3 +7,5 @@ from .vehicle_api import VehicleList, VehicleDetail
 from .trade_api import TradeList, TradeDetail
 from .user_api import *
 from .user_serializer import *
+from .customer_api import *
+from .customer_serializer import *

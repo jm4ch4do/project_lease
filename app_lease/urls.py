@@ -31,7 +31,6 @@ urlpatterns = [
     path('user/<int:pk>', app_lease.api.user_edit, name='user_edit'),
     path('user/', app_lease.api.user_add, name='user_add'),
 
-
     # ----- View Sets
     path('', include(router.urls)),
 ]
