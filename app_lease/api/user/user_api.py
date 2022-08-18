@@ -252,4 +252,4 @@ def user_edit_put(request, user):
 
 def user_edit_delete(request, user):
     user.delete()
-    return Response(status=status.HTTP_204_NO_CONTENT)
+    return Response({'response': "Remove Completed"}, status=status.HTTP_204_NO_CONTENT)
