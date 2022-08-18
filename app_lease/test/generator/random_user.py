@@ -19,7 +19,7 @@ def random_user(total=1, is_active=None):
         random_first_name = fake.first_name()
         random_last_name = fake.last_name()
         random_user_name = Provider.get_random_user_name(random_first_name)
-        is_active = bool(getrandbits(1)) if not is_active else is_active
+        is_active = bool(getrandbits(1)) if is_active is None else is_active
 
         created_user = User(
             is_superuser=False,
