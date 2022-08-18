@@ -7,8 +7,8 @@ from rest_framework.authtoken.models import Token
 
 @pytest.mark.order(2)
 @pytest.mark.django_db
-def test_get_own_user_details():
-    """ A regular user can get his own user data """
+def test_modify_own_user():
+    """ A regular user can edit his own user data """
 
     # create user
     created_user = random_user(is_active=1)
