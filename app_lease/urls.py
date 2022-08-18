@@ -32,6 +32,7 @@ urlpatterns = [
     # ----- API Customer
     path('customers/', app_lease.api.customer_list, name='customers'),
     path('customer/<int:pk>', app_lease.api.customer_edit, name='customer_edit'),
+    path('customers/search/', app_lease.api.customer_search, name='customer_search'),
     #path('customers/<int:pk>', api.CustomerDetail.as_view()),
 
     # ----- View Sets

@@ -142,6 +142,38 @@ def test_cant_get_details_of_non_existent_customer():
     assert response.data.get("response")
 
 
+# regular user can't search
+# search returns error with no allowed fields
+@pytest.mark.order(2)
+@pytest.mark.django_db
+def test_search_ignores_inactive_customers_in_list():
+    """ Search results should not include inactive customers """
+
+    # create user
+    staff_user = random_user(is_active=True)
+    staff_user.username = "aaaa"
+    staff_user.is_staff = True
+    staff_user.save()
+
+    # create inactive user
+    inactive_user = random_user(is_active=False)
+    inactive_user.username = "aaaa"
+
+    # configure token for staff_user
+    client = APIClient()
+    token, created = Token.objects.get_or_create(user=staff_user)
+    client.credentials(HTTP_AUTHORIZATION='Token ' + str(token))
+
+    # make request
+    url = reverse("user_search")
+    url += '?username=aaa'
+    response = client.get(url)
+
+    # get data back
+    assert response.status_code == 200
+    assert len(response.data) == 1
+    assert User.objects.first().last_name == staff_user.last_name
+
 # each user can get his own customer
 # staff and superuser can get any customer
 # only staff and superuser can get all customers

@@ -83,3 +83,41 @@ def customer_edit_put(request, customer):
 def customer_edit_delete(request, customer):
     customer.delete()
     return Response({'response': "Remove Completed"}, status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['GET'])
+def customer_search(request):
+
+    # verify user is authenticated
+    if not request.user.is_authenticated:
+        return Response({'response': "Logging to be able to search users"},
+                        status.HTTP_401_UNAUTHORIZED)
+
+    # only staff and superuser can access this view
+    if not request.user.is_staff and not request.user.is_superuser:
+        return Response({'response': "No permission to search users"},
+                        status.HTTP_401_UNAUTHORIZED)
+
+    ALLOWED_FIELDS = ('first_name', 'last_name', 'job', 'age')
+
+    parameters = request.query_params
+    queryset = Customer.objects.filter(status=1)
+
+    for key, value in parameters.items():
+        if key not in ALLOWED_FIELDS:
+            return Response({'response': "Invalid Field + key"},
+                            status.HTTP_422_UNPROCESSABLE_ENTITY)
+
+        if key == 'age':
+            filter_pars = {key: int(value)}
+        else:
+            filter_pars = {key + '__contains': value}
+
+        queryset = queryset.filter(**filter_pars)
+
+    if queryset.count() == 0:
+        return Response({'response': "No results found in search"},
+                        status.HTTP_204_NO_CONTENT)
+
+    serializer = CustomerSerializer(queryset, many=True)
+    return Response(serializer.data)
