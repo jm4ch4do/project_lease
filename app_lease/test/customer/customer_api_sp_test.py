@@ -45,7 +45,7 @@ def test_user_cant_get_customer_list():
     token, created = Token.objects.get_or_create(user=created_user)
     client.credentials(HTTP_AUTHORIZATION='Token ' + str(token))
 
-    # make request for creating customer
+    # make request for customer list
     url = reverse("customers")
     payload = random_customer_payload()
     response = client.get(url, payload)
