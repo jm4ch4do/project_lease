@@ -247,7 +247,7 @@ def user_edit_put(request, user):
         serializer.save()
         return Response(serializer.data)
     else:
-        Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 def user_edit_delete(request, user):

@@ -1,6 +1,6 @@
 from app_lease.models import Customer
 from rest_framework.decorators import api_view
-from app_lease.api.customer_serializer import CustomerSerializer
+from app_lease.api.customer_serializer import CustomerSerializer, CustomerEditSerializer
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework import status
@@ -72,12 +72,12 @@ def customer_edit_get(request, customer):
 
 
 def customer_edit_put(request, customer):
-    serializer = CustomerSerializer(customer, data=request.data)
+    serializer = CustomerEditSerializer(customer, data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
     else:
-        Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 def customer_edit_delete(request, customer):
