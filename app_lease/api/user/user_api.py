@@ -212,8 +212,15 @@ def user_edit(request, pk):
         not request.user.is_staff and \
             not request.user.is_superuser:
 
-        return Response({'response': "No permission to modify"},
+        return Response({'response': "No permission to access"},
                         status.HTTP_401_UNAUTHORIZED)
+
+    # extra permissions: only superuser can get another staff or superuser
+    if target_user.is_staff or target_user.is_superuser:
+        if not request.user.is_superuser:
+            if target_user != request.user:
+                return Response({'response': "No permission to access"},
+                                status.HTTP_401_UNAUTHORIZED)
 
     # redirect to GET
     if request.method == 'GET':

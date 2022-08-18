@@ -167,12 +167,3 @@ def test_superuser_gets_any_staff_details():
     assert response.data.get("customer_id") is not None
     assert response.data.get('id')
     assert "password" not in response.data
-
-
-# staff user can't edit another staff or a superuser
-# can't get user if not authenticate
-# can't get user if user doesn't exist
-# can't get user if not own user
-
-# staff user can't edit another staff user, only regular users
-
