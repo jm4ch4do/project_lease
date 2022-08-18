@@ -52,34 +52,27 @@ def customer_edit(request, pk):
         return Response({'response': "No permission to access"},
                         status.HTTP_401_UNAUTHORIZED)
 
-    # extra permissions: only superuser can get another staff or superuser
-    if target_user.is_staff or target_user.is_superuser:
-        if not request.user.is_superuser:
-            if target_user != request.user:
-                return Response({'response': "No permission to access"},
-                                status.HTTP_401_UNAUTHORIZED)
-
     # redirect to GET
     if request.method == 'GET':
-        return user_edit_get(request, target_user)
+        return customer_edit_get(request, target_customer)
 
     # redirect to PUT
     elif request.method == 'PUT':
-        return user_edit_put(request, target_user)
+        return customer_edit_put(request, target_customer)
 
     # redirect to DELETE
     elif request.method == 'DELETE':
-        return user_edit_delete(request, target_user)
+        return customer_edit_delete(request, target_customer)
     pass
 
 
-def user_edit_get(request, user):
-    serializer = UserSerializer(user)
+def customer_edit_get(request, customer):
+    serializer = CustomerSerializer(customer)
     return Response(serializer.data)
 
 
-def user_edit_put(request, user):
-    serializer = UserSerializer(user, data=request.data)
+def customer_edit_put(request, customer):
+    serializer = CustomerSerializer(customer, data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
@@ -87,6 +80,6 @@ def user_edit_put(request, user):
         Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-def user_edit_delete(request, user):
-    user.delete()
+def customer_edit_delete(request, customer):
+    customer.delete()
     return Response({'response': "Remove Completed"}, status=status.HTTP_204_NO_CONTENT)
