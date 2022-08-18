@@ -12,8 +12,6 @@ router.register(r'groups', api.GroupViewSet)
 urlpatterns = [
     path('services/', api.service_list),
     path('services/<int:pk>', api.service_detail),
-    path('customers/', api.CustomerList.as_view()),
-    path('customers/<int:pk>', api.CustomerDetail.as_view()),
     path('lead/', api.LeadList.as_view()),
     path('leads/<int:pk>', api.LeadDetail.as_view()),
     path('vehicles/', api.VehicleList.as_view()),
@@ -30,6 +28,10 @@ urlpatterns = [
     path('users/search/', app_lease.api.user_search, name='user_search'),
     path('user/<int:pk>', app_lease.api.user_edit, name='user_edit'),
     path('user/', app_lease.api.user_add, name='user_add'),
+
+    # ----- API Customer
+    path('customers/', api.CustomerList.as_view(), name='customers'),
+    path('customers/<int:pk>', api.CustomerDetail.as_view()),
 
     # ----- View Sets
     path('', include(router.urls)),

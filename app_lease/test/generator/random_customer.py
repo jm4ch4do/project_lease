@@ -35,3 +35,30 @@ def random_customer(total=1, user=None):
         return created_customer
     else:
         return created_customers
+
+
+def random_customer_payload(user=None):
+
+    # register custom functions
+    fake = Faker()
+    fake.add_provider(Provider)
+
+    # random first_name and last_name
+    random_first_name = fake.first_name()
+    random_last_name = fake.last_name()
+    random_user_name = Provider.get_random_user_name(random_first_name)
+
+    # create random user payload
+    payload = dict(
+        first_name=random_first_name,
+        last_name=random_last_name,
+        job=fake.job(),
+        status=1,
+        notes=fake.paragraph(nb_sentences=3),
+        dob=fake.date_between(start_date=datetime(1950, 1, 1), end_date=datetime(2003, 1, 1)),
+    )
+
+    if user is not None:
+        payload['user'] = user
+
+    return payload
