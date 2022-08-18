@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from rest_framework.decorators import api_view
 from rest_framework import viewsets
 from rest_framework import permissions
-from app_lease.api.user.user_serializer import UserHyperSerializer, \
+from app_lease.api.user_serializer import UserHyperSerializer, \
     UserCustomerRegSerializer, UserPasswordUpdateSerializer, LoginSerializer, \
     UserSerializer, UserAdminSerializer
 from rest_framework.response import Response

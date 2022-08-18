@@ -3,7 +3,6 @@ from app_lease.models import Customer
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from app_lease.utils.password_has_errors import password_has_errors
-from app_lease.serializers import CustomerSerializer
 
 
 class UserHyperSerializer(serializers.HyperlinkedModelSerializer):

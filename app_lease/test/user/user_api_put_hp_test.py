@@ -29,5 +29,3 @@ def test_modify_own_user():
     assert response.data.get("username") == payload.get("username")
     assert response.data.get('id') is not None
     assert "password" not in response.data
-
-

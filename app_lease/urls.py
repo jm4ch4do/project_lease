@@ -1,4 +1,6 @@
 from django.urls import path, include
+
+import app_lease.api
 from app_lease import api
 from rest_framework import routers
 
@@ -20,14 +22,14 @@ urlpatterns = [
     path('trades/<int:pk>', api.TradeDetail.as_view()),
 
     # ----- API User
-    path('register/', api.user.user_api.user_register, name='api_register'),
-    path('password_update/<int:pk>', api.user.user_api.user_password_update,
+    path('register/', app_lease.api.user_register, name='api_register'),
+    path('password_update/<int:pk>', app_lease.api.user_password_update,
          name='api_password_update'),
-    path('login/', api.user.user_api.user_login, name='api_login'),
-    path('users/', api.user.user_api.user_list, name='user_list'),
-    path('users/search/', api.user.user_api.user_search, name='user_search'),
-    path('user/<int:pk>', api.user.user_api.user_edit, name='user_edit'),
-    path('user/', api.user.user_api.user_add, name='user_add'),
+    path('login/', app_lease.api.user_login, name='api_login'),
+    path('users/', app_lease.api.user_list, name='user_list'),
+    path('users/search/', app_lease.api.user_search, name='user_search'),
+    path('user/<int:pk>', app_lease.api.user_edit, name='user_edit'),
+    path('user/', app_lease.api.user_add, name='user_add'),
 
 
     # ----- View Sets
