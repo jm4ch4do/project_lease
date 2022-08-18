@@ -119,7 +119,7 @@ def test_cant_get_user_that_doesnt_exist():
 @pytest.mark.order(2)
 @pytest.mark.django_db
 def test_user_cant_get_any_user():
-    """ A user can't get anothers user information """
+    """ A user can't get another's user information """
 
     # create user
     created_user = random_user(is_active=1)

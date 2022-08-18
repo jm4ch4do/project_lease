@@ -101,7 +101,7 @@ def test_superuser_gets_any_user_details():
 
 @pytest.mark.order(2)
 @pytest.mark.django_db
-def test_superuser_gets_any_user_details():
+def test_superuser_gets_any_superuser_details():
     """ A superuser can get details on any superuser """
 
     # create user
