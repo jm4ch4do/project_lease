@@ -1,7 +1,7 @@
 # uses APIView
 
 from app_lease.models import Customer
-from app_lease.api import CustomerSerializer
+from app_lease.api.customer_serializer import CustomerSerializer
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
