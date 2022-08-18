@@ -232,8 +232,3 @@ def test_staff_can_search_customers():
     assert response.status_code == 200
     assert len(response.data) == 1
     assert Customer.objects.first().last_name == created_customer.last_name
-
-
-# each user can get his own customer
-# staff and superuser can get any customer
-# only staff and superuser can get all customers
