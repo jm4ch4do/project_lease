@@ -1,6 +1,6 @@
 from django.urls import path, include
 
-import app_lease.api
+import app_lease.api.user_api
 from app_lease import api
 from rest_framework import routers
 
@@ -30,8 +30,8 @@ urlpatterns = [
     path('user/', app_lease.api.user_add, name='user_add'),
 
     # ----- API Customer
-    path('customers/', api.CustomerList.as_view(), name='customers'),
-    path('customers/<int:pk>', api.CustomerDetail.as_view()),
+    path('customers/', app_lease.api.customer_list, name='customers'),
+    #path('customers/<int:pk>', api.CustomerDetail.as_view()),
 
     # ----- View Sets
     path('', include(router.urls)),
