@@ -211,7 +211,6 @@ def test_invalid_field_search_in_customer_list():
     assert response.data['response']
 
 
-# regular user can't search
 @pytest.mark.order(2)
 @pytest.mark.django_db
 def test_regular_user_cant_search_customers():
