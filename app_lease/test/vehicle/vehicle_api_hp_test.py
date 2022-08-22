@@ -76,7 +76,6 @@ def test_superuser_get_vehicle_list():
     assert response.data[0]['model']
 
 
-
 @pytest.mark.order(2)
 @pytest.mark.django_db
 def test_get_own_vehicle_details():
@@ -176,6 +175,31 @@ def test_superuser_gets_any_vehicle_details():
     assert response.data['customer']
     assert response.data['model']
 
+
+@pytest.mark.order(2)
+@pytest.mark.django_db
+def test_user_adds_own_vehicle():
+    """ A regular user can add his own vehicle"""
+
+    # create active customer
+    created_user = random_user(is_active=True)
+    created_customer = random_customer(user=created_user)
+
+    # configure token for created_user
+    client = APIClient()
+    token, created = Token.objects.get_or_create(user=created_user)
+    client.credentials(HTTP_AUTHORIZATION='Token ' + str(token))
+
+    # make request for add vehicle for created customer
+    url = reverse("vehicles")
+    payload = random_vehicle_payload(customer=created_customer)
+    response = client.post(url, payload)
+
+    # response has the correct values
+    assert response.status_code == 201
+    assert Vehicle.objects.all().count() == 1
+    assert Vehicle.objects.first().model == payload['model']
+    
 
 @pytest.mark.order(2)
 @pytest.mark.django_db

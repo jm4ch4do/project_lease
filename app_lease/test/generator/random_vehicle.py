@@ -64,6 +64,6 @@ def random_vehicle_payload(customer=None):
     )
 
     if customer is not None:
-        payload['customer'] = customer
+        payload['customer'] = customer.id
 
     return payload

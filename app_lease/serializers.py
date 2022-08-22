@@ -31,9 +31,6 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['url', 'name']
 
 
-
-
-
 class LeadSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lead

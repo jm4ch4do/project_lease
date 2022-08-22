@@ -3,10 +3,15 @@ from rest_framework.decorators import api_view
 from app_lease.api.vehicle_serializer import VehicleSerializer, VehicleEditSerializer
 from rest_framework.response import Response
 from rest_framework import status
+from django.core import serializers
 
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def vehicle_list(request):
+
+    # if post redirect to create vehicle
+    if request.method == 'POST':
+        return vehicle_add(request)
 
     # only staff and superuser can get vehicle list
     if not request.user.is_staff and not request.user.is_superuser:
@@ -26,6 +31,34 @@ def vehicle_list(request):
     vehicles = Vehicle.objects.all()
     serializer = VehicleSerializer(vehicles, many=True)
     return Response(serializer.data)
+
+
+def vehicle_add(request):
+
+    # verify user is authenticated
+    if not request.user.is_authenticated:
+        return Response({'response': "Logging to be able to add vehicles"},
+                        status.HTTP_401_UNAUTHORIZED)
+
+    # verify data is valid ('also verifies if customer exists')
+    serializer = VehicleSerializer(data=request.data)
+    if not serializer.is_valid():
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    # verify user has permission to add
+    target_user = serializer.validated_data['customer'].user
+
+    # verify user has permissions to add
+    if request.user != target_user and \
+        not request.user.is_staff and \
+            not request.user.is_superuser:
+
+        return Response({'response': "No permission to access"},
+                        status.HTTP_401_UNAUTHORIZED)
+
+    # save data and response ok
+    serializer.save()
+    return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
