@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from app_lease.models import Service, Lead, Trade
+from app_lease.models import Service, Trade
 from django.contrib.auth.models import Group
 
 
@@ -29,14 +29,3 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Group
         fields = ['url', 'name']
-
-
-class LeadSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Lead
-        fields = ['id', 'first_name', 'last_name', 'source', 'notes',
-                  'dob', 'created_at', 'updated_at', 'name']
-
-
-
-
