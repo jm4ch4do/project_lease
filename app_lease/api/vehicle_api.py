@@ -45,16 +45,24 @@ def vehicle_add(request):
     if not serializer.is_valid():
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    # verify user has permission to add
-    target_user = serializer.validated_data['customer'].user
+    # verify requesting user is active
+    if not request.user.is_active:
+        return Response({'response': "No permission to access"},
+                        status.HTTP_401_UNAUTHORIZED)
 
     # verify user has permissions to add
+    target_user = serializer.validated_data['customer'].user
     if request.user != target_user and \
         not request.user.is_staff and \
             not request.user.is_superuser:
 
         return Response({'response': "No permission to access"},
                         status.HTTP_401_UNAUTHORIZED)
+
+    # verify target user is active
+    if not target_user.is_active:
+        return Response({'response': "Target user is not active or does not exists"},
+                        status.HTTP_404_NOT_FOUND)
 
     # save data and response ok
     serializer.save()
@@ -67,6 +75,11 @@ def vehicle_edit(request, pk):
     # verify user is authenticated
     if not request.user.is_authenticated:
         return Response({'response': "Please logging before proceeding"},
+                        status.HTTP_401_UNAUTHORIZED)
+
+    # verify user is active
+    if not request.user.is_active:
+        return Response({'response': "No permission to access"},
                         status.HTTP_401_UNAUTHORIZED)
 
     # verify vehicle exists
