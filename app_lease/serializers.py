@@ -31,14 +31,7 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['url', 'name']
 
 
-class VehicleSerializer(serializers.ModelSerializer):
 
-    class Meta:
-
-        model = Vehicle
-        fields = ('id', 'customer', 'make_model', 'make', 'model', 'category',
-                  'machine_make_model', 'machine_make', 'machine_model',
-                  'machine_category', 'year', 'machine_year', 'created_at', 'updated_at')
 
 
 class LeadSerializer(serializers.ModelSerializer):

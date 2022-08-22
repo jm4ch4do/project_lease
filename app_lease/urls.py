@@ -14,8 +14,6 @@ urlpatterns = [
     path('services/<int:pk>', api.service_detail),
     path('lead/', api.LeadList.as_view()),
     path('leads/<int:pk>', api.LeadDetail.as_view()),
-    path('vehicles/', api.VehicleList.as_view()),
-    path('vehicles/<int:pk>', api.VehicleDetail.as_view()),
     path('trades/', api.TradeList.as_view()),
     path('trades/<int:pk>', api.TradeDetail.as_view()),
 
@@ -34,6 +32,11 @@ urlpatterns = [
     path('customer/<int:pk>', app_lease.api.customer_edit, name='customer_edit'),
     path('customers/search/', app_lease.api.customer_search, name='customer_search'),
     #path('customers/<int:pk>', api.CustomerDetail.as_view()),
+
+    # ----- API Vehicle
+    path('vehicles/', app_lease.api.vehicle_list, name='vehicles'),
+    path('vehicle/<int:pk>', app_lease.api.vehicle_edit, name='vehicle_edit'),
+    path('vehicles/search/', app_lease.api.vehicle_search, name='vehicle_search'),
 
     # ----- View Sets
     path('', include(router.urls)),

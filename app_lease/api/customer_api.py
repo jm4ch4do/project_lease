@@ -2,7 +2,6 @@ from app_lease.models import Customer
 from rest_framework.decorators import api_view
 from app_lease.api.customer_serializer import CustomerSerializer, CustomerEditSerializer
 from rest_framework.response import Response
-from rest_framework.authtoken.models import Token
 from rest_framework import status
 
 

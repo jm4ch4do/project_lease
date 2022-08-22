@@ -6,3 +6,4 @@ from .vehicle_api import VehicleList, VehicleDetail
 from .trade_api import TradeList, TradeDetail
 from .user_api import *
 from .customer_api import *
+from .vehicle_api import *
