@@ -1,6 +1,6 @@
 import pytest
 from rest_framework.test import APIClient
-from app_lease.test.generator import random_vehicle_payload, random_user, random_customer
+from app_lease.test.generator import random_vehicle_payload, random_user, random_customer, random_vehicle
 from django.urls import reverse
 from rest_framework.authtoken.models import Token
 from app_lease.models import Customer, Vehicle
@@ -128,38 +128,50 @@ def test_staff_cant_add_vehicle_for_inactive_user():
     assert Vehicle.objects.all().count() == 0
 
 
-
 @pytest.mark.order(2)
 @pytest.mark.django_db
-def test_user_cant_get_customer_list():
-    """ A regular user can't get the list of all customers """
+def test_user_cant_get_vehicle_list():
+    """ A regular user can't get the list of all vehicles """
 
-    # create user
-    created_user = random_user(is_active=1)
+    # create vehicle with active customer and user
+    created_vehicle = random_vehicle()
+    created_customer = created_vehicle.customer
+    created_customer.status = 1
+    created_customer.save()
+    created_user = created_customer.user
+    created_user.is_active = True
+    created_user.save()
 
-    # configure token for created_user
+    # create regular user
+    regular_user = random_user(is_active=True)
+
+    # configure token for staff_user
     client = APIClient()
-    token, created = Token.objects.get_or_create(user=created_user)
+    token, created = Token.objects.get_or_create(user=regular_user)
     client.credentials(HTTP_AUTHORIZATION='Token ' + str(token))
 
-    # make request for customer list
-    url = reverse("customers")
-    payload = random_customer_payload()
-    response = client.get(url, payload)
+    # make request for vehicle list
+    url = reverse("vehicles")
+    response = client.get(url)
 
     # response has the correct values
-    assert response.status_code == 401  # created status
-    assert response.data.get("response")
+    assert response.status_code == 401
+    assert response.data['response']
 
 
 @pytest.mark.order(2)
 @pytest.mark.django_db
-def test_user_cant_get_another_user_details():
-    """ A regular user can't get another customer's data """
+def test_user_cant_get_another_user_vehicle_details():
+    """ A regular user can't get another customer's vehicle data """
 
-    # create user and customer
-    created_user = random_user(is_active=True)
-    created_customer = random_customer(user=created_user)
+    # create vehicle with active customer and user
+    created_vehicle = random_vehicle()
+    created_customer = created_vehicle.customer
+    created_customer.status = 1
+    created_customer.save()
+    created_user = created_customer.user
+    created_user.is_active = True
+    created_user.save()
 
     # create regular user
     regular_user = random_user(is_active=True)
@@ -170,7 +182,7 @@ def test_user_cant_get_another_user_details():
     client.credentials(HTTP_AUTHORIZATION='Token ' + str(token))
 
     # make request for getting customer details
-    url = reverse("customer_edit", kwargs={'pk': created_customer.id})
+    url = reverse("vehicle_edit", kwargs={'pk': created_vehicle.id})
     response = client.get(url)
 
     # response has the correct values
@@ -180,12 +192,17 @@ def test_user_cant_get_another_user_details():
 
 @pytest.mark.order(2)
 @pytest.mark.django_db
-def test_not_authenticated_superuser_cant_get_another_user_details():
+def test_not_authenticated_superuser_cant_get_another_user_vehicle_details():
     """ A superuser needs to authenticate to get a customer's data """
 
-    # create user and customer
-    created_user = random_user(is_active=True)
-    created_customer = random_customer(user=created_user)
+    # create vehicle with active customer and user
+    created_vehicle = random_vehicle()
+    created_customer = created_vehicle.customer
+    created_customer.status = 1
+    created_customer.save()
+    created_user = created_customer.user
+    created_user.is_active = True
+    created_user.save()
 
     # create superuser
     super_user = random_user(is_active=True)
@@ -198,7 +215,7 @@ def test_not_authenticated_superuser_cant_get_another_user_details():
     # client.credentials(HTTP_AUTHORIZATION='Token ' + str(token))
 
     # make request for getting customer details
-    url = reverse("customer_edit", kwargs={'pk': created_customer.id})
+    url = reverse("vehicle_edit", kwargs={'pk': created_vehicle.id})
     response = client.get(url)
 
     # response has the correct values
@@ -208,22 +225,27 @@ def test_not_authenticated_superuser_cant_get_another_user_details():
 
 @pytest.mark.order(2)
 @pytest.mark.django_db
-def test_cant_get_details_of_non_existent_customer():
-    """ When superuser tries to get details of non-existent customer it will
+def test_cant_get_details_of_non_existent_vehicle():
+    """ When superuser tries to get details of non-existent vehicle it will
         obtain a 404 error """
 
-    # create user and customer
-    created_user = random_user(is_active=True)
-    created_customer = random_customer(user=created_user)
+    # create vehicle with active customer and user
+    created_vehicle = random_vehicle()
+    created_customer = created_vehicle.customer
+    created_customer.status = 1
+    created_customer.save()
+    created_user = created_customer.user
+    created_user.is_active = True
+    created_user.save()
 
     # create superuser
     super_user = random_user(is_active=True)
     super_user.is_superuser = True
     super_user.save()
 
-    # delete customer
-    created_customer_id = created_customer.id
-    created_customer.delete()
+    # delete vehicle
+    created_vehicle_id = created_vehicle.id
+    created_vehicle.delete()
 
     # configure token for super_user
     client = APIClient()
@@ -231,7 +253,7 @@ def test_cant_get_details_of_non_existent_customer():
     client.credentials(HTTP_AUTHORIZATION='Token ' + str(token))
 
     # make request for getting customer details
-    url = reverse("customer_edit", kwargs={'pk': created_customer_id})
+    url = reverse("vehicle_edit", kwargs={'pk': created_vehicle_id})
     response = client.get(url)
 
     # response has the correct values
@@ -241,55 +263,22 @@ def test_cant_get_details_of_non_existent_customer():
 
 @pytest.mark.order(2)
 @pytest.mark.django_db
-def test_search_ignores_inactive_customers_in_list():
-    """ Only active customers should be in the search results """
-
-    # create user
-    staff_user = random_user(is_active=True)
-    staff_user.is_staff = True
-    staff_user.save()
-
-    # create customer
-    created_user = random_user(is_active=True)
-    created_customer = random_customer(user=created_user)
-    created_customer.first_name = 'aaaa'
-    created_customer.save()
-
-    # create inactive customer
-    inactive_user = random_user(is_active=False)
-    inactive_customer = random_customer(user=inactive_user)
-    inactive_customer.first_name = 'aaaa'
-    inactive_customer.save()
-
-    # configure token for staff_user
-    client = APIClient()
-    token, created = Token.objects.get_or_create(user=staff_user)
-    client.credentials(HTTP_AUTHORIZATION='Token ' + str(token))
-
-    # make request
-    url = reverse("customer_search")
-    url += '?first_name=aaa'
-    response = client.get(url)
-
-    # get data back
-    assert response.status_code == 200
-    assert len(response.data) == 1
-    assert Customer.objects.first().last_name == created_customer.last_name
-
-
-@pytest.mark.order(2)
-@pytest.mark.django_db
-def test_invalid_field_search_in_customer_list():
+def test_invalid_field_search_in_vehicle_list():
     """ Invalid field in the search results in 422 error """
 
+    # create vehicle with active customer and user
+    created_vehicle = random_vehicle()
+    created_customer = created_vehicle.customer
+    created_customer.status = 1
+    created_customer.save()
+    created_user = created_customer.user
+    created_user.is_active = True
+    created_user.save()
+
     # create user
     staff_user = random_user(is_active=True)
     staff_user.is_staff = True
     staff_user.save()
-
-    # create customer
-    created_user = random_user(is_active=True)
-    created_customer = random_customer(user=created_user)
 
     # configure token for staff_user
     client = APIClient()
@@ -297,7 +286,7 @@ def test_invalid_field_search_in_customer_list():
     client.credentials(HTTP_AUTHORIZATION='Token ' + str(token))
 
     # make request
-    url = reverse("user_search")
+    url = reverse("vehicle_search")
     url += '?email=bbb'
     response = client.get(url)
 
@@ -309,24 +298,29 @@ def test_invalid_field_search_in_customer_list():
 
 @pytest.mark.order(2)
 @pytest.mark.django_db
-def test_regular_user_cant_search_customers():
-    """ Regular users can't perform customer searches """
+def test_regular_user_cant_search_vehicles():
+    """ Regular users can't perform vehicles searches """
 
-    # create user
-    staff_user = random_user(is_active=True)
+    # create vehicle with active customer and user
+    created_vehicle = random_vehicle()
+    created_customer = created_vehicle.customer
+    created_customer.status = 1
+    created_customer.save()
+    created_user = created_customer.user
+    created_user.is_active = True
+    created_user.save()
 
-    # create customer
-    created_user = random_user(is_active=True)
-    created_customer = random_customer(user=created_user)
+    # create regular user
+    regular_user = random_user(is_active=True)
 
     # configure token for staff_user
     client = APIClient()
-    token, created = Token.objects.get_or_create(user=staff_user)
+    token, created = Token.objects.get_or_create(user=regular_user)
     client.credentials(HTTP_AUTHORIZATION='Token ' + str(token))
 
     # make request
-    url = reverse("user_search")
-    url += '?first_name=bbb'
+    url = reverse("vehicle_search")
+    url += '?model=bbb'
     response = client.get(url)
 
     # get data back

@@ -201,7 +201,7 @@ def test_invalid_field_search_in_customer_list():
     client.credentials(HTTP_AUTHORIZATION='Token ' + str(token))
 
     # make request
-    url = reverse("user_search")
+    url = reverse("customer_search")
     url += '?email=bbb'
     response = client.get(url)
 
