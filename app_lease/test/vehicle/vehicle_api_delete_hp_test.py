@@ -1,14 +1,15 @@
 import pytest
 from rest_framework.test import APIClient
-from app_lease.test.generator import random_user, random_vehicle
+from app_lease.test.generator import random_customer, random_user, random_vehicle_payload, random_vehicle
 from django.urls import reverse
 from rest_framework.authtoken.models import Token
+from app_lease.models import Vehicle
 
 
 @pytest.mark.order(2)
 @pytest.mark.django_db
-def test_user_cant_get_vehicle_list():
-    """ A regular user can't get the list of all vehicles """
+def test_delete_own_vehicle_details():
+    """ A regular user can delete his vehicle"""
 
     # create vehicle with active customer and user
     created_vehicle = random_vehicle()
@@ -19,18 +20,16 @@ def test_user_cant_get_vehicle_list():
     created_user.is_active = True
     created_user.save()
 
-    # create regular user
-    regular_user = random_user(is_active=True)
-
-    # configure token for staff_user
+    # configure token for created_user
     client = APIClient()
-    token, created = Token.objects.get_or_create(user=regular_user)
+    token, created = Token.objects.get_or_create(user=created_user)
     client.credentials(HTTP_AUTHORIZATION='Token ' + str(token))
 
-    # make request for vehicle list
-    url = reverse("vehicles")
-    response = client.get(url)
+    # make request for deleting vehicle
+    url = reverse("vehicle_edit", kwargs={'pk': created_vehicle.id})
+    response = client.delete(url)
 
     # response has the correct values
-    assert response.status_code == 401
-    assert response.data['response']
+    assert response.status_code == 204
+    assert response.data.get("response")
+    assert Vehicle.objects.all().count() == 0
