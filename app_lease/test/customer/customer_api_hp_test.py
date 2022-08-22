@@ -190,7 +190,7 @@ def test_delete_own_customer_details():
     token, created = Token.objects.get_or_create(user=created_user)
     client.credentials(HTTP_AUTHORIZATION='Token ' + str(token))
 
-    # make request for getting customer details
+    # make request for deleting customer details
     url = reverse("customer_edit", kwargs={'pk': created_customer.id})
     response = client.delete(url)
 

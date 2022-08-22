@@ -70,7 +70,7 @@ def vehicle_edit_get(request, vehicle):
     return Response(serializer.data)
 
 
-def customer_edit_put(request, vehicle):
+def vehicle_edit_put(request, vehicle):
     serializer = VehicleEditSerializer(vehicle, data=request.data)
     if serializer.is_valid():
         serializer.save()
@@ -89,25 +89,27 @@ def vehicle_search(request):
 
     # verify user is authenticated
     if not request.user.is_authenticated:
-        return Response({'response': "Logging to be able to search users"},
+        return Response({'response': "Logging to be able to search vehicles"},
                         status.HTTP_401_UNAUTHORIZED)
 
     # only staff and superuser can access this view
     if not request.user.is_staff and not request.user.is_superuser:
-        return Response({'response': "No permission to search users"},
+        return Response({'response': "No permission to search vehicles"},
                         status.HTTP_401_UNAUTHORIZED)
 
-    ALLOWED_FIELDS = ('first_name', 'last_name', 'job', 'age')
+    ALLOWED_FIELDS = ('make_model', 'make', 'model', 'category',
+                      'machine_make_model', 'machine_make', 'machine_model',
+                      'machine_category', 'year', 'machine_year')
 
     parameters = request.query_params
-    queryset = Vehicle.objects.filter(status=1)
+    queryset = Vehicle.objects.all()
 
     for key, value in parameters.items():
         if key not in ALLOWED_FIELDS:
             return Response({'response': "Invalid Field + key"},
                             status.HTTP_422_UNPROCESSABLE_ENTITY)
 
-        if key == 'age':
+        if key == 'year':
             filter_pars = {key: int(value)}
         else:
             filter_pars = {key + '__contains': value}

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from app_lease.models import Service, Lead, Vehicle, Trade
+from app_lease.models import Service, Lead, Trade
 from django.contrib.auth.models import Group
 
 
