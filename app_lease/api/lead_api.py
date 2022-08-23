@@ -48,14 +48,14 @@ def lead_add(request):
 @api_view(['GET', 'PUT', 'DELETE'])
 def lead_edit(request, pk):
 
-# verify user is authenticated
+    # verify user is authenticated
     if not request.user.is_authenticated:
         return Response({'response': "Logging to get vehicle list"},
                         status.HTTP_401_UNAUTHORIZED)
 
-    # only staff and superuser can get lead list or create lead
+    # only staff and superuser can get edit
     if not request.user.is_staff and not request.user.is_superuser:
-        return Response({'response': "No permission to view/create leads list"},
+        return Response({'response': "No permission to view/edit leads list"},
                         status.HTTP_401_UNAUTHORIZED)
 
     # extra permission: can't access if user's inactive

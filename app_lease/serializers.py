@@ -15,16 +15,6 @@ class TradeSerializer(serializers.ModelSerializer):
                   'updated_at', 'label', 'vehicle', 'vehicle_name', 'vehicle_model')
 
 
-class ServiceSerializer(serializers.ModelSerializer):
-
-    trades = TradeSerializer(source='trade_set', many=True, read_only=True)
-
-    class Meta:
-
-        model = Service
-        fields = ('id', 'name', 'cost', 'description', 'when_to_pay', 'service_type', 'trades')
-
-
 class GroupSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Group
