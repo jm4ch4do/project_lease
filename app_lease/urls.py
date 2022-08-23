@@ -45,6 +45,11 @@ urlpatterns = [
     path('service/<int:pk>', app_lease.api.service_edit, name='service_edit'),
     path('services/search/', app_lease.api.service_search, name='service_search'),
 
+    # ----- API Credit Card
+    path('customers/', app_lease.api.credit_card_list, name='credit_cards'),
+    path('customer/<int:pk>', app_lease.api.credit_card_edit, name='credit_card_edit'),
+    path('customers/search/', app_lease.api.credit_card_search, name='credit_card_search'),
+
     # ----- View Sets
     path('', include(router.urls)),
 ]

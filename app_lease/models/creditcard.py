@@ -47,6 +47,11 @@ class CreditCard(models.Model):
             return False
 
     @property
+    def last_four_digits(self):
+
+        return self.card_number[-4:]
+
+    @property
     def label(self):
         return self.name_in_card + ' (' + self.provider + ' )' + ' ........' + str(self.card_number)[-4:]
 
