@@ -34,7 +34,7 @@ def test_invalid_field_search_in_lead_list():
     assert response.data['response']
 
 
-@pytest.mark.order(2)
+@pytest.mark.order(4)
 @pytest.mark.django_db
 def test_regular_user_cant_search_leads():
     """ Regular users can't perform a lead search """

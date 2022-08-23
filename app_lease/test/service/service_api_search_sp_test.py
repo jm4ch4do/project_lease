@@ -5,7 +5,7 @@ from django.urls import reverse
 from rest_framework.authtoken.models import Token
 
 
-@pytest.mark.order(2)
+@pytest.mark.order(6)
 @pytest.mark.django_db
 def test_invalid_field_search_in_service_list():
     """ Invalid field in the search results in 422 error """

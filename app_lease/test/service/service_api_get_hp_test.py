@@ -5,7 +5,7 @@ from django.urls import reverse
 from rest_framework.authtoken.models import Token
 
 
-@pytest.mark.order(2)
+@pytest.mark.order(6)
 @pytest.mark.django_db
 def test_regular_user_gets_any_service_details():
     """ A regular user can get any service details """
@@ -33,7 +33,7 @@ def test_regular_user_gets_any_service_details():
     assert response.data['name']
 
 
-@pytest.mark.order(2)
+@pytest.mark.order(6)
 @pytest.mark.django_db
 def test_staff_gets_any_service_details():
     """ A staff user can get any service details """
@@ -61,7 +61,7 @@ def test_staff_gets_any_service_details():
     assert response.data['name']
 
 
-@pytest.mark.order(2)
+@pytest.mark.order(6)
 @pytest.mark.django_db
 def test_superuser_gets_any_service_details():
     """ A superuser can get any service details """

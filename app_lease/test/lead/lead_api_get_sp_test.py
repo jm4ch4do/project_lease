@@ -5,7 +5,7 @@ from django.urls import reverse
 from rest_framework.authtoken.models import Token
 
 
-@pytest.mark.order(2)
+@pytest.mark.order(4)
 @pytest.mark.django_db
 def test_user_cant_get_lead_details():
     """ A regular user can't get a lead details """
@@ -30,7 +30,7 @@ def test_user_cant_get_lead_details():
     assert response.data['response']
 
 
-@pytest.mark.order(2)
+@pytest.mark.order(4)
 @pytest.mark.django_db
 def test_not_authenticated_superuser_cant_get_lead_details():
     """ A superuser needs to authenticate to get a lead's details """
@@ -57,7 +57,7 @@ def test_not_authenticated_superuser_cant_get_lead_details():
     assert response.data.get("response")
 
 
-@pytest.mark.order(2)
+@pytest.mark.order(4)
 @pytest.mark.django_db
 def test_cant_get_details_of_non_existent_lead():
     """ When superuser tries to get details of non-existent lead it will

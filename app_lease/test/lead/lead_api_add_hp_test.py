@@ -6,7 +6,7 @@ from rest_framework.authtoken.models import Token
 from app_lease.models import Lead
 
 
-@pytest.mark.order(2)
+@pytest.mark.order(4)
 @pytest.mark.django_db
 def test_staff_adds_lead():
     """ A staff member can add a lead """
@@ -32,7 +32,7 @@ def test_staff_adds_lead():
     assert Lead.objects.first().last_name == payload['last_name']
 
 
-@pytest.mark.order(2)
+@pytest.mark.order(4)
 @pytest.mark.django_db
 def test_superuser_adds_lead():
     """ A superuser member can add a lead """

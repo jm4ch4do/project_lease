@@ -6,7 +6,7 @@ from rest_framework.authtoken.models import Token
 from app_lease.models import Service
 
 
-@pytest.mark.order(2)
+@pytest.mark.order(6)
 @pytest.mark.django_db
 def test_regular_user_cant_modify_service_details():
     """ A regular user can't modify a service details"""

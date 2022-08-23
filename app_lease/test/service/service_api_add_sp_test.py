@@ -7,7 +7,7 @@ from app_lease.models import Service
 from app_lease.test.generator import random_service_payload
 
 
-@pytest.mark.order(2)
+@pytest.mark.order(6)
 @pytest.mark.django_db
 def test_user_cant_add_service():
     """ Service creation is not available to regular users """
@@ -30,7 +30,7 @@ def test_user_cant_add_service():
     assert Service.objects.all().count() == 0
 
 
-@pytest.mark.order(2)
+@pytest.mark.order(6)
 @pytest.mark.django_db
 def test_staff_cant_add_service_if_not_authenticated():
     """ A staff member (or superuser) can't add service if not authenticated """
@@ -56,7 +56,7 @@ def test_staff_cant_add_service_if_not_authenticated():
     assert Service.objects.all().count() == 0
 
 
-@pytest.mark.order(2)
+@pytest.mark.order(6)
 @pytest.mark.django_db
 def test_inactive_staff_cant_add_service():
     """ An inactive staff member (or superuser) can't add service """

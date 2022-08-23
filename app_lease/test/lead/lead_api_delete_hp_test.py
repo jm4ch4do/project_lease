@@ -6,7 +6,7 @@ from rest_framework.authtoken.models import Token
 from app_lease.models import Lead
 
 
-@pytest.mark.order(2)
+@pytest.mark.order(4)
 @pytest.mark.django_db
 def test_staff_deletes_lead():
     """ A staff user can delete any lead"""

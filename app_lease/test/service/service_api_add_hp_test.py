@@ -6,7 +6,7 @@ from rest_framework.authtoken.models import Token
 from app_lease.models import Service
 
 
-@pytest.mark.order(2)
+@pytest.mark.order(6)
 @pytest.mark.django_db
 def test_staff_adds_service():
     """ A staff member can add a service """
@@ -32,7 +32,7 @@ def test_staff_adds_service():
     assert Service.objects.first().name == payload['name']
 
 
-@pytest.mark.order(2)
+@pytest.mark.order(6)
 @pytest.mark.django_db
 def test_superuser_adds_service():
     """ A superuser can add a service """

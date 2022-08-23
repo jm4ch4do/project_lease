@@ -5,7 +5,7 @@ from django.urls import reverse
 from rest_framework.authtoken.models import Token
 
 
-@pytest.mark.order(2)
+@pytest.mark.order(4)
 @pytest.mark.django_db
 def test_staff_get_lead_list():
     """ A staff member can get the list of all leads """
@@ -33,7 +33,7 @@ def test_staff_get_lead_list():
     assert response.data[0]['last_name']
 
 
-@pytest.mark.order(2)
+@pytest.mark.order(4)
 @pytest.mark.django_db
 def test_superuser_get_lead_list():
     """ A superuser can get the list of all leads """

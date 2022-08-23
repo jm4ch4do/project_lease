@@ -5,7 +5,7 @@ from django.urls import reverse
 from rest_framework.authtoken.models import Token
 
 
-@pytest.mark.order(2)
+@pytest.mark.order(6)
 @pytest.mark.django_db
 def test_regular_user_can_search_service():
     """ Regular user can search services """
@@ -36,7 +36,7 @@ def test_regular_user_can_search_service():
     assert response.data[0].get('name') == created_service.name
 
 
-@pytest.mark.order(2)
+@pytest.mark.order(6)
 @pytest.mark.django_db
 def test_staff_can_search_service():
     """ Staff user can search services """
@@ -70,7 +70,7 @@ def test_staff_can_search_service():
     assert response.data[0].get('name') == created_service.name
 
 
-@pytest.mark.order(2)
+@pytest.mark.order(6)
 @pytest.mark.django_db
 def test_superuser_can_search_service():
     """ Superuser user can search services """

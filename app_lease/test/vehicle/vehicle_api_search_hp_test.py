@@ -3,10 +3,9 @@ from rest_framework.test import APIClient
 from app_lease.test.generator import random_user, random_vehicle
 from django.urls import reverse
 from rest_framework.authtoken.models import Token
-from app_lease.models import Vehicle
 
 
-@pytest.mark.order(2)
+@pytest.mark.order(7)
 @pytest.mark.django_db
 def test_staff_can_search_vehicles():
     """ Staff user can search vehicles """

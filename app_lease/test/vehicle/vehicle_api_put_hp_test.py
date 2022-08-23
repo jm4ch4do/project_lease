@@ -1,12 +1,12 @@
 import pytest
 from rest_framework.test import APIClient
-from app_lease.test.generator import random_customer, random_user, random_vehicle_payload, random_vehicle
+from app_lease.test.generator import random_vehicle_payload, random_vehicle
 from django.urls import reverse
 from rest_framework.authtoken.models import Token
 from app_lease.models import Vehicle
 
 
-@pytest.mark.order(2)
+@pytest.mark.order(7)
 @pytest.mark.django_db
 def test_modify_own_vehicle_details():
     """ A regular user can modify his vehicle information"""

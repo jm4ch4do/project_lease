@@ -5,7 +5,7 @@ from django.urls import reverse
 from rest_framework.authtoken.models import Token
 
 
-@pytest.mark.order(2)
+@pytest.mark.order(7)
 @pytest.mark.django_db
 def test_user_cant_get_vehicle_list():
     """ A regular user can't get the list of all vehicles """

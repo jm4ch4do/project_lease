@@ -6,7 +6,7 @@ from rest_framework.authtoken.models import Token
 from app_lease.models import Vehicle
 
 
-@pytest.mark.order(2)
+@pytest.mark.order(7)
 @pytest.mark.django_db
 def test_user_adds_own_vehicle():
     """ A regular user can add his own vehicle"""
@@ -31,7 +31,7 @@ def test_user_adds_own_vehicle():
     assert Vehicle.objects.first().model == payload['model']
 
 
-@pytest.mark.order(2)
+@pytest.mark.order(7)
 @pytest.mark.django_db
 def test_staff_adds_any_vehicle():
     """ A staff member can add a vehicle to any customer """
@@ -61,7 +61,7 @@ def test_staff_adds_any_vehicle():
     assert Vehicle.objects.first().model == payload['model']
 
 
-@pytest.mark.order(2)
+@pytest.mark.order(7)
 @pytest.mark.django_db
 def test_superuser_adds_any_vehicle():
     """ A superuser can add a vehicle to any customer """

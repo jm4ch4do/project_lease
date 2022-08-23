@@ -6,7 +6,7 @@ from rest_framework.authtoken.models import Token
 from app_lease.models import Service
 
 
-@pytest.mark.order(2)
+@pytest.mark.order(6)
 @pytest.mark.django_db
 def test_staff_deletes_service():
     """ A staff user can delete any service """

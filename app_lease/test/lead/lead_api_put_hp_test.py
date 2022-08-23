@@ -6,7 +6,7 @@ from rest_framework.authtoken.models import Token
 from app_lease.models import Lead
 
 
-@pytest.mark.order(2)
+@pytest.mark.order(4)
 @pytest.mark.django_db
 def test_staff_modify_lead_details():
     """ A staff member can modify a lead information"""

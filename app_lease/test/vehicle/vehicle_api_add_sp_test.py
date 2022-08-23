@@ -6,7 +6,7 @@ from rest_framework.authtoken.models import Token
 from app_lease.models import Vehicle
 
 
-@pytest.mark.order(2)
+@pytest.mark.order(7)
 @pytest.mark.django_db
 def test_user_cant_add_any_vehicle():
     """ A regular user can't add a vehicle to another customer """
@@ -33,7 +33,7 @@ def test_user_cant_add_any_vehicle():
     assert Vehicle.objects.all().count() == 0
 
 
-@pytest.mark.order(2)
+@pytest.mark.order(7)
 @pytest.mark.django_db
 def test_staff_cant_add_vehicle_for_deleted_customer():
     """ A staff member (or superuser) can't add a vehicle to a non-existent customer """
@@ -63,7 +63,7 @@ def test_staff_cant_add_vehicle_for_deleted_customer():
     assert Vehicle.objects.all().count() == 0
 
 
-@pytest.mark.order(2)
+@pytest.mark.order(7)
 @pytest.mark.django_db
 def test_staff_cant_add_vehicle_if_not_authenticated():
     """ A staff member (or superuser) can't add vehicle if not authenticated """
@@ -95,7 +95,7 @@ def test_staff_cant_add_vehicle_if_not_authenticated():
     assert Vehicle.objects.all().count() == 0
 
 
-@pytest.mark.order(2)
+@pytest.mark.order(7)
 @pytest.mark.django_db
 def test_staff_cant_add_vehicle_for_inactive_user():
     """ A staff member (or superuser) can't add vehicle for an inactive user """

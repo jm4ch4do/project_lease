@@ -7,7 +7,7 @@ from app_lease.models import Lead
 from app_lease.test.generator import random_lead_payload
 
 
-@pytest.mark.order(2)
+@pytest.mark.order(4)
 @pytest.mark.django_db
 def test_user_cant_add_any_lead():
     """ Lead creation is not available to regular users """
@@ -30,7 +30,7 @@ def test_user_cant_add_any_lead():
     assert Lead.objects.all().count() == 0
 
 
-@pytest.mark.order(2)
+@pytest.mark.order(4)
 @pytest.mark.django_db
 def test_staff_cant_add_lead_if_not_authenticated():
     """ A staff member (or superuser) can't add lead if not authenticated """
@@ -61,7 +61,7 @@ def test_staff_cant_add_lead_if_not_authenticated():
     assert Lead.objects.all().count() == 0
 
 
-@pytest.mark.order(2)
+@pytest.mark.order(4)
 @pytest.mark.django_db
 def test_inactive_staff_cant_add_lead():
     """ An inactive staff member (or superuser) can't add lead """
