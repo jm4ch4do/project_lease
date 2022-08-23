@@ -44,4 +44,4 @@ def test_staff_can_search_vehicles():
     # get data back
     assert response.status_code == 200
     assert len(response.data) == 1
-    assert Vehicle.objects.first().model == created_vehicle.model
+    assert response.data[0].get('model') == created_vehicle.model

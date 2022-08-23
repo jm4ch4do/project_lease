@@ -20,8 +20,8 @@ def lead_list(request):
 
     # extra permission: can't access if user's inactive
     if not request.user.is_active:
-        return Response({'response': "No permission to view/create leads list"},
-                        status.HTTP_401_UNAUTHORIZED)
+        return Response({'response': "User not found or inactive"},
+                        status.HTTP_404_NOT_FOUND)
 
     # if requests is post -> redirect to create lead
     if request.method == 'POST':
