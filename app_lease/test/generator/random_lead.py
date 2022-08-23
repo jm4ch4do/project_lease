@@ -18,7 +18,7 @@ def random_lead(total=1, user=None):
         created_lead = Lead.objects.create(
             first_name=fake.first_name(),
             last_name=fake.last_name(),
-            source=fake.get_random_source(),
+            source="https://" + fake.get_random_source(),
             notes=fake.paragraph(nb_sentences=3),
             dob=fake.date_between(start_date=datetime(1950, 1, 1), end_date=datetime(2003, 1, 1)),
         )
@@ -29,3 +29,21 @@ def random_lead(total=1, user=None):
         return created_lead
     else:
         return created_leads
+
+
+def random_lead_payload():
+
+    # register custom functions
+    fake = Faker()
+    fake.add_provider(Provider)
+
+    # create random user payload
+    payload = dict(
+        first_name=fake.first_name(),
+        last_name=fake.last_name(),
+        source="https://" + fake.get_random_source(),
+        notes=fake.paragraph(nb_sentences=3),
+        dob=fake.date_between(start_date=datetime(1950, 1, 1), end_date=datetime(2003, 1, 1)),
+    )
+
+    return payload

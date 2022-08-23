@@ -40,3 +40,30 @@ def random_vehicle(total=1, customer=None):
         return created_vehicle
     else:
         return created_vehicles
+
+
+def random_vehicle_payload(customer=None):
+
+    # register custom functions
+    fake = Faker()
+    fake.add_provider(Provider)
+    fake.add_provider(VehicleProvider)
+
+    # create random user payload
+    payload = dict(
+            make_model=fake.vehicle_make_model(),
+            make=fake.vehicle_make(),
+            model=fake.vehicle_model(),
+            category=fake.vehicle_category(),
+            machine_make_model=fake.machine_make_model(),
+            machine_make=fake.machine_make(),
+            machine_model=fake.machine_model(),
+            machine_category=fake.machine_category(),
+            year=fake.vehicle_year(),
+            machine_year=fake.machine_year()
+    )
+
+    if customer is not None:
+        payload['customer'] = customer.id
+
+    return payload

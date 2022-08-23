@@ -1,6 +1,6 @@
 from django.urls import path, include
 
-import app_lease.api
+import app_lease.api.user_api
 from app_lease import api
 from rest_framework import routers
 
@@ -10,14 +10,7 @@ router.register(r'groups', api.GroupViewSet)
 
 
 urlpatterns = [
-    path('services/', api.service_list),
-    path('services/<int:pk>', api.service_detail),
-    path('customers/', api.CustomerList.as_view()),
-    path('customers/<int:pk>', api.CustomerDetail.as_view()),
-    path('lead/', api.LeadList.as_view()),
-    path('leads/<int:pk>', api.LeadDetail.as_view()),
-    path('vehicles/', api.VehicleList.as_view()),
-    path('vehicles/<int:pk>', api.VehicleDetail.as_view()),
+
     path('trades/', api.TradeList.as_view()),
     path('trades/<int:pk>', api.TradeDetail.as_view()),
 
@@ -31,6 +24,26 @@ urlpatterns = [
     path('user/<int:pk>', app_lease.api.user_edit, name='user_edit'),
     path('user/', app_lease.api.user_add, name='user_add'),
 
+    # ----- API Customer
+    path('customers/', app_lease.api.customer_list, name='customers'),
+    path('customer/<int:pk>', app_lease.api.customer_edit, name='customer_edit'),
+    path('customers/search/', app_lease.api.customer_search, name='customer_search'),
+    #path('customers/<int:pk>', api.CustomerDetail.as_view()),
+
+    # ----- API Vehicle
+    path('vehicles/', app_lease.api.vehicle_list, name='vehicles'),
+    path('vehicle/<int:pk>', app_lease.api.vehicle_edit, name='vehicle_edit'),
+    path('vehicles/search/', app_lease.api.vehicle_search, name='vehicle_search'),
+
+    # ----- API Lead
+    path('leads/', app_lease.api.lead_list, name='leads'),
+    path('lead/<int:pk>', app_lease.api.lead_edit, name='lead_edit'),
+    path('leads/search/', app_lease.api.lead_search, name='lead_search'),
+
+    # ----- API Services
+    path('services/', app_lease.api.service_list, name='services'),
+    path('service/<int:pk>', app_lease.api.service_edit, name='service_edit'),
+    path('services/search/', app_lease.api.service_search, name='service_search'),
 
     # ----- View Sets
     path('', include(router.urls)),

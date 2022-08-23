@@ -147,7 +147,7 @@ def user_search(request):
         return Response({'response': "Logging to be able to search users"},
                         status.HTTP_401_UNAUTHORIZED)
 
-    # only staff and superuser can get user list
+    # only staff and superuser can access this view
     if not request.user.is_staff and not request.user.is_superuser:
         return Response({'response': "No permission to search users"},
                         status.HTTP_401_UNAUTHORIZED)
@@ -155,7 +155,7 @@ def user_search(request):
     ALLOWED_FIELDS = ('username', 'first_name', 'last_name')
 
     parameters = request.query_params
-    queryset = User.objects.all()
+    queryset = User.objects.filter(is_active=True)
 
     for key, value in parameters.items():
         if key not in ALLOWED_FIELDS:
@@ -247,7 +247,7 @@ def user_edit_put(request, user):
         serializer.save()
         return Response(serializer.data)
     else:
-        Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 def user_edit_delete(request, user):
