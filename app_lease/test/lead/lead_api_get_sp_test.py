@@ -71,7 +71,7 @@ def test_cant_get_details_of_non_existent_lead():
     super_user.is_superuser = True
     super_user.save()
 
-    # delete vehicle
+    # delete lead
     created_lead_id = created_lead.id
     created_lead.delete()
 

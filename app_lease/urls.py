@@ -41,9 +41,9 @@ urlpatterns = [
     path('leads/search/', app_lease.api.lead_search, name='lead_search'),
 
     # ----- API Services
-    path('servicess/', app_lease.api.lead_list, name='services'),
-    path('service/<int:pk>', app_lease.api.lead_edit, name='lead_edit'),
-    path('services/search/', app_lease.api.lead_search, name='lead_search'),
+    path('services/', app_lease.api.service_list, name='services'),
+    path('service/<int:pk>', app_lease.api.service_edit, name='service_edit'),
+    path('services/search/', app_lease.api.service_search, name='service_search'),
 
     # ----- View Sets
     path('', include(router.urls)),

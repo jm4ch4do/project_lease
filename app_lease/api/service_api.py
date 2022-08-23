@@ -53,11 +53,6 @@ def service_edit(request, pk):
         return Response({'response': "Logging to get vehicle list"},
                         status.HTTP_401_UNAUTHORIZED)
 
-    # only staff and superuser can edit
-    if not request.user.is_staff and not request.user.is_superuser:
-        return Response({'response': "No permission to view/edit services list"},
-                        status.HTTP_401_UNAUTHORIZED)
-
     # extra permission: can't access if user's inactive
     if not request.user.is_active:
         return Response({'response': "No permission to view/edit services list"},
@@ -85,11 +80,18 @@ def service_edit(request, pk):
 
 
 def service_edit_get(request, service):
+
     serializer = ServiceSerializer(service)
     return Response(serializer.data)
 
 
 def service_edit_put(request, service):
+
+    # only staff and superuser can edit
+    if not request.user.is_staff and not request.user.is_superuser:
+        return Response({'response': "No permission to view/edit services list"},
+                        status.HTTP_401_UNAUTHORIZED)
+
     serializer = ServiceSerializer(service, data=request.data)
     if serializer.is_valid():
         serializer.save()
@@ -99,6 +101,12 @@ def service_edit_put(request, service):
 
 
 def service_edit_delete(request, service):
+
+    # only staff and superuser can delete
+    if not request.user.is_staff and not request.user.is_superuser:
+        return Response({'response': "No permission to view/edit services list"},
+                        status.HTTP_401_UNAUTHORIZED)
+
     service.delete()
     return Response({'response': "Remove Completed"}, status=status.HTTP_204_NO_CONTENT)
 
@@ -109,11 +117,6 @@ def service_search(request):
     # verify user is authenticated
     if not request.user.is_authenticated:
         return Response({'response': "Logging to be able to search services"},
-                        status.HTTP_401_UNAUTHORIZED)
-
-    # only staff and superuser can access this view
-    if not request.user.is_staff and not request.user.is_superuser:
-        return Response({'response': "No permission to search services"},
                         status.HTTP_401_UNAUTHORIZED)
 
     ALLOWED_FIELDS = ('id', 'name', 'cost', 'when_to_pay', 'service_type')

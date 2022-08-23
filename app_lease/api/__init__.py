@@ -1,4 +1,4 @@
-from .service_api import service_list, service_detail
+from .service_api import service_list, service_edit, service_search
 from app_lease.api.user_api import UserViewSet
 from .group_api import GroupViewSet
 from .trade_api import TradeList, TradeDetail
