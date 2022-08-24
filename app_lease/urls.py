@@ -46,9 +46,9 @@ urlpatterns = [
     path('services/search/', app_lease.api.service_search, name='service_search'),
 
     # ----- API Credit Card
-    path('customers/', app_lease.api.credit_card_list, name='credit_cards'),
-    path('customer/<int:pk>', app_lease.api.credit_card_edit, name='credit_card_edit'),
-    path('customers/search/', app_lease.api.credit_card_search, name='credit_card_search'),
+    path('credit_cards/', app_lease.api.credit_card_list, name='credit_cards'),
+    path('credit_card/<int:pk>', app_lease.api.credit_card_edit, name='credit_card_edit'),
+    path('credit_cards/search/', app_lease.api.credit_card_search, name='credit_card_search'),
 
     # ----- View Sets
     path('', include(router.urls)),

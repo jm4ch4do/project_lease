@@ -6,13 +6,13 @@ class CreditCardSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CreditCard
-        fields = ['id', 'user', 'first_name', 'last_name', 'job', 'notes',
-                  'dob', 'status', 'created_at', 'updated_at', 'age']
+        fields = ['id', 'customer', 'name_in_card', 'provider', 'expire_month', 'expire_year',
+                  'security_code', 'card_number']
 
 
 class CreditCardEditSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CreditCard
-        fields = ['id', 'first_name', 'last_name', 'job', 'notes',
-                  'dob', 'status', 'created_at', 'updated_at', 'age']
+        fields = ['id', 'name_in_card', 'provider', 'expire_month', 'expire_year',
+                  'security_code', 'card_number']

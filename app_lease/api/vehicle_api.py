@@ -3,7 +3,6 @@ from rest_framework.decorators import api_view
 from app_lease.api.vehicle_serializer import VehicleSerializer, VehicleEditSerializer
 from rest_framework.response import Response
 from rest_framework import status
-from django.core import serializers
 
 
 @api_view(['GET', 'POST'])
