@@ -1,7 +1,7 @@
 from django.db import models
 from .customer import Customer
 from datetime import datetime
-from django.core.validators import MaxValueValidator, MinValueValidator, MinLengthValidator, MaxLengthValidator
+from django.core.validators import MaxValueValidator, MinValueValidator, MaxLengthValidator, MinLengthValidator
 
 
 class CreditCard(models.Model):
@@ -21,9 +21,10 @@ class CreditCard(models.Model):
     expire_year = models.PositiveIntegerField(blank=False, validators=[
         MaxValueValidator(datetime.today().year + 20)
     ])
-    security_code = models.PositiveIntegerField(blank=False, validators=[
-        MaxValueValidator(999), MinValueValidator(100)
+    security_code = models.CharField(blank=False, max_length=200, validators=[
+        MaxLengthValidator(3), MinLengthValidator(3)
     ])
+
     card_number = models.CharField(blank=False, max_length=19, validators=[
         MinLengthValidator(12)
     ])

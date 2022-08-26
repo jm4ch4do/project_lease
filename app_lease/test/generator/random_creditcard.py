@@ -1,5 +1,4 @@
 from faker import Faker
-from app_lease.test.generator.random_user import random_user
 from app_lease.test.generator.random_customer import random_customer
 from app_lease.utils.fake_provider import Provider
 from app_lease.models import CreditCard
@@ -29,7 +28,7 @@ def random_creditcard(total=1, customer=None, name_in_card=None):
             provider=fake.credit_card_provider(),
             expire_month=randint(1, 12),
             expire_year=randint(datetime.today().year, datetime.today().year + 5),
-            security_code=fake.credit_card_security_code(),
+            security_code=str(fake.credit_card_security_code()),
             card_number=fake.credit_card_number(),
         )
 
@@ -54,7 +53,7 @@ def random_creditcard_payload(customer):
         provider=fake.credit_card_provider(),
         expire_month=randint(1, 12),
         expire_year=randint(datetime.today().year, datetime.today().year + 5),
-        security_code=fake.credit_card_security_code(),
+        security_code=str(fake.credit_card_security_code()),
         card_number=fake.credit_card_number(),
     )
 
