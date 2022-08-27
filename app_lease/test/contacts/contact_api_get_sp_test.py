@@ -5,7 +5,7 @@ from django.urls import reverse
 from rest_framework.authtoken.models import Token
 
 
-@pytest.mark.order(7)
+@pytest.mark.order(5)
 @pytest.mark.django_db
 def test_user_cant_get_another_user_vehicle_details():
     """ A regular user can't get another customer's vehicle data """
@@ -36,7 +36,7 @@ def test_user_cant_get_another_user_vehicle_details():
     assert response.data.get("response")
 
 
-@pytest.mark.order(7)
+@pytest.mark.order(5)
 @pytest.mark.django_db
 def test_not_authenticated_superuser_cant_get_another_user_vehicle_details():
     """ A superuser needs to authenticate to get a customer's data """
@@ -69,7 +69,7 @@ def test_not_authenticated_superuser_cant_get_another_user_vehicle_details():
     assert response.data.get("response")
 
 
-@pytest.mark.order(7)
+@pytest.mark.order(5)
 @pytest.mark.django_db
 def test_cant_get_details_of_non_existent_vehicle():
     """ When superuser tries to get details of non-existent vehicle it will

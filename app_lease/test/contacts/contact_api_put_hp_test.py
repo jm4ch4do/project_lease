@@ -6,7 +6,7 @@ from rest_framework.authtoken.models import Token
 from app_lease.models import Vehicle
 
 
-@pytest.mark.order(7)
+@pytest.mark.order(5)
 @pytest.mark.django_db
 def test_modify_own_vehicle_details():
     """ A regular user can modify his vehicle information"""

@@ -5,7 +5,7 @@ from django.urls import reverse
 from rest_framework.authtoken.models import Token
 
 
-@pytest.mark.order(7)
+@pytest.mark.order(5)
 @pytest.mark.django_db
 def test_staff_can_search_vehicles():
     """ Staff user can search vehicles """

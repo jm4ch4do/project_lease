@@ -5,7 +5,7 @@ from django.urls import reverse
 from rest_framework.authtoken.models import Token
 
 
-@pytest.mark.order(7)
+@pytest.mark.order(5)
 @pytest.mark.django_db
 def test_invalid_field_search_in_vehicle_list():
     """ Invalid field in the search results in 422 error """
@@ -40,7 +40,7 @@ def test_invalid_field_search_in_vehicle_list():
     assert response.data['response']
 
 
-@pytest.mark.order(7)
+@pytest.mark.order(5)
 @pytest.mark.django_db
 def test_regular_user_cant_search_vehicles():
     """ Regular users can't perform vehicles searches """

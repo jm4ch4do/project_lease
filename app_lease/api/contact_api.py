@@ -37,14 +37,14 @@ def contact_list(request):
                         status.HTTP_204_NO_CONTENT)
 
     # return results
-    serializer = VehicleSerializer(vehicles, many=True)
+    serializer = ContactSerializer(vehicles, many=True)
     return Response(serializer.data)
 
 
 def contact_add(request):
 
     # verify data is valid (also checks for customer or lead must exist)
-    serializer = VehicleSerializer(data=request.data)
+    serializer = ContactSerializer(data=request.data)
     if not serializer.is_valid():
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -64,7 +64,7 @@ def contact_add(request):
     if target_customer is not None:
         if not request.user.is_staff and \
                 not request.user.is_superuser and \
-                target_customer.user != request.user.customer:
+                target_customer.user != request.user:
 
             return Response({'response': "No permission to add contacts for this customer"},
                             status.HTTP_401_UNAUTHORIZED)

@@ -5,7 +5,7 @@ from django.urls import reverse
 from rest_framework.authtoken.models import Token
 
 
-@pytest.mark.order(7)
+@pytest.mark.order(5)
 @pytest.mark.django_db
 def test_get_own_vehicle_details():
     """ A regular user can get his vehicle information """
@@ -35,7 +35,7 @@ def test_get_own_vehicle_details():
     assert response.data['model']
 
 
-@pytest.mark.order(7)
+@pytest.mark.order(5)
 @pytest.mark.django_db
 def test_staff_gets_any_vehicles_details():
     """ A staff member can get any vehicle user data """
@@ -70,7 +70,7 @@ def test_staff_gets_any_vehicles_details():
     assert response.data['model']
 
 
-@pytest.mark.order(7)
+@pytest.mark.order(5)
 @pytest.mark.django_db
 def test_superuser_gets_any_vehicle_details():
     """ A superuser can get any vehicle user data """

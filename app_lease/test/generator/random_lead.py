@@ -4,7 +4,7 @@ from app_lease.models import Lead
 from datetime import datetime
 
 
-def random_lead(total=1, user=None):
+def random_lead(total=1):
 
     # register custom functions
     fake = Faker()
