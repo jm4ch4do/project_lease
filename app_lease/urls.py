@@ -50,6 +50,11 @@ urlpatterns = [
     path('credit_card/<int:pk>', app_lease.api.credit_card_edit, name='credit_card_edit'),
     path('credit_cards/search/', app_lease.api.credit_card_search, name='credit_card_search'),
 
+    # ----- API Contact
+    path('contact/', app_lease.api.contact_list, name='contacts'),
+    path('contact/<int:pk>', app_lease.api.contact_edit, name='contact_edit'),
+    path('contacts/search/', app_lease.api.contact_search, name='contact_search'),
+
     # ----- View Sets
     path('', include(router.urls)),
 ]
