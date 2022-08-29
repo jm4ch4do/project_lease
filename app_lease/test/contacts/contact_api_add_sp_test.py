@@ -9,7 +9,7 @@ from app_lease.models import Contact
 
 @pytest.mark.order(5)
 @pytest.mark.django_db
-def test_user_cant_adds_contact_for_any_customer():
+def test_user_cant_add_contact_for_any_customer():
     """ A regular user can't add a contact for any customer """
 
     # create active customer
@@ -60,42 +60,14 @@ def test_user_cant_add_contact_for_lead():
     assert Contact.objects.all().count() == 0
 
 
-@pytest.mark.order(5)
-@pytest.mark.django_db
-def test_user_cant_add_any_vehicle():
-    """ A regular user can't add a vehicle to another customer """
-
-    # create active customer
-    created_user = random_user(is_active=True)
-    created_customer = random_customer(user=created_user)
-
-    # create regular user
-    regular_user = random_user(is_active=True)
-
-    # configure token for regular_user
-    client = APIClient()
-    token, created = Token.objects.get_or_create(user=regular_user)
-    client.credentials(HTTP_AUTHORIZATION='Token ' + str(token))
-
-    # make request for add vehicle for created customer
-    url = reverse("vehicles")
-    payload = random_vehicle_payload(customer=created_customer)
-    response = client.post(url, payload)
-
-    # response has the correct values
-
-
-
 @pytest.mark.order(7)
 @pytest.mark.django_db
-def test_staff_cant_add_vehicle_for_deleted_customer():
-    """ A staff member (or superuser) can't add a vehicle to a non-existent customer """
+def test_staff_cant_add_contact_for_deleted_customer():
+    """ A staff member (or superuser) can't add a contact to a non-existent customer """
 
-    # create active customer
+    # create and customer
     created_user = random_user(is_active=True)
     created_customer = random_customer(user=created_user)
-    created_customer_id = created_customer.id
-    created_customer.delete()
 
     # create staff member
     staff_user = random_user(is_active=True)
@@ -106,14 +78,15 @@ def test_staff_cant_add_vehicle_for_deleted_customer():
     client.credentials(HTTP_AUTHORIZATION='Token ' + str(token))
 
     # make request for add vehicle for created customer
-    url = reverse("vehicles")
-    payload = random_vehicle_payload()
-    payload['customer'] = created_customer_id
+    url = reverse("contacts")
+    payload = random_contact_payload(owner=created_customer)
+    payload['customer'] = created_customer.id
+    created_customer.delete()
     response = client.post(url, payload)
 
     # response has the correct values
     assert response.status_code == 400
-    assert Vehicle.objects.all().count() == 0
+    assert Contact.objects.all().count() == 0
 
 
 @pytest.mark.order(5)
