@@ -33,6 +33,7 @@ urlpatterns = [
     # ----- API Vehicle
     path('vehicles/', app_lease.api.vehicle_list, name='vehicles'),
     path('vehicle/<int:pk>', app_lease.api.vehicle_edit, name='vehicle_edit'),
+    path('vehicles_for_customer/<int:pk>', app_lease.api.vehicles_for_customer, name='vehicles_for_customer'),
     path('vehicles/search/', app_lease.api.vehicle_search, name='vehicle_search'),
 
     # ----- API Lead
