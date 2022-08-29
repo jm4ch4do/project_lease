@@ -1,23 +1,19 @@
 import pytest
 from rest_framework.test import APIClient
-from app_lease.test.generator import random_user, random_vehicle
+from app_lease.test.generator import random_user, random_customer, random_contact
 from django.urls import reverse
 from rest_framework.authtoken.models import Token
 
 
 @pytest.mark.order(5)
 @pytest.mark.django_db
-def test_user_cant_get_another_user_vehicle_details():
-    """ A regular user can't get another customer's vehicle data """
+def test_user_cant_gets_contact_for_any_customer():
+    """ A regular user can't get a contact for any customer """
 
-    # create vehicle with active customer and user
-    created_vehicle = random_vehicle()
-    created_customer = created_vehicle.customer
-    created_customer.status = 1
-    created_customer.save()
-    created_user = created_customer.user
-    created_user.is_active = True
-    created_user.save()
+    # create user, customer and contact
+    created_user = random_user(is_active=True)
+    created_customer = random_customer(user=created_user)
+    created_contact = random_contact(owner=created_customer)
 
     # create regular user
     regular_user = random_user(is_active=True)
@@ -27,28 +23,24 @@ def test_user_cant_get_another_user_vehicle_details():
     token, created = Token.objects.get_or_create(user=regular_user)
     client.credentials(HTTP_AUTHORIZATION='Token ' + str(token))
 
-    # make request for getting customer details
-    url = reverse("vehicle_edit", kwargs={'pk': created_vehicle.id})
+    # make request to get contact
+    url = reverse("contact_edit", kwargs={'pk': created_contact.id})
     response = client.get(url)
 
     # response has the correct values
     assert response.status_code == 401
-    assert response.data.get("response")
+    assert response.data['response']
 
 
 @pytest.mark.order(5)
 @pytest.mark.django_db
-def test_not_authenticated_superuser_cant_get_another_user_vehicle_details():
-    """ A superuser needs to authenticate to get a customer's data """
+def test_not_authenticated_superuser_cant_get_contact_details():
+    """ A superuser needs to authenticate to get a contact data """
 
-    # create vehicle with active customer and user
-    created_vehicle = random_vehicle()
-    created_customer = created_vehicle.customer
-    created_customer.status = 1
-    created_customer.save()
-    created_user = created_customer.user
-    created_user.is_active = True
-    created_user.save()
+    # create user, customer and contact
+    created_user = random_user(is_active=True)
+    created_customer = random_customer(user=created_user)
+    created_contact = random_contact(owner=created_customer)
 
     # create superuser
     super_user = random_user(is_active=True)
@@ -60,8 +52,8 @@ def test_not_authenticated_superuser_cant_get_another_user_vehicle_details():
     token, created = Token.objects.get_or_create(user=super_user)
     # client.credentials(HTTP_AUTHORIZATION='Token ' + str(token))
 
-    # make request for getting customer details
-    url = reverse("vehicle_edit", kwargs={'pk': created_vehicle.id})
+    # make request to get contact
+    url = reverse("contact_edit", kwargs={'pk': created_contact.id})
     response = client.get(url)
 
     # response has the correct values
@@ -71,27 +63,23 @@ def test_not_authenticated_superuser_cant_get_another_user_vehicle_details():
 
 @pytest.mark.order(5)
 @pytest.mark.django_db
-def test_cant_get_details_of_non_existent_vehicle():
-    """ When superuser tries to get details of non-existent vehicle it will
+def test_cant_get_details_of_non_existent_contact():
+    """ When superuser tries to get details of non-existent contact it will
         obtain a 404 error """
 
-    # create vehicle with active customer and user
-    created_vehicle = random_vehicle()
-    created_customer = created_vehicle.customer
-    created_customer.status = 1
-    created_customer.save()
-    created_user = created_customer.user
-    created_user.is_active = True
-    created_user.save()
+    # create user, customer and contact
+    created_user = random_user(is_active=True)
+    created_customer = random_customer(user=created_user)
+    created_contact = random_contact(owner=created_customer)
 
     # create superuser
     super_user = random_user(is_active=True)
     super_user.is_superuser = True
     super_user.save()
 
-    # delete vehicle
-    created_vehicle_id = created_vehicle.id
-    created_vehicle.delete()
+    # delete contact
+    created_contact_id = created_contact.id
+    created_contact.delete()
 
     # configure token for super_user
     client = APIClient()
@@ -99,7 +87,7 @@ def test_cant_get_details_of_non_existent_vehicle():
     client.credentials(HTTP_AUTHORIZATION='Token ' + str(token))
 
     # make request for getting customer details
-    url = reverse("vehicle_edit", kwargs={'pk': created_vehicle_id})
+    url = reverse("contact_edit", kwargs={'pk': created_contact_id})
     response = client.get(url)
 
     # response has the correct values
