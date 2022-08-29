@@ -9,7 +9,6 @@ class ContactSerializer(serializers.ModelSerializer):
         model = Contact
         fields = ('id', 'customer', 'lead', 'phone', 'email', 'note', 'type')
 
-
     def validate(self, data):
         instance = Contact(**data)
         instance.clean()
