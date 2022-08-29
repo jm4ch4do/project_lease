@@ -106,7 +106,7 @@ def contact_edit(request, pk):
     if target_contact.customer is not None:
         if not request.user.is_staff and \
                 not request.user.is_superuser and \
-                target_contact.customer.user != request.user.customer:
+                target_contact.customer.user != request.user:
 
             return Response({'response': "No permission to modify contact for this customer"},
                             status.HTTP_401_UNAUTHORIZED)

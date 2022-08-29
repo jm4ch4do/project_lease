@@ -5,7 +5,7 @@ from app_lease.utils.fake_provider import Provider
 from app_lease.models import Contact, Customer, Lead
 
 
-def random_contact(total=1, related_to='customer', contact_type=1):
+def random_contact(total=1, related_to='customer', contact_type=1, owner=None):
 
     # register custom functions
     fake = Faker()
@@ -17,9 +17,9 @@ def random_contact(total=1, related_to='customer', contact_type=1):
         # create customer or lead
         created_customer, created_lead = None, None
         if related_to == 'customer':
-            created_customer = random_customer()
+            created_customer = random_customer() if owner is None else owner
         elif related_to == 'lead':
-            created_lead = random_lead()
+            created_lead = random_lead() if owner is None else owner
 
         # create phone or email
         phone, email = None, None
