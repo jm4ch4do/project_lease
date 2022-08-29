@@ -167,7 +167,11 @@ def contact_search(request):
             return Response({'response': "Invalid Field + key"},
                             status.HTTP_422_UNPROCESSABLE_ENTITY)
 
-        filter_pars = {key + '__contains': value}
+        if key == 'type':
+            filter_pars = {key: int(value)}
+        else:
+            filter_pars = {key + '__contains': value}
+
         queryset = queryset.filter(**filter_pars)
 
     if queryset.count() == 0:

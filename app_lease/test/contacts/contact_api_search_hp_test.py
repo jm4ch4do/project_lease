@@ -1,34 +1,29 @@
 import pytest
 from rest_framework.test import APIClient
-from app_lease.test.generator import random_user, random_vehicle
+from app_lease.test.generator import random_user, random_contact, random_customer
 from django.urls import reverse
 from rest_framework.authtoken.models import Token
 
 
 @pytest.mark.order(5)
 @pytest.mark.django_db
-def test_staff_can_search_vehicles():
-    """ Staff user can search vehicles """
+def test_staff_can_search_contacts():
+    """ Staff user can search contacts """
 
-    # create vehicle with active customer and user
-    created_vehicle = random_vehicle()
-    created_customer = created_vehicle.customer
-    created_customer.status = 1
-    created_customer.save()
-    created_user = created_customer.user
-    created_user.is_active = True
-    created_user.save()
+    # create user, customer and contact
+    created_user = random_user(is_active=True)
+    created_customer = random_customer(user=created_user)
+    created_contact = random_contact(owner=created_customer)
 
-    # create user
+    # create staff member
     staff_user = random_user(is_active=True)
     staff_user.is_staff = True
     staff_user.save()
 
-    # modify vehicle
-    created_vehicle.make = 'aaaa'
-    created_vehicle.model = 'bbbb'
-    created_vehicle.year = 2020
-    created_vehicle.save()
+    # modify contact
+    created_contact.note = 'aaaa'
+    created_contact.type = 1
+    created_contact.save()
 
     # configure token for staff_user
     client = APIClient()
@@ -36,11 +31,11 @@ def test_staff_can_search_vehicles():
     client.credentials(HTTP_AUTHORIZATION='Token ' + str(token))
 
     # make request
-    url = reverse("vehicle_search")
-    url += '?make=aaa&model=bbb&year=2020&'
+    url = reverse("contact_search")
+    url += '?note=aaa&type=1'
     response = client.get(url)
 
     # get data back
     assert response.status_code == 200
     assert len(response.data) == 1
-    assert response.data[0].get('model') == created_vehicle.model
+    assert response.data[0].get('note') == created_contact.note
