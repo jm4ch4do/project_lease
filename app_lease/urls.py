@@ -59,8 +59,13 @@ urlpatterns = [
     path('contacts/search/', app_lease.api.contact_search, name='contact_search'),
 
     # ----- API Contact
-    path('trades/', api.TradeList.as_view()),
-    path('trades/<int:pk>', api.TradeDetail.as_view()),
+    # path('trades/', api.TradeList.as_view()),
+    #path('trades/<int:pk>', api.TradeDetail.as_view()),
+    path('trades/', app_lease.api.trade_list, name='trades'),
+    path('trade/<int:pk>', app_lease.api.trade_edit, name='trade_edit'),
+    #path('trades_for_customer/<int:pk>', app_lease.api.vehicles_for_customer, name='vehicles_for_customer'),
+    path('trades/search/', app_lease.api.trade_search, name='trade_search'),
+
 
     # ----- View Sets
     path('', include(router.urls)),

@@ -23,7 +23,7 @@ def trade_add(request):
         return Response({'response': "Logging to be able to add trades"},
                         status.HTTP_401_UNAUTHORIZED)
 
-    # verify data is valid ('also verifies if customer exists')
+    # verify data is valid ('also verifies if vehicle exists')
     serializer = TradeSerializer(data=request.data)
     if not serializer.is_valid():
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -55,6 +55,19 @@ def trade_add(request):
 @api_view(['GET', 'PUT', 'DELETE'])
 def trade_edit(request, pk):
 
+
+
+    # verify trade exists
+    try:
+        target_trade = Trade.objects.get(pk=pk)
+    except Trade.DoesNotExist:
+        return Response({'response': "Trade not Found"},
+                        status=status.HTTP_404_NOT_FOUND)
+
+    # redirect to GET
+    if request.method == 'GET':
+        return trade_edit_get(request, target_trade)
+
     # verify user is authenticated
     if not request.user.is_authenticated:
         return Response({'response': "Please logging before proceeding"},
@@ -65,13 +78,6 @@ def trade_edit(request, pk):
         return Response({'response': "No permission to access"},
                         status.HTTP_401_UNAUTHORIZED)
 
-    # verify trade exists
-    try:
-        target_trade = Trade.objects.get(pk=pk)
-    except Trade.DoesNotExist:
-        return Response({'response': "Trade not Found"},
-                        status=status.HTTP_404_NOT_FOUND)
-
     # verify user has permissions to modify
     if request.user != target_trade.vehicle.customer.user and \
         not request.user.is_staff and \
@@ -80,18 +86,13 @@ def trade_edit(request, pk):
         return Response({'response': "No permission to access"},
                         status.HTTP_401_UNAUTHORIZED)
 
-    # redirect to GET
-    if request.method == 'GET':
-        return trade_edit_get(request, target_trade)
-
     # redirect to PUT
-    elif request.method == 'PUT':
+    if request.method == 'PUT':
         return vehicle_edit_put(request, target_trade)
 
     # redirect to DELETE
-    elif request.method == 'DELETE':
+    if request.method == 'DELETE':
         return trade_edit_delete(request, target_trade)
-    pass
 
 
 def trade_edit_get(request, trade):
@@ -115,11 +116,6 @@ def trade_edit_delete(request, trade):
 
 @api_view(['GET'])
 def trade_search(request):
-
-    # verify user is authenticated
-    if not request.user.is_authenticated:
-        return Response({'response': "Logging to be able to search trades"},
-                        status.HTTP_401_UNAUTHORIZED)
 
     ALLOWED_FIELDS = ('note', 'status')
 
