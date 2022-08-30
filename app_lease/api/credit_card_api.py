@@ -1,4 +1,4 @@
-from app_lease.models import CreditCard
+from app_lease.models import CreditCard, Customer
 from rest_framework.decorators import api_view
 from app_lease.api.credit_card_serializer import CreditCardSerializer, CreditCardEditSerializer
 from rest_framework.response import Response
@@ -154,4 +154,38 @@ def credit_card_search(request):
                         status.HTTP_204_NO_CONTENT)
 
     serializer = CreditCardSerializer(queryset, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def credit_cards_for_customer(request, pk):
+
+    # verify user is authenticated
+    if not request.user.is_authenticated:
+        return Response({'response': "Please logging before proceeding"},
+                        status.HTTP_401_UNAUTHORIZED)
+
+    # verify user is active
+    if not request.user.is_active:
+        return Response({'response': "No permission to access"},
+                        status.HTTP_401_UNAUTHORIZED)
+
+    # verify customer exists
+    try:
+        target_customer = Customer.objects.get(pk=pk)
+    except Customer.DoesNotExist:
+        return Response({'response': "Customer not Found"},
+                        status=status.HTTP_404_NOT_FOUND)
+
+    # verify user has permissions to get
+    if request.user != target_customer.user and \
+        not request.user.is_staff and \
+            not request.user.is_superuser:
+
+        return Response({'response': "No permission to access"},
+                        status.HTTP_401_UNAUTHORIZED)
+
+    vehicles = CreditCard.objects.filter(customer_id=target_customer.id)
+
+    serializer = CreditCardSerializer(vehicles, many=True)
     return Response(serializer.data)

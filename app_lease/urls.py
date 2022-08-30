@@ -49,6 +49,7 @@ urlpatterns = [
     # ----- API Credit Card
     path('credit_cards/', app_lease.api.credit_card_list, name='credit_cards'),
     path('credit_card/<int:pk>', app_lease.api.credit_card_edit, name='credit_card_edit'),
+    path('credit_cards_for_customer/<int:pk>', app_lease.api.credit_cards_for_customer, name='credit_cards_for_customer'),
     path('credit_cards/search/', app_lease.api.credit_card_search, name='credit_card_search'),
 
     # ----- API Contact

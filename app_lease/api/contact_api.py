@@ -238,7 +238,7 @@ def contacts_for_lead(request, pk):
 
     # verify user has permissions to get
     if not request.user.is_staff and \
-        not request.user.is_superuser:
+            not request.user.is_superuser:
 
         return Response({'response': "No permission to access"},
                         status.HTTP_401_UNAUTHORIZED)
