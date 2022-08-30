@@ -1,6 +1,6 @@
 from faker import Faker
 from app_lease.utils.fake_provider import Provider
-from app_lease.test.generator import random_trade
+from app_lease.test.generator.random_trade import random_trade
 from app_lease.models import Proposal
 from random import uniform, randint
 

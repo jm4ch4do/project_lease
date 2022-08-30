@@ -1,11 +1,9 @@
 from faker import Faker
-from app_lease.test.generator.random_customer import random_customer
 from app_lease.test.generator.random_vehicle import random_vehicle
 from app_lease.test.generator.random_service import random_service
 from app_lease.utils.fake_provider import Provider
 from app_lease.models import Trade
 from django.core.exceptions import ValidationError
-from random import randint
 
 
 def random_trade(total=1, service=None, vehicle=None):

@@ -33,6 +33,7 @@ urlpatterns = [
     # ----- API Vehicle
     path('vehicles/', app_lease.api.vehicle_list, name='vehicles'),
     path('vehicle/<int:pk>', app_lease.api.vehicle_edit, name='vehicle_edit'),
+    path('vehicles_for_customer/<int:pk>', app_lease.api.vehicles_for_customer, name='vehicles_for_customer'),
     path('vehicles/search/', app_lease.api.vehicle_search, name='vehicle_search'),
 
     # ----- API Lead
@@ -44,6 +45,19 @@ urlpatterns = [
     path('services/', app_lease.api.service_list, name='services'),
     path('service/<int:pk>', app_lease.api.service_edit, name='service_edit'),
     path('services/search/', app_lease.api.service_search, name='service_search'),
+
+    # ----- API Credit Card
+    path('credit_cards/', app_lease.api.credit_card_list, name='credit_cards'),
+    path('credit_card/<int:pk>', app_lease.api.credit_card_edit, name='credit_card_edit'),
+    path('credit_cards_for_customer/<int:pk>', app_lease.api.credit_cards_for_customer, name='credit_cards_for_customer'),
+    path('credit_cards/search/', app_lease.api.credit_card_search, name='credit_card_search'),
+
+    # ----- API Contact
+    path('contact/', app_lease.api.contact_list, name='contacts'),
+    path('contact/<int:pk>', app_lease.api.contact_edit, name='contact_edit'),
+    path('contacts_for_customer/<int:pk>', app_lease.api.contacts_for_customer, name='contacts_for_customer'),
+    path('contacts_for_lead/<int:pk>', app_lease.api.contacts_for_lead, name='contacts_for_lead'),
+    path('contacts/search/', app_lease.api.contact_search, name='contact_search'),
 
     # ----- View Sets
     path('', include(router.urls)),

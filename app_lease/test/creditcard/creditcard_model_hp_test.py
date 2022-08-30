@@ -79,4 +79,5 @@ def test_custom_creditcard():
 
     created_creditcard = random_creditcard()
     assert True if isinstance(str(created_creditcard), str) else False
+    assert True if isinstance(created_creditcard.last_four_digits, str) else False
     assert True if isinstance(created_creditcard.label, str) else False
