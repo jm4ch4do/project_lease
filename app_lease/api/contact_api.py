@@ -1,4 +1,4 @@
-from app_lease.models import Contact, Customer
+from app_lease.models import Contact, Customer, Lead
 from rest_framework.decorators import api_view
 from app_lease.api.contact_serializer import ContactSerializer, ContactEditSerializer
 from rest_framework.response import Response
@@ -231,15 +231,14 @@ def contacts_for_lead(request, pk):
 
     # verify customer exists
     try:
-        target_customer = Customer.objects.get(pk=pk)
-    except Customer.DoesNotExist:
-        return Response({'response': "Customer not Found"},
+        target_customer = Lead.objects.get(pk=pk)
+    except Lead.DoesNotExist:
+        return Response({'response': "Lead not Found"},
                         status=status.HTTP_404_NOT_FOUND)
 
     # verify user has permissions to get
-    if request.user != target_customer.user and \
-        not request.user.is_staff and \
-            not request.user.is_superuser:
+    if not request.user.is_staff and \
+        not request.user.is_superuser:
 
         return Response({'response': "No permission to access"},
                         status.HTTP_401_UNAUTHORIZED)
