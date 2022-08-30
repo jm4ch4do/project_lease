@@ -54,7 +54,7 @@ urlpatterns = [
     # ----- API Contact
     path('contact/', app_lease.api.contact_list, name='contacts'),
     path('contact/<int:pk>', app_lease.api.contact_edit, name='contact_edit'),
-    path('contacts_for_customer/<int:pk>', app_lease.api.contacs_for_customer, name='contacs_for_customer'),
+    path('contacts_for_customer/<int:pk>', app_lease.api.contacts_for_customer, name='contacts_for_customer'),
     path('contacts/search/', app_lease.api.contact_search, name='contact_search'),
 
     # ----- View Sets
