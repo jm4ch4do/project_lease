@@ -7,8 +7,8 @@ from rest_framework.authtoken.models import Token
 
 @pytest.mark.order(7)
 @pytest.mark.django_db
-def test_user_cant_get_vehicles_for_any_customer():
-    """ A regular user can't get the vehicles for any customer """
+def test_user_cant_get_contacts_for_any_customer():
+    """ A regular user can't get the contacts for any customer """
 
     # create user, customer and two contacts
     created_contact = random_contact()

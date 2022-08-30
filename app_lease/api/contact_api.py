@@ -214,3 +214,37 @@ def contacts_for_customer(request, pk):
 
     serializer = ContactSerializer(vehicles, many=True)
     return Response(serializer.data)
+
+
+@api_view(['GET'])
+def contacts_for_lead(request, pk):
+
+    # verify user is authenticated
+    if not request.user.is_authenticated:
+        return Response({'response': "Please logging before proceeding"},
+                        status.HTTP_401_UNAUTHORIZED)
+
+    # verify user is active
+    if not request.user.is_active:
+        return Response({'response': "No permission to access"},
+                        status.HTTP_401_UNAUTHORIZED)
+
+    # verify customer exists
+    try:
+        target_customer = Customer.objects.get(pk=pk)
+    except Customer.DoesNotExist:
+        return Response({'response': "Customer not Found"},
+                        status=status.HTTP_404_NOT_FOUND)
+
+    # verify user has permissions to get
+    if request.user != target_customer.user and \
+        not request.user.is_staff and \
+            not request.user.is_superuser:
+
+        return Response({'response': "No permission to access"},
+                        status.HTTP_401_UNAUTHORIZED)
+
+    vehicles = Contact.objects.filter(lead_id=target_customer.id)
+
+    serializer = ContactSerializer(vehicles, many=True)
+    return Response(serializer.data)
