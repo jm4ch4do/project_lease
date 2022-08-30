@@ -11,8 +11,7 @@ router.register(r'groups', api.GroupViewSet)
 
 urlpatterns = [
 
-    path('trades/', api.TradeList.as_view()),
-    path('trades/<int:pk>', api.TradeDetail.as_view()),
+
 
     # ----- API User
     path('register/', app_lease.api.user_register, name='api_register'),
@@ -58,6 +57,10 @@ urlpatterns = [
     path('contacts_for_customer/<int:pk>', app_lease.api.contacts_for_customer, name='contacts_for_customer'),
     path('contacts_for_lead/<int:pk>', app_lease.api.contacts_for_lead, name='contacts_for_lead'),
     path('contacts/search/', app_lease.api.contact_search, name='contact_search'),
+
+    # ----- API Contact
+    path('trades/', api.TradeList.as_view()),
+    path('trades/<int:pk>', api.TradeDetail.as_view()),
 
     # ----- View Sets
     path('', include(router.urls)),

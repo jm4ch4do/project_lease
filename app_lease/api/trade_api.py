@@ -1,10 +1,11 @@
 # Uses Generic Class-Based api
 
+# from rest_framework.permissions import IsAuthenticated
+# from rest_framework.authentication import TokenAuthentication
+
 from app_lease.models import Trade
-from app_lease.serializers import TradeSerializer
+from app_lease.api.trade_serializer import TradeSerializer
 from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.authentication import TokenAuthentication
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.filters import SearchFilter, OrderingFilter
 
@@ -17,12 +18,11 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 class TradeList(generics.ListCreateAPIView):
     queryset = Trade.objects.all()
     serializer_class = TradeSerializer
-    authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated, )
+    # authentication_classes = (TokenAuthentication, )
+    # permission_classes = (IsAuthenticated, )
     pagination_class = PageNumberPagination
     filter_backends = (SearchFilter, OrderingFilter)
     search_fields = ('status', 'vehicle__model')
-
 
 
 class TradeDetail(generics.RetrieveUpdateDestroyAPIView):
