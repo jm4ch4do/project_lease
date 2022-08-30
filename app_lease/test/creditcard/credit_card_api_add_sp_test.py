@@ -4,7 +4,6 @@ from app_lease.test.generator import random_user, random_customer, random_credit
 from django.urls import reverse
 from rest_framework.authtoken.models import Token
 from app_lease.models import CreditCard
-from app_lease.test.generator import random_lead_payload
 
 
 @pytest.mark.order(11)

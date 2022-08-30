@@ -1,4 +1,4 @@
-from app_lease.serializers import TradeSerializer
+from app_lease.api.trade_serializer import TradeSerializer
 from rest_framework import serializers
 from app_lease.models import Service
 

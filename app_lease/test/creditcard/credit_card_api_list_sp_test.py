@@ -1,6 +1,6 @@
 import pytest
 from rest_framework.test import APIClient
-from app_lease.test.generator import random_customer_payload, random_user, random_customer, random_creditcard
+from app_lease.test.generator import random_user, random_customer, random_creditcard
 from django.urls import reverse
 from rest_framework.authtoken.models import Token
 

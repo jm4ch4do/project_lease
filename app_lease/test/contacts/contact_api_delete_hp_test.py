@@ -1,7 +1,7 @@
 import pytest
 from rest_framework.test import APIClient
 from app_lease.test.generator import random_contact, random_customer,\
-    random_user, random_contact_payload, random_lead
+    random_user, random_lead
 from django.urls import reverse
 from rest_framework.authtoken.models import Token
 from app_lease.models import Contact

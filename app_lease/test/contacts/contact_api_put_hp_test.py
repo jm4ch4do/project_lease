@@ -4,7 +4,7 @@ from app_lease.test.generator import random_customer, random_user, \
     random_contact_payload, random_contact, random_lead
 from django.urls import reverse
 from rest_framework.authtoken.models import Token
-from app_lease.models import Contact, Lead
+from app_lease.models import Contact
 
 
 @pytest.mark.order(5)
