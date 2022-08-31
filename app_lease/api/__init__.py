@@ -10,4 +10,4 @@ from .credit_card_api import credit_card_list, credit_card_edit, \
     credit_card_search, credit_cards_for_customer
 from .contact_api import contact_list, contact_edit, contact_search,\
     contacts_for_customer, contacts_for_lead
-from .trade_api import trade_list, trade_edit, trade_search
+from .trade_api import trade_list, trade_edit, trade_search, trades_for_service

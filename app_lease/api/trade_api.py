@@ -1,7 +1,9 @@
+from app_lease.api.trade_serializer import TradeSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from app_lease.api.trade_serializer import TradeEditSerializer
+from app_lease.models import Service, Trade
 
 
 @api_view(['GET', 'POST'])
@@ -142,38 +144,37 @@ def trade_search(request):
     return Response(serializer.data)
 
 
-# @api_view(['GET'])
-# def trades_for_vehicle(request, pk):
-#
-#     # verify user is authenticated
-#     if not request.user.is_authenticated:
-#         return Response({'response': "Please logging before proceeding"},
-#                         status.HTTP_401_UNAUTHORIZED)
-#
-#     # verify user is active
-#     if not request.user.is_active:
-#         return Response({'response': "No permission to access"},
-#                         status.HTTP_401_UNAUTHORIZED)
-#
-#     # verify customer exists
-#     try:
-#         target_customer = Customer.objects.get(pk=pk)
-#     except Customer.DoesNotExist:
-#         return Response({'response': "Customer not Found"},
-#                         status=status.HTTP_404_NOT_FOUND)
-#
-#     # verify user has permissions to get
-#     if request.user != target_customer.user and \
-#         not request.user.is_staff and \
-#             not request.user.is_superuser:
-#
-#         return Response({'response': "No permission to access"},
-#                         status.HTTP_401_UNAUTHORIZED)
-#
-#     vehicles = Vehicle.objects.filter(customer_id=target_customer.id)
-#
-#     serializer = VehicleSerializer(vehicles, many=True)
-#     return Response(serializer.data)
+@api_view(['GET'])
+def trades_for_service(request, pk):
+
+    # verify user is authenticated
+    if not request.user.is_authenticated:
+        return Response({'response': "Please logging before proceeding"},
+                        status.HTTP_401_UNAUTHORIZED)
+
+    # verify user is active
+    if not request.user.is_active:
+        return Response({'response': "No permission to access"},
+                        status.HTTP_401_UNAUTHORIZED)
+
+    # verify service exists
+    try:
+        target_service = Service.objects.get(pk=pk)
+    except Service.DoesNotExist:
+        return Response({'response': "Service not Found"},
+                        status=status.HTTP_404_NOT_FOUND)
+
+    # verify user has permissions to get
+    if not request.user.is_staff and \
+            not request.user.is_superuser:
+
+        return Response({'response': "No permission to access"},
+                        status.HTTP_401_UNAUTHORIZED)
+
+    trades = Trade.objects.filter(service_id=target_service.id)
+
+    serializer = TradeSerializer(trades, many=True)
+    return Response(serializer.data)
 
 
 #  --------------------------------------------------------
@@ -182,11 +183,11 @@ def trade_search(request):
 # from rest_framework.permissions import IsAuthenticated
 # from rest_framework.authentication import TokenAuthentication
 
-from app_lease.models import Trade
-from app_lease.api.trade_serializer import TradeSerializer
-from rest_framework import generics
-from rest_framework.pagination import PageNumberPagination
-from rest_framework.filters import SearchFilter, OrderingFilter
+# from app_lease.models import Trade
+# from app_lease.api.trade_serializer import TradeSerializer
+# from rest_framework import generics
+# from rest_framework.pagination import PageNumberPagination
+# from rest_framework.filters import SearchFilter, OrderingFilter
 
 
 # http://127.0.0.1:8000/api/trades?search=super
