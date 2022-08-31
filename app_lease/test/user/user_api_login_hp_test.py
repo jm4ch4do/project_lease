@@ -4,7 +4,6 @@ from app_lease.test.generator import random_user
 from django.urls import reverse
 
 
-
 @pytest.mark.order(2)
 @pytest.mark.django_db
 def test_login_user():
