@@ -134,3 +134,5 @@ app_lease/migrations/
 *.pyc
 
 app_lease/test/test_views.py
+
+Lease API docs.docx
