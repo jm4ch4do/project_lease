@@ -66,7 +66,6 @@ urlpatterns = [
     path('trades_for_service/<int:pk>', app_lease.api.trades_for_service, name='trades_for_service'),
     path('trades/search/', app_lease.api.trade_search, name='trade_search'),
 
-
     # ----- View Sets
     path('', include(router.urls)),
 ]
