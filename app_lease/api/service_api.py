@@ -119,7 +119,7 @@ def service_search(request):
         return Response({'response': "Logging to be able to search services"},
                         status.HTTP_401_UNAUTHORIZED)
 
-    ALLOWED_FIELDS = ('id', 'name', 'cost', 'when_to_pay', 'service_type')
+    ALLOWED_FIELDS = ('name', 'cost', 'when_to_pay', 'service_type')
 
     parameters = request.query_params
     queryset = Service.objects.all()
