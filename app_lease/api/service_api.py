@@ -119,14 +119,14 @@ def service_search(request):
         return Response({'response': "Logging to be able to search services"},
                         status.HTTP_401_UNAUTHORIZED)
 
-    ALLOWED_FIELDS = ('id', 'name', 'cost', 'when_to_pay', 'service_type')
+    ALLOWED_FIELDS = ('name', 'cost', 'when_to_pay', 'service_type')
 
     parameters = request.query_params
     queryset = Service.objects.all()
 
     for key, value in parameters.items():
         if key not in ALLOWED_FIELDS:
-            return Response({'response': "Invalid Field + key"},
+            return Response({'response': "Invalid Field " + key},
                             status.HTTP_422_UNPROCESSABLE_ENTITY)
 
         if key == 'cost':

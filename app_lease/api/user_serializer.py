@@ -142,7 +142,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
 
         model = User
-        fields = ('id', 'username', 'email', 'first_name', 'last_name', 'is_active', 'is_staff', 'customer_id')
+        fields = ('id', 'username', 'email', 'first_name', 'last_name', 'is_active', 'customer_id')
 
     def get_customer_id(self, user):
         try:

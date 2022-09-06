@@ -151,7 +151,7 @@ def vehicle_search(request):
 
     for key, value in parameters.items():
         if key not in ALLOWED_FIELDS:
-            return Response({'response': "Invalid Field + key"},
+            return Response({'response': "Invalid Field " + key},
                             status.HTTP_422_UNPROCESSABLE_ENTITY)
 
         if key == 'year':

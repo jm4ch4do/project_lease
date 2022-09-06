@@ -1,6 +1,6 @@
 import pytest
 from rest_framework.test import APIClient
-from app_lease.test.generator import random_user_payload, random_user
+from app_lease.test.generator import random_user
 from django.urls import reverse
 from rest_framework.authtoken.models import Token
 
@@ -27,7 +27,6 @@ def test_get_own_user_details():
     assert response.data.get("email")
     assert response.data.get("username")
     assert response.data.get("is_active") is not None
-    assert response.data.get("is_staff") is not None
     assert response.data.get("customer_id") is not None
     assert response.data.get('id')
     assert "password" not in response.data
@@ -60,7 +59,6 @@ def test_staff_gets_any_user_details():
     assert response.data.get("email")
     assert response.data.get("username")
     assert response.data.get("is_active") is not None
-    assert response.data.get("is_staff") is not None
     assert response.data.get("customer_id") is not None
     assert response.data.get('id')
     assert "password" not in response.data
@@ -93,7 +91,6 @@ def test_superuser_gets_any_user_details():
     assert response.data.get("email")
     assert response.data.get("username")
     assert response.data.get("is_active") is not None
-    assert response.data.get("is_staff") is not None
     assert response.data.get("customer_id") is not None
     assert response.data.get('id')
     assert "password" not in response.data
@@ -128,7 +125,6 @@ def test_superuser_gets_any_superuser_details():
     assert response.data.get("email")
     assert response.data.get("username")
     assert response.data.get("is_active") is not None
-    assert response.data.get("is_staff") is not None
     assert response.data.get("customer_id") is not None
     assert response.data.get('id')
     assert "password" not in response.data
@@ -163,7 +159,6 @@ def test_superuser_gets_any_staff_details():
     assert response.data.get("email")
     assert response.data.get("username")
     assert response.data.get("is_active") is not None
-    assert response.data.get("is_staff") is not None
     assert response.data.get("customer_id") is not None
     assert response.data.get('id')
     assert "password" not in response.data

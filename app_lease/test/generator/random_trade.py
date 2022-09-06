@@ -44,3 +44,18 @@ def random_trade(total=1, service=None, vehicle=None):
             return created_trade
         else:
             return created_trades
+
+def random_trade_payload(service, vehicle):
+
+    # register custom functions
+    fake = Faker()
+    fake.add_provider(Provider)
+
+    # create random trade payload
+    payload = dict(
+        service=service.id,
+        vehicle=vehicle.id,
+        note=fake.paragraph(nb_sentences=3),
+    )
+
+    return payload

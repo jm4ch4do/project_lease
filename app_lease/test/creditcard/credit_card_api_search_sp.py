@@ -3,7 +3,6 @@ from rest_framework.test import APIClient
 from app_lease.test.generator import random_creditcard, random_user, random_customer
 from django.urls import reverse
 from rest_framework.authtoken.models import Token
-from app_lease.models import Customer
 
 
 @pytest.mark.order(2)
